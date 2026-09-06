@@ -80,7 +80,12 @@ package is not sufficient evidence that a consumer can use it.
   adapter when needed.
 - For any Flow/invocable endpoint, separately verify supported input/output
   types, annotations, constructor requirements and bulk input/output behaviour.
-  Do not assume that a type usable by Apex or LWC is also usable by Flow.
+  Flow Apex-defined variables do not support inner classes or getter methods;
+  their fields need `@AuraEnabled`. Invocable request/response wrappers have
+  different rules and can use inner classes. From API 66.0, custom invocable
+  parameter classes need an accessible no-argument constructor (`global` for
+  packaged classes invoked from outside the package). Do not assume that a
+  type usable by Apex or LWC is also usable by Flow.
 - Before release, install a beta package into a separate subscriber test org
   and exercise the exposed APIs from consumer code outside the package. Test
   upgrades against existing consumer code when a released version exists.
@@ -92,6 +97,8 @@ subscriber compilation or consumer integration tests.
 
 References: [Apex Developer Guide, Apex in Managed Packages](https://resources.docs.salesforce.com/latest/latest/en-us/sfdc/pdf/salesforce_apex_developer_guide.pdf),
 [exposing Apex to LWC](https://developer.salesforce.com/docs/platform/lwc/guide/apex-expose-method.html),
+[Flow Apex-defined type limitations](https://help.salesforce.com/s/articleView?id=sf.flow_considerations_apex_data_type.htm&language=en_US&type=5),
+[Flow Apex action wrappers](https://help.salesforce.com/s/articleView?id=platform.flow_concepts_apex_type.htm&language=en_US&type=5),
 and [PMD's global modifier rule](https://pmd.github.io/pmd/pmd_rules_apex_bestpractices.html#avoidglobalmodifier).
 
 ## Local development setup
