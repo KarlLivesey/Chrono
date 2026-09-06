@@ -1,0 +1,7 @@
+.git/
+.sf/
+.sfdx/
+.localdevserver/
+node_modules/
+coverage/
+package-lock.json

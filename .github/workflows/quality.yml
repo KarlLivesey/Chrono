@@ -1,0 +1,41 @@
+name: Code quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Formatting and Apex lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SF_DISABLE_TELEMETRY: "true"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Set up Java
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Install formatting dependencies
+        run: npm ci
+      - name: Install Salesforce analysis tools
+        run: |
+          npm install --global @salesforce/cli@2.150.6
+          sf plugins install @salesforce/plugin-code-analyzer@5.14.0
+      - name: Check formatting and Apex
+        run: npm run check
