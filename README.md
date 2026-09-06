@@ -60,7 +60,21 @@ Salesforce calendar model; alternate calendar annotations such as
 The initial package version setting is `0.1.0.NEXT`. This is configuration for a
 future build, not an existing installable version.
 
-## Managed-package API checks
+## Managed-package feasibility
+
+Managed-package constraints are a project-wide engineering requirement across
+design, implementation, testing and releases. Check packaging, installation,
+subscriber use and upgrade behaviour relevant to each feature. The examples
+below are not exhaustive; working in an unpackaged development org is not
+sufficient validation. This requirement is also recorded in [AGENTS.md](AGENTS.md)
+for future development work.
+
+Before selecting a feature or approach, establish whether it is supported in
+managed 2GP **for the intended use and consumer**. Ask "Can we actually use X
+here?" before building around X. Verify the relevant restrictions in official
+documentation and resolve uncertain behaviour with focused package/subscriber
+validation before committing to the design. The specific checks and references
+below are examples, not the limits of this requirement.
 
 Before exposing an API, check the intended consumer: subscriber Apex, Apex in
 another package, Lightning Web Components, or Flow/invocable actions. Each has

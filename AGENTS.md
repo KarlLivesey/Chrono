@@ -1,0 +1,61 @@
+# Chrono project requirements
+
+Chrono is a Salesforce second-generation managed package in the `skel`
+namespace. The functional scope and tooling commands are recorded in
+[README.md](README.md).
+
+## Managed-package engineering
+
+Design and validate Chrono as a managed package from the outset. Apply this
+requirement throughout architecture, implementation, testing and releases.
+
+Before choosing any Apex feature, type, annotation, metadata component or design
+approach, ask: **Can this actually be used in a second-generation managed
+package, in the way Chrono and its intended consumers need to use it?**
+
+Check feasibility before building around the choice:
+
+1. Identify the proposed capability and where it must work: inside Chrono,
+   across a package/namespace boundary, or in the subscriber's execution context.
+2. Verify that Salesforce supports that use in managed 2GP, including relevant
+   access, packaging and lifecycle restrictions. General Apex support or an
+   unpackaged example is not proof of managed-package support.
+3. If documentation leaves the behaviour uncertain, identify the smallest
+   package/subscriber validation needed before committing to the design. Keep
+   the choice explicitly unverified until there is supporting evidence.
+4. If it does not work in that context, explain the limitation before proposing
+   a supported approach. Do not build on the assumption that a packaging problem
+   can be fixed later, or silently change the agreed scope to work around it.
+
+This is an open-ended feasibility requirement for every proposed capability,
+not merely a check against a fixed list of known gotchas.
+
+- Check the managed-package constraints relevant to each change. Code that
+  compiles or works in an unpackaged development org is not sufficient evidence
+  that it can be packaged, installed, upgraded or used by subscribers.
+- Verify uncertain or version-dependent behaviour against current official
+  Salesforce documentation and, where necessary, a focused package/subscriber
+  test. Make unresolved assumptions explicit.
+- Consider the actual consumer and package boundary when designing APIs.
+  Subscriber Apex, another managed package, LWC and Flow/invocable actions have
+  different visibility, supported-type and serialisation requirements.
+- Review exposed classes, members, constructors, parameters, return types,
+  nested types, enums and annotations together. Keep implementation details
+  internal and expose only the API consumers need.
+- Account for namespaces, dependencies, supported metadata, permissions and
+  subscriber configuration wherever they affect a feature. Avoid assumptions
+  based solely on the development org's configuration.
+- Review release manageability and upgrade compatibility before committing to
+  a global API or changing an existing released contract.
+- Validate exposed behaviour from outside the package in a separate subscriber
+  org before release. Include installation and, once released versions exist,
+  upgrade checks appropriate to the change.
+- Treat lint, package validation and consumer integration tests as distinct
+  checks. State exactly which were run and what remains unverified.
+
+These examples are not an exhaustive checklist. Investigate other packaging
+constraints as features are designed. The requirement is a general engineering
+standard, not a request to add speculative APIs, wrappers or metadata.
+
+See the README's managed-package feasibility section for documented LWC, Flow and global
+API considerations.
