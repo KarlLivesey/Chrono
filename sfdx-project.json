@@ -1,20 +1,20 @@
 {
-  "name": "Temporal",
+  "name": "Chrono",
   "packageDirectories": [
     {
       "versionName": "Initial development",
       "versionNumber": "0.1.0.NEXT",
       "path": "force-app",
       "default": true,
-      "package": "Temporal",
+      "package": "Chrono",
       "definitionFile": "config/project-scratch-def.json",
-      "versionDescription": "JavaScript Temporal functionality for Apex with conversions to and from Salesforce Date, Time and Datetime types."
+      "versionDescription": "Salesforce-native date and time utilities with zoned datetime and Business Hours support."
     }
   ],
   "namespace": "skel",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "67.0",
   "packageAliases": {
-    "Temporal": "0HogK0000004dxFSAQ"
+    "Chrono": "0HogK0000004dxFSAQ"
   }
 }
