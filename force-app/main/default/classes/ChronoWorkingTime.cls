@@ -2,27 +2,38 @@
 /** @description Internal working-time arithmetic over Salesforce operating hours. Reads configuration in user mode; never writes it. */
 public with sharing class ChronoWorkingTime {
   private static final Integer MAX_SEARCH_DAYS = 3660;
-  private final String zoneId;
-  private final List<TimeSlot> slots;
-  private final List<Holiday> holidays;
+  private String zoneId;
+  private List<TimeSlot> slots;
+  private List<Holiday> holidays;
   public ChronoWorkingTime(OperatingHours hours) {
     ChronoSupport.requireValue(hours, 'OperatingHours');
     ChronoSupport.requireValue(hours.Id, 'Saved OperatingHours ID');
-    OperatingHours stored = [
-      SELECT TimeZone
-      FROM OperatingHours
-      WHERE Id = :hours.Id
-      WITH USER_MODE
-    ];
-    zoneId = stored.TimeZone;
+    ChronoOperatingSchedules loaded = new ChronoOperatingSchedules(
+      new Set<Id>{ hours.Id }
+    );
+    initialise(
+      loaded.operating.get(hours.Id),
+      loaded.slots.get(hours.Id),
+      loaded.holidays.get(hours.Id)
+    );
+  }
+  public ChronoWorkingTime(
+    OperatingHours hours,
+    List<TimeSlot> slots,
+    List<Holiday> holidays
+  ) {
+    initialise(hours, slots, holidays);
+  }
+  private void initialise(
+    OperatingHours hours,
+    List<TimeSlot> loadedSlots,
+    List<Holiday> loadedHolidays
+  ) {
+    ChronoSupport.requireValue(hours, 'Accessible OperatingHours');
+    zoneId = hours.TimeZone;
     ChronoSupport.zone(zoneId);
-    slots = [
-      SELECT DayOfWeek, StartTime, EndTime, Type, RecordsetFilterCriteriaId
-      FROM TimeSlot
-      WHERE OperatingHoursId = :hours.Id AND Type = 'Normal'
-      WITH USER_MODE
-      ORDER BY StartTime
-    ];
+    slots = loadedSlots == null ? new List<TimeSlot>() : loadedSlots;
+    holidays = loadedHolidays == null ? new List<Holiday>() : loadedHolidays;
     if (slots.isEmpty()) {
       throw new ChronoException('OperatingHours has no normal time slots.');
     }
@@ -32,28 +43,6 @@ public with sharing class ChronoWorkingTime {
           'Conditional operating-hour slots require appointment context and cannot be used for generic working-time arithmetic.'
         );
       }
-    }
-    holidays = new List<Holiday>();
-    for (OperatingHoursHoliday link : [
-      SELECT
-        Holiday.IsAllDay,
-        Holiday.ActivityDate,
-        Holiday.StartTimeInMinutes,
-        Holiday.EndTimeInMinutes,
-        Holiday.IsRecurrence,
-        Holiday.RecurrenceStartDate,
-        Holiday.RecurrenceEndDateOnly,
-        Holiday.RecurrenceType,
-        Holiday.RecurrenceInterval,
-        Holiday.RecurrenceDayOfWeekMask,
-        Holiday.RecurrenceDayOfMonth,
-        Holiday.RecurrenceInstance,
-        Holiday.RecurrenceMonthOfYear
-      FROM OperatingHoursHoliday
-      WHERE OperatingHoursId = :hours.Id
-      WITH USER_MODE
-    ]) {
-      holidays.add(link.Holiday);
     }
   }
 

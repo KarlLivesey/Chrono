@@ -11,7 +11,7 @@ Chrono builds on Salesforce's native `Date`, `Time`,
 date/time API for organisations working across multiple time zones, with
 conversions to and from the native Salesforce types.
 
-Chrono will support schedule-aware arithmetic using Salesforce `OperatingHours`,
+Chrono supports schedule-aware arithmetic using Salesforce `OperatingHours`,
 its time slots and associated holidays, as well as the native `BusinessHours`
 API. These are distinct Salesforce models; verify object availability and managed
 package dependencies before selecting the implementation.
@@ -172,8 +172,17 @@ serialised as zoned strings. Salesforce's native date ranges and exceptions appl
 
 Chrono-specific invalid inputs and unresolved local times raise the globally
 catchable `ChronoException`. Native range errors, permissions and query failures
-propagate from Salesforce. These classes are subscriber Apex APIs; no Flow actions,
-LWC endpoints or Apex-defined transport types are included in this beta.
+propagate from Salesforce. The core classes are subscriber Apex APIs. [Flow actions](docs/flow-actions.md)
+provide separate transport types, bulk execution and configuration helpers.
+LWC components are a later phase.
+
+## Flow actions
+
+The **Chrono** category contains conversion, arithmetic, elapsed-difference and
+working-time actions, each in single-value and collection forms. They include
+labelled inputs/outputs, calendar icons and Flow Builder configuration helpers.
+See the [Flow guide](docs/flow-actions.md) for setup, examples, permissions,
+collection types and error handling.
 
 ## Project configuration
 

@@ -79,7 +79,8 @@ Scratch-org and package-version creation allocations are limited. Reuse the
 existing `chrono-dev` and `chrono-subscriber` scratch orgs. Do not create further
 scratch orgs without checking with Karl.
 
-- Karl permits quick builds using `--skip-validation`, charged to
+- Default to `--skip-validation` for every package build unless Karl explicitly
+  specifies another mode. Quick builds are charged to
   `Package2VersionCreatesWithoutValidation`. Use these for test packages.
 - **Do not consume `Package2VersionCreates` without Karl's explicit approval.**
   Standard/full builds (the CLI default) and async validation builds are not
@@ -91,3 +92,20 @@ scratch orgs without checking with Karl.
 - Quick builds do not validate package dependencies/metadata or calculate package
   coverage and cannot be promoted. Install and test in the existing subscriber
   org, and report that evidence separately from standard build validation.
+
+## Flow and component delivery
+
+Implement Flow actions first, including meaningful single and bulk tests and
+managed-package subscriber validation. LWC components for Flow screens and record
+pages are a subsequent phase; do not start them as part of the Flow-action work.
+Expose all eight Chrono types through the appropriate Flow operations. Provide
+single-value and explicit-collection actions, each bulkified across interviews.
+Preserve outer interview order and inner collection order. Load shared schedule
+configuration in bulk and reuse identical calculations within an invocation when
+it saves work. Return independent result objects; cached instances must not escape.
+Use `InvocableActionExtension` for a better Flow Builder configuration experience,
+including clear labels, the Chrono category, calendar icons, ordering/groups and
+relevant picklists/visibility. Prefer CLI and automated validation; browser checks
+are not required. If needed, use a CLI-generated login URL in the internal browser,
+not Karl’s personal browser. Verify the
+actual packaged action configuration and execution in the subscriber org.

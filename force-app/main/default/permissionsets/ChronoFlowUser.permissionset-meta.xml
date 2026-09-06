@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata"><classAccesses
+  ><apexClass>ChronoConvertAction</apexClass><enabled
+    >true</enabled></classAccesses><classAccesses><apexClass
+    >ChronoConvertCollectionAction</apexClass><enabled
+    >true</enabled></classAccesses><classAccesses><apexClass
+    >ChronoAdjustAction</apexClass><enabled
+    >true</enabled></classAccesses><classAccesses><apexClass
+    >ChronoAdjustCollectionAction</apexClass><enabled
+    >true</enabled></classAccesses><classAccesses><apexClass
+    >ChronoDifferenceAction</apexClass><enabled
+    >true</enabled></classAccesses><classAccesses><apexClass
+    >ChronoDifferenceCollectionAction</apexClass><enabled
+    >true</enabled></classAccesses><classAccesses><apexClass
+    >ChronoWorkingTimeAction</apexClass><enabled
+    >true</enabled></classAccesses><classAccesses><apexClass
+    >ChronoWorkingTimeCollectionAction</apexClass><enabled
+    >true</enabled></classAccesses><classAccesses><apexClass
+    >ChronoTimeZonePicklist</apexClass><enabled
+    >true</enabled></classAccesses><description
+  >Run Chrono Flow actions. Working schedules additionally require the user's existing object and field permissions.</description><hasActivationRequired
+  >false</hasActivationRequired><label>Chrono Flow User</label></PermissionSet>

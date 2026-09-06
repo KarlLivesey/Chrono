@@ -4,95 +4,118 @@ Validation performed on 6 September 2026 against Salesforce API 67.0.
 
 ## Development checks
 
-- Namespaced development org: `chrono-dev` (`skel`). Reused for every deployment.
-- 31 Apex test methods passed; 877 of 905 executable lines covered (96.9%).
-- Formatting passed; PMD recommended/AppExchange checks passed the configured
-  severity 1–3 gate. Low-priority ApexDoc and test `runAs` suggestions remain visible.
-- Test scenarios include native/ISO round trips, all eight types, instance/static
-  equivalence, calendar versus elapsed arithmetic, invalid inputs, four-zone DST
-  gaps/overlaps including Lord Howe, recurring/partial holidays, working-time
-  subtraction and short opening windows inside DST transitions.
-- The Friday 16:30 plus one working hour example produces Tuesday 09:30 with
-  Monday configured as a bank holiday.
+- Reused `chrono-dev` in the `skel` namespace.
+- **58 Apex test methods passed**: 49 package tests and nine consumer tests.
+- Package source coverage: **1,472 of 1,519 executable lines (96.9%)**, calculated
+  from development-org test results, excluding consumer and obsolete scratch-only
+  classes. This is not package-build coverage.
+- Formatting and the PMD recommended/AppExchange severity 1–3 gate passed.
+  There are 99 low-priority ApexDoc and test `runAs` suggestions.
+- Core tests cover all eight types, native/ISO round trips, both call styles,
+  calendar versus elapsed arithmetic, invalid dates, DST gaps/overlaps including
+  Lord Howe, recurring/partial holidays, working subtraction and short opening
+  windows inside DST transitions.
+- Flow tests cover all eight action entry points, single values, collections,
+  200-interview batches, nested ordering, partial failures, empty/null inputs,
+  duplicate calculation reuse and independent output copies.
+- OperatingHours loading uses three queries across multiple schedules and 200
+  interviews, including collections. BusinessHours uses one user-mode lookup.
+- The Friday 16:30 plus one working hour example returns Tuesday 09:30 with Monday
+  configured as a bank holiday. Negative working-time arithmetic is also tested.
+- A Minimum Access profile test proves that schedule reads enforce permissions;
+  pure conversion remains usable without schedule access.
 
-## Package and subscriber checks
+## Managed package and subscriber checks
 
-The current test package is **0.1.0.2**, subscriber version
-`04tgK000000JnGLQA0`, request `08cgK000000H0lBQAS`. It was created with
-`--skip-validation`: no package validation or package coverage was calculated,
-and it cannot be promoted. It installed successfully into `chrono-subscriber`.
-A deployment using `RunAllTestsInOrg` then passed **35 test methods** with no
-failures: **31 packaged tests in `skel` and four consumer tests outside the
-namespace**. This includes the corrected invalid-date and holiday recurrence
-behaviour. Installation request: `0HfAs000002aycPKAQ`.
+The current beta is **0.1.0.3**, subscriber version **`04tgK000000JnHxQAK`**,
+created by request `08cgK000000H0mnQAC` with **`--skip-validation`**.
+It installed successfully into the existing, non-namespaced `chrono-subscriber`
+org (installation request `0HfAs000002aye1KAA`).
 
-The earlier **0.1.0.1** (`04tgK000000JnEjQAK`) passed a standard build and installed
-successfully. Three selected subscriber test methods passed against it, proving
-global constructors, return types, exception handling, both call styles and the
-standard-object arguments. That version predates fixes for invalid calendar dates
-and the any-day holiday recurrence mask; use the corrected test version instead.
+A deployment using `RunAllTestsInOrg` passed **58 test methods with no failures**:
+**49 packaged tests in `skel` and nine unpackaged consumer tests**. Consumer tests
+exercise global APIs and run eight actual autolaunched Flow harnesses against the
+installed actions. They verify:
 
-Salesforce refused an in-place beta upgrade. The temporary consumer test class
-was removed from the subscriber org, then the earlier beta was uninstalled. The
-local test files were retained and restored after the corrected beta installation.
-This is a fresh-install check, not evidence of released-package upgrade compatibility.
+- Conversion, ordinary arithmetic, elapsed differences and working time, each
+  through single-value and explicit-collection Flow actions.
+- Apex-defined input/result collections across the package boundary, native
+  datetime/date outputs, negative durations, and millisecond values beyond the
+  32-bit integer range.
+- **200 Flow interviews** submitted through the platform's Flow invocable runtime,
+  preserving one ordered result per interview.
+- Item-level failures that preserve successful siblings.
+- The bank-holiday working-time example through both working-time Flows.
+- The global time-zone configuration helper from unpackaged consumer Apex.
 
-Consumer tests live in `tests/subscriber`, outside the packaged `force-app` tree.
-The separate `chrono-subscriber` scratch org has no namespace. The complete test
-class includes the invalid-calendar-date regression introduced after the first beta.
-No release has been promoted.
+The Actions API lists all eight installed actions with their readable labels.
+The installed conversion action reports the **Chrono** category, calendar icon
+and enumeration metadata for its type, target type, repeated-time policy and
+zone inputs. Metadata list/retrieve calls confirm all eight
+`InvocableActionExtension` components are installed in `skel`. Their deployment
+validated the grouping, ordering, picklist and controlling-field attributes.
+Browser rendering was not manually checked; validation uses CLI and automated
+checks as requested.
 
-## Allocation policy and usage
+Salesforce's extension validator required action-local invocable request wrappers
+for scalar parameter targets. Explicit collection types remain top-level with
+global constructors and Aura-enabled fields. Generic cross-namespace
+`JSON.deserialize` is not enabled for these package DTOs; subscriber tests create
+and populate them through their global constructors/fields, as Flow assignments do.
 
-Two scratch orgs were created: `chrono-dev` and `chrono-subscriber`, both expiring
-13 September 2026. Reuse them; further org creation requires checking with Karl.
+Salesforce does not permit an in-place beta upgrade. The temporary old consumer
+test class was removed, beta 0.1.0.2 was uninstalled, and the new beta was installed.
+Consumer classes and Flows were then restored from `tests/subscriber`. Local test
+sources were retained throughout. No new scratch org was created for this phase.
+This verifies a fresh installation, not released-package upgrade compatibility.
 
-- Standard builds: **1 used**, **5 of 6 remaining**. No further use of
-  `Package2VersionCreates` is allowed without explicit approval.
-- Quick builds: **1 used**, **499 of 500 remaining** in
-  `Package2VersionCreatesWithoutValidation`. Karl permits `--skip-validation`
-  for test packages. The before/after limits confirm it did not consume a
-  standard-build allocation.
-- Async validation is not a workaround for the standard-build approval rule.
+The previous 0.1.0.2 quick beta (`04tgK000000JnGLQA0`) passed 35 tests before the
+Flow work. The initial 0.1.0.1 (`04tgK000000JnEjQAK`) used a standard build before
+the explicit allocation policy was established. No release has been promoted.
+
+## Allocation usage
+
+The existing `chrono-dev` and `chrono-subscriber` orgs expire 13 September 2026.
+Further org creation requires checking with Karl.
+
+| Allocation                              | Before this Flow build | After                |
+| --------------------------------------- | ---------------------- | -------------------- |
+| Package2VersionCreates                  | 5 of 6 remaining       | 5 of 6 remaining     |
+| Package2VersionCreatesWithoutValidation | 499 of 500 remaining   | 498 of 500 remaining |
+| ActiveScratchOrgs                       | 1 of 3 available       | 1 of 3 available     |
+| DailyScratchOrgs                        | 4 of 6 remaining       | 4 of 6 remaining     |
+
+This phase consumed **one quick build and no standard builds**. Standard/full
+builds and async validation require explicit approval. Quick builds do not
+validate package dependencies/metadata or calculate package coverage, and cannot
+be promoted. Installation and runtime tests are separate evidence.
 
 ## Reproducing checks
 
 ```sh
 npm run check
 sf project deploy start --source-dir force-app --target-org chrono-dev --test-level RunLocalTests --wait 10
-# After installing the corrected quick beta into chrono-subscriber:
+# After installing the quick beta into chrono-subscriber:
 cd tests/subscriber
 sf project deploy start --source-dir force-app --target-org chrono-subscriber --test-level RunAllTestsInOrg --wait 10
 ```
 
-Tests use scratch-org administrator access; restricted-profile behaviour has not
-been independently verified. Apex tests in a namespaced scratch org do not prove
-managed packaging. A successful
-beta install and these subscriber tests validate the tested Apex surface only;
-they do not establish Flow/LWC support, another managed-package dependency, every
-Salesforce licence/edition, or upgrade compatibility with a released version.
+These checks establish the tested Apex and Flow behaviour in the two existing
+scratch orgs. They do not establish LWC support, another managed-package
+integration, every Salesforce licence/edition, or released-package upgrades.
+LWC components remain a later phase.
 
-## Platform evidence
+## References and lint exceptions
 
-- [Operating-hours object relationships](https://developer.salesforce.com/docs/platform/data-models/guide/field-service-operating-hours.html).
-- [Field Service object reference](https://resources.docs.salesforce.com/latest/latest/en-us/sfdc/pdf/field_service_dev.pdf): OperatingHoursHoliday and feature access rules.
-- [Holiday recurrence configuration](https://resources.docs.salesforce.com/latest/latest/en-us/sfdc/pdf/api_meta.pdf).
+- [Operating-hours relationships](https://developer.salesforce.com/docs/platform/data-models/guide/field-service-operating-hours.html).
+- [Field Service object reference](https://resources.docs.salesforce.com/latest/latest/en-us/sfdc/pdf/field_service_dev.pdf).
 - [Scheduler holiday considerations](https://help.salesforce.com/s/articleView?id=sf.ls_considerations_holidays.htm&language=en_US&type=5).
+- [Flow configuration and managed-package notes](flow-actions.md).
 
-## Lint exceptions
-
-Global value classes and the catchable exception have a scoped AvoidGlobalModifier
-suppression because subscriber Apex requires global visibility. A declaration-line
-NOPMD comment suppresses aggregate complexity findings driven by the required
-instance/static overloads; method-level complexity checks remain enabled. Four-
-argument native schedule overloads retain explicit source, zone, amount and schedule
-parameters with a scoped ExcessiveParameterList suppression. The resolver test's
-assertion helper has equivalent documented exceptions. No project-wide rule is
-disabled.
-
-## Quick-build validation limits
-
-The authorised quick build has now been installed and its packaged and consumer
-Apex tests have passed. This verifies the tested installation and runtime
-behaviour; it does not turn the quick build into a validated/promotable package.
-Any standard build still requires explicit approval.
+Global APIs, Flow wrappers and configuration helpers have scoped
+`AvoidGlobalModifier` suppressions because subscriber access requires global
+visibility. Required no-argument Flow constructors have scoped empty-block
+exemptions. Existing aggregate-complexity and four-argument core overload
+exemptions remain documented in source; method-level checks remain enabled.
+Test assertion/input builders have narrow parameter-count exceptions. No
+project-wide rule was disabled.
