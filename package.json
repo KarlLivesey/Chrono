@@ -11,7 +11,7 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "sf code-analyzer run --workspace force-app --rule-selector pmd:Recommended --rule-selector pmd:AppExchange --severity-threshold 3 --view table",
+    "lint": "sf code-analyzer run --workspace force-app --workspace tests/subscriber/force-app --rule-selector pmd:Recommended --rule-selector pmd:AppExchange --severity-threshold 3 --view table",
     "check": "npm run format:check && npm run lint"
   },
   "devDependencies": {

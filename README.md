@@ -6,22 +6,45 @@ Salesforce second-generation managed package in the `skel` namespace, using
 The managed package is registered in the Dev Hub with package ID
 `0HogK0000004dxFSAQ` and local alias `Chrono`.
 
-The planned library, Chrono, builds on Salesforce's native `Date`, `Time`,
+Chrono builds on Salesforce's native `Date`, `Time`,
 `Datetime` and time-zone capabilities. Its scope is to add an easy-to-use zoned
 date/time API for organisations working across multiple time zones, with
 conversions to and from the native Salesforce types.
 
-Chrono will also integrate with Salesforce Business Hours for business-time
-calculations using the organisation's configured business hours.
+Chrono will support schedule-aware arithmetic using Salesforce `OperatingHours`,
+its time slots and associated holidays, as well as the native `BusinessHours`
+API. These are distinct Salesforce models; verify object availability and managed
+package dependencies before selecting the implementation.
+
+For example, with operating hours of 09:00–17:00 Monday to Friday and a holiday
+on Monday, adding one working hour to Friday 16:30 must produce Tuesday 09:30
+in the schedule's time zone. Closed periods do not consume the requested working
+time. Include partial-day holidays, schedule time zones and daylight-saving
+transitions in the behaviour and validation.
+
+Provide both instance and static call styles for operations. Static overloads
+accept the value being operated on as their first argument and delegate to the
+same behaviour as the instance methods. Support native Salesforce inputs where
+applicable; require an explicit zone when a native `Datetime` needs zoned
+semantics rather than silently using the running user's zone. Intended examples:
+
+```apex
+zoned.addHours(1, operatingHours);
+ChronoZonedDateTime.addHours(zoned, 1, operatingHours);
+ChronoZonedDateTime.addHours(nativeDatetime, zoneId, 1, operatingHours);
+```
+
+Both styles return a new value and leave the input unchanged.
 
 JavaScript Temporal's [type relationships and string representations](https://tc39.es/proposal-temporal/docs/)
-are the reference for the planned types and conversions. Alternate calendar
+are the reference for the types and conversions. Alternate calendar
 systems, such as the Japanese calendar, are outside the scope.
 
-This project currently contains setup only. No Apex implementation, Apex tests,
-runtime dependencies or package versions have been created.
+Chrono implements the eight native-backed value types below. It is an Apex
+library with no runtime dependencies. This is an initial beta API, not a complete
+JavaScript Temporal polyfill.
 
-## Planned API scope
+## API scope
 
 | Type                   | Purpose                                                                               |
 | ---------------------- | ------------------------------------------------------------------------------------- |
@@ -51,14 +74,115 @@ time-zone annotations such as `[Asia/Tokyo]` where appropriate. Use the native
 Salesforce calendar model; alternate calendar annotations such as
 `[u-ca=japanese]` are not supported.
 
+## Using Chrono from subscriber Apex
+
+Prefix classes with the managed-package namespace, `skel`:
+
+```apex
+skel.ChronoPlainDateTime local = new skel.ChronoPlainDateTime(
+    Date.newInstance(2026, 8, 28), Time.newInstance(16, 30, 0, 0)
+);
+skel.ChronoZonedDateTime friday = local.toZonedDateTime('Europe/London');
+OperatingHours hours = [SELECT Id FROM OperatingHours WHERE Name = 'UK Office' LIMIT 1];
+skel.ChronoZonedDateTime next = friday.addHours(1, hours);
+// The same operation with a Chrono or native starting value:
+next = skel.ChronoZonedDateTime.addHours(friday, 1, hours);
+next = skel.ChronoZonedDateTime.addHours(friday.toDatetime(), 'Europe/London', 1, hours);
+Datetime nativeInstant = next.toDatetime();
+Date localDate = next.toDate();
+Time localTime = next.toTime();
+```
+
+With 09:00–17:00 weekdays and a linked Monday holiday, the result is Tuesday
+09:30. `addHours` and `addMinutes` also accept a saved `BusinessHours` record;
+those overloads delegate to Salesforce's native `BusinessHours.addGmt`.
+
+All arithmetic returns new values. Instance/static pairs share their behaviour;
+static operations accept the source value first. Date, time and instant
+arithmetic also has native-input overloads. Constructors and `parse` provide
+entry points for all eight types. Individual methods have ApexDoc in source.
+
+### Calendar and elapsed time
+
+`addDays`, `addMonths` and `addYears` operate on local calendar values. Native
+Salesforce date arithmetic determines month-end behaviour, including clamping
+31 January plus one month to the last day of February. `addHours` on an instant
+or zoned datetime adds elapsed time. On a plain datetime it adds wall-clock time;
+on a plain time it wraps at midnight.
+
+`ChronoDuration` retains separate signed months, days and milliseconds. ISO years
+become months and weeks become days. Components must share a sign. Zoned `add`
+applies calendar months and days first, resolves the zone, then adds elapsed
+milliseconds. `until` on instants or zoned datetimes returns an elapsed duration.
+`toMilliseconds` rejects calendar components because their length depends on a
+relative value. This API does not implement Temporal's complete balancing,
+rounding or difference-options system.
+
+Converting a plain datetime to a zone rejects skipped and repeated clock times
+by default. Pass `earlier` or `later` to select an occurrence of a repeated time:
+
+```apex
+skel.ChronoZonedDateTime chosen = skel.ChronoPlainDateTime
+    .parse('2026-10-25T01:30')
+    .toZonedDateTime('Europe/London', 'later');
+```
+
+Skipped local values always raise `skel.ChronoException`. Changing a zoned value
+with `withTimeZone` preserves its instant. The native `Datetime` always denotes
+an instant; `toDate` and `toTime` on the zoned value return its local components.
+A plain datetime has no unqualified conversion to a native instant: supply a zone.
+
+### Working schedules and permissions
+
+Operating-hours arithmetic reads the saved `OperatingHours`, its **normal**
+`TimeSlot` records and holidays linked through `OperatingHoursHoliday`. It honours
+all-day and partial-day holidays, including Salesforce's seven recurrence types.
+It uses the schedule's zone and preserves the source value's zone in the result.
+Negative amounts traverse openings backwards; zero preserves the instant.
+
+Clock gaps consume no time. Repeated opening windows count each actual occurrence,
+while closed periods between them remain closed. Salesforce rejects overlapping
+slots and end times before start times; configure coverage on separate days with
+separate valid slots. Extended hours and appointment-filtered slots are not generic
+availability: extended slots are excluded and conditional normal slots raise an
+explicit error because Chrono has no appointment context.
+
+The OperatingHours overload performs **three SOQL queries per call** in user mode,
+without a hidden cache or DML. The caller must be able to read the schedule, slots,
+links and holiday fields. Salesforce feature availability and permissions still
+apply. Do not put these query-backed overloads into an unbounded record loop.
+Native BusinessHours overloads use Salesforce's own calculation and access
+behaviour. Holidays on that model must be associated through its own configuration.
+
+Search is limited to 3,660 calendar days, with normal Apex CPU, heap and query-row
+limits also applying; very large working-time additions may hit those limits sooner.
+Zone intervals use Salesforce's time-zone rules, sampling for transitions every six
+hours and locating detected transitions to millisecond precision. No time-zone
+database is bundled or maintained by Chrono.
+
+### Parsing and errors
+
+ISO representations support four-digit dates, times with optional seconds and
+up to three fractional digits, offset-bearing instants, named-zone datetimes,
+`YYYY-MM`, `--MM-DD` and durations. Output includes seconds and milliseconds;
+year-month and month-day retain their partial form. Zoned parsing requires an
+offset matching the named zone. Alternate calendar annotations and sub-millisecond
+precision are rejected. Historical offsets containing seconds cannot currently be
+serialised as zoned strings. Salesforce's native date ranges and exceptions apply.
+
+Chrono-specific invalid inputs and unresolved local times raise the globally
+catchable `ChronoException`. Native range errors, permissions and query failures
+propagate from Salesforce. These classes are subscriber Apex APIs; no Flow actions,
+LWC endpoints or Apex-defined transport types are included in this beta.
+
 ## Project configuration
 
 - `sfdx-project.json`: package directory, namespace, API version and version settings.
 - `config/project-scratch-def.json`: Developer Edition scratch-org definition.
-- `force-app/main/default/classes/`: empty directory reserved for future Apex source.
+- `force-app/main/default/classes/`: package implementation and Apex tests.
 
-The initial package version setting is `0.1.0.NEXT`. This is configuration for a
-future build, not an existing installable version.
+The package version setting is `0.1.0.NEXT`. See [validation](docs/validation.md)
+for the exact version and checks performed.
 
 ## Managed-package feasibility
 
@@ -135,7 +259,8 @@ When development begins, create a namespaced scratch org:
 sf org create scratch --definition-file config/project-scratch-def.json --target-dev-hub skel-devhub --alias chrono-dev --set-default --duration-days 7
 ```
 
-No scratch org is created as part of the initial setup.
+Reuse the existing `chrono-dev` and `chrono-subscriber` orgs. Scratch-org and
+package-version allocations are limited; do not recreate them for routine tests.
 
 Package configuration follows the [Salesforce managed 2GP project configuration documentation](https://developer.salesforce.com/docs/platform/pkg2-dev/guide/sfdx-dev2gp-config-file.html).
 
@@ -164,9 +289,9 @@ Lower-severity findings remain visible. These checks run locally without a
 Salesforce org login and are configured in GitHub Actions for pull requests
 and pushes to `main`.
 
-The current empty Apex directory produces no lint findings. This does not
-represent Apex compilation or test coverage; those require source code and a
-Salesforce development org. See the [Salesforce Code Analyzer documentation](https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/analyze.html)
+Static analysis is separate from Apex compilation, runtime tests and package
+installation. See [validation](docs/validation.md) for actual results and the
+[Salesforce Code Analyzer documentation](https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/analyze.html)
 for rule selection and severity thresholds.
 
 ## Licence

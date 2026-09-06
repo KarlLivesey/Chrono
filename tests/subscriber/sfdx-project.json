@@ -1,0 +1,6 @@
+{
+  "name": "chrono-subscriber-tests",
+  "packageDirectories": [{ "path": "force-app", "default": true }],
+  "namespace": "",
+  "sourceApiVersion": "67.0"
+}

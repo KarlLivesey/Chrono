@@ -59,3 +59,35 @@ standard, not a request to add speculative APIs, wrappers or metadata.
 
 See the README's managed-package feasibility section for documented LWC, Flow and global
 API considerations.
+
+## API call styles and working time
+
+Provide instance and static forms of operations, sharing one implementation.
+Static forms take the source value first and support corresponding native
+Salesforce values where applicable. Zoned operations on a native `Datetime`
+require an explicit time-zone ID. Arithmetic returns new values.
+
+Working-time arithmetic must support Salesforce `OperatingHours`, time slots
+and associated holidays; do not substitute `BusinessHours` without addressing
+the distinct object model. Verify availability and managed-package dependencies.
+The acceptance example is Friday 16:30 plus one working hour, with 09:00–17:00
+Monday–Friday hours and Monday a holiday, returning Tuesday 09:30.
+
+## Salesforce allocation limits
+
+Scratch-org and package-version creation allocations are limited. Reuse the
+existing `chrono-dev` and `chrono-subscriber` scratch orgs. Do not create further
+scratch orgs without checking with Karl.
+
+- Karl permits quick builds using `--skip-validation`, charged to
+  `Package2VersionCreatesWithoutValidation`. Use these for test packages.
+- **Do not consume `Package2VersionCreates` without Karl's explicit approval.**
+  Standard/full builds (the CLI default) and async validation builds are not
+  authorised by a request to implement, test, commit, push or make a quick build.
+- Always include `--skip-validation` on an authorised quick-build command. Do not
+  combine it with `--code-coverage` or `--async-validation`.
+- Run compilation, tests and lint in existing orgs before building. Consolidate
+  validation into as few builds as practical; do not retry creation blindly.
+- Quick builds do not validate package dependencies/metadata or calculate package
+  coverage and cannot be promoted. Install and test in the existing subscriber
+  org, and report that evidence separately from standard build validation.
