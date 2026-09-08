@@ -31,6 +31,36 @@ country or timezone. Provide the records representing your organisation&#39;s ru
 <p>Single query-backed Apex working-time overloads perform three user-mode queries
 per schedule load. Flow batches common schedules across requests. Access failures
 are not interpreted as an empty schedule; they are reported as errors.</p>
+<h2 id="bulk-safe-apex-and-flow">Bulk-safe Apex and Flow<a class="heading-anchor" href="#bulk-safe-apex-and-flow" aria-label="Link to Bulk-safe Apex and Flow">#</a></h2><p>For multiple saved-schedule calculations, call
+<code>skel.ChronoWorkingTimeAction.run(requests)</code> <strong>once with the complete list</strong>.
+This global entry point is available to subscriber Apex as well as Flow in
+released version <strong>0.1.0.19</strong>.</p>
+<ul>
+<li>All requested OperatingHours IDs share <strong>three user-mode schedule queries for
+the batch</strong>, rather than three per item. Mixing in BusinessHours adds one
+explicit query to load those records, followed by native Salesforce calculations.</li>
+<li>Each request can use its own start value, amount, result timezone and schedule.</li>
+<li>Output order matches input order. Check each result&#39;s <code>success</code> and
+<code>errorMessage</code> before reading <code>instantValue</code> or the zoned ISO <code>value</code>.</li>
+<li>Identical requests reuse their calculation within the call. Every returned
+result is independent, so changing one does not change another.</li>
+<li>Ordinary item errors are reported per result. Governor-limit exceptions can
+still abort the transaction; bulk query loading is not unlimited CPU capacity.</li>
+</ul>
+<p>Create a <code>skel.ChronoWorkingTimeAction.Request</code> per item and set <code>startInstant</code>
+or <code>startValue</code>, <code>timeZoneId</code>, <code>amount</code>, <code>unit</code> (<code>hours</code> or <code>minutes</code>),
+<code>scheduleType</code> (<code>OperatingHours</code> or <code>BusinessHours</code>) and <code>scheduleId</code>.
+Pass the complete <code>List&lt;skel.ChronoWorkingTimeAction.Request&gt;</code> to <code>run</code>; it returns
+<code>List&lt;skel.ChronoFlowResult&gt;</code>. See the
+<a href="../reference/apex/ChronoWorkingTimeAction.html">exact request fields and entry point</a>.
+Do not call the batch entry point separately for each record in a loop.</p>
+<p>In Flow, <strong>Chrono: Add or subtract working time</strong> batches separate interviews;
+its <a href="../reference/actions/WorkingTime.html">collection action</a> also accepts explicit
+collections. Working elapsed differences similarly batch saved schedules through
+<code>skel.ChronoDifferenceAction.run(requests)</code>.</p>
+<p>For typed <code>ChronoZonedDateTime</code> results with schedule records you have already
+loaded, use the supplied-record service overload below. It performs no schedule
+queries and can be called inside a loop without a query per item.</p>
 <h2 id="supplied-native-records">Supplied native records<a class="heading-anchor" href="#supplied-native-records" aria-label="Link to Supplied native records">#</a></h2><p>Use an OperatingHours record plus TimeSlot and Holiday collections when the
 schedule is dynamic or already loaded. Records may be unsaved. Supplying all
 three inputs uses their fields directly, with no schedule queries or DML—even if
@@ -72,6 +102,6 @@ not be assumed to accept a BusinessHours ID.</p>
 <p>See <a href="security.html">permissions</a>, <a href="screen-configuration.html">screen schedule choices</a>
 and <a href="limits.html">limits</a> before processing large schedule ranges.</p>
 </article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
-<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#the-friday-to-tuesday-example">The Friday-to-Tuesday example</a></li><li><a href="#saved-configuration">Saved configuration</a></li><li><a href="#supplied-native-records">Supplied native records</a></li><li><a href="#pick-the-working-operation">Pick the working operation</a></li><li><a href="#boundaries-and-holidays">Boundaries and holidays</a></li><li><a href="#businesshours-is-separate">BusinessHours is separate</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#the-friday-to-tuesday-example">The Friday-to-Tuesday example</a></li><li><a href="#saved-configuration">Saved configuration</a></li><li><a href="#bulk-safe-apex-and-flow">Bulk-safe Apex and Flow</a></li><li><a href="#supplied-native-records">Supplied native records</a></li><li><a href="#pick-the-working-operation">Pick the working operation</a></li><li><a href="#boundaries-and-holidays">Boundaries and holidays</a></li><li><a href="#businesshours-is-separate">BusinessHours is separate</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
 <footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
 </body></html>
