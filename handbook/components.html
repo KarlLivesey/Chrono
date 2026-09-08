@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Use the Lightning components · Chrono</title><meta name="description" content="Chrono separates user interface, resolution/control, Flow adaptation and record persistence. Choose the layer that owns the work you need. | Layer             | Component examples           ">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/components.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html" aria-current="page">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Use the Lightning components</div>
+<article><h1 id="use-the-lightning-components">Use the Lightning components</h1><p>Chrono separates user interface, resolution/control, Flow adaptation and record
+persistence. Choose the layer that owns the work you need.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Layer</th><th scope="col">Component examples</th><th scope="col">Responsibility</th></tr></thead><tbody><tr><td>UI only</td><td><code>chronoDateTimePicker</code>, <code>chronoRangePicker</code>, <code>chronoAvailabilityPicker</code></td><td>Display supplied state and emit user intent</td></tr><tr><td>Date/time control</td><td><code>chronoDateTimeControl</code></td><td>Resolve values, load/check schedules, validate and publish changes</td></tr><tr><td>Flow screens</td><td><code>chronoFlowDateTime</code>, <code>chronoFlowRange</code>, <code>chronoFlowAvailability</code>, <code>chronoFlowRecurrence</code>, <code>chronoFlowValueInput</code></td><td>Adapt values and validation to Flow</td></tr><tr><td>Record page</td><td><code>chronoRecordDateTime</code></td><td>Read and save a configured Date/DateTime field through LDS</td></tr><tr><td>Supporting UI</td><td><code>chronoOffsetPicker</code>, <code>chronoPickerMenu</code>, <code>chronoPickerPopover</code></td><td>Reusable compact interactions</td></tr></tbody></table></div><p>See <a href="../reference/components/index.html">all exposed components</a> for actual public
+members, defaults, targets and Flow/App Builder properties.</p>
+<h2 id="compose-a-control-in-a-subscriber-lwc">Compose a control in a subscriber LWC<a class="heading-anchor" href="#compose-a-control-in-a-subscriber-lwc" aria-label="Link to Compose a control in a subscriber LWC">#</a></h2><p>With Lightning Web Security enabled, a subscriber parent can compose an exposed
+Chrono component. For a controller that handles timezone resolution:</p>
+<pre><code class="language-html">&lt;skel-chrono-date-time-control
+  label=&quot;Appointment&quot;
+  time-zone-id=&quot;Europe/London&quot;
+  onvaluechange=&quot;{handleValueChange}&quot;
+&gt;
+&lt;/skel-chrono-date-time-control&gt;
+</code></pre>
+<p>The <a href="../reference/components/chronoDateTimeControl.html">control reference</a> gives
+its members. Its <code>valuechange</code> event carries a changed property&#39;s <code>name</code> and
+<code>value</code>; store the properties your application needs. Invoke its validation
+methods before accepting an unresolved value.</p>
+<p>For full control of data loading/resolution, compose <code>chronoDateTimePicker</code>
+instead. Its parent supplies candidates, selected instant, zone options and
+schedule choices. It emits <code>edit</code>, <code>resolvechoice</code>, <code>offsetchange</code>, <code>zonesearch</code>,
+<code>schedulechange</code>, <code>schedulesearch</code> and <code>openchoice</code>. It imports neither Apex nor
+Flow support and does not mutate its public inputs.</p>
+<h2 id="native-temporal-and-apex-fallback">Native Temporal and Apex fallback<a class="heading-anchor" href="#native-temporal-and-apex-fallback" aria-label="Link to Native Temporal and Apex fallback">#</a></h2><p>The controller feature-detects native Temporal. If it is unavailable or cannot
+handle the selected zone, it falls back to the package&#39;s Apex resolution. The
+package does not ship a runtime Temporal polyfill or rely on implicit JavaScript
+Date parsing of local clocks.</p>
+<p>Schedule validation can still require Apex even when native Temporal resolves
+the time. Treat the pending state as pending, not as a valid selected instant.
+Stale asynchronous responses are discarded by the controller.</p>
+<h2 id="styling-and-layout">Styling and layout<a class="heading-anchor" href="#styling-and-layout" aria-label="Link to Styling and layout">#</a></h2><p>The picker uses Salesforce base inputs and SLDS semantic theme hooks. Its date
+and time fields sit together; timezone and Hours are siblings rather than nested
+menus. The persistent offset control reopens its choice. The picker normally
+fills its container up to 26rem; a parent can set <code>--chrono-picker-max-width</code>.</p>
+<p>Do not add a second custom dark-mode system inside Salesforce. Let base controls
+and semantic hooks inherit the host theme. Automated component tests cover
+behaviour; live light/dark rendering has not been browser-verified in this release.</p>
+<h2 id="event-ownership">Event ownership<a class="heading-anchor" href="#event-ownership" aria-label="Link to Event ownership">#</a></h2><p>UI events describe intent. The parent decides whether to update its state,
+resolve a value or save a record. Flow adapters translate changes into
+<code>FlowAttributeChangeEvent</code> and implement Flow&#39;s validation lifecycle. The record
+adapter owns the explicit save. Avoid mixing these responsibilities in a parent
+that assumes every selection has already persisted data.</p>
+<p>Cross-package LWC-to-Apex controller calls and legacy Locker composition are not
+supported integration paths. Use the exposed components or the global Apex API.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#compose-a-control-in-a-subscriber-lwc">Compose a control in a subscriber LWC</a></li><li><a href="#native-temporal-and-apex-fallback">Native Temporal and Apex fallback</a></li><li><a href="#styling-and-layout">Styling and layout</a></li><li><a href="#event-ownership">Event ownership</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

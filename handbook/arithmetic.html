@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar, elapsed and working time · Chrono</title><meta name="description" content="Pick the meaning of the unit before choosing the action. Three calculations that all say “add a day” can answer different business questions. | Meaning              | Example                ">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/arithmetic.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html" aria-current="page">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Calendar, elapsed and working time</div>
+<article><h1 id="calendar-elapsed-and-working-time">Calendar, elapsed and working time</h1><p>Pick the meaning of the unit before choosing the action. Three calculations
+that all say “add a day” can answer different business questions.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Meaning</th><th scope="col">Example</th><th scope="col">Use</th></tr></thead><tbody><tr><td>Calendar</td><td>Same local clock on the next date</td><td>Add/subtract calendar days</td></tr><tr><td>Elapsed</td><td>Exactly 24 hours later</td><td>Add 24 hours or <code>PT24H</code></td></tr><tr><td>Working</td><td>Consume time only while a schedule is open</td><td>Working-time action</td></tr><tr><td>Working calendar day</td><td>Move to another date with some opening</td><td>WorkingDays action</td></tr></tbody></table></div><h2 id="month-ends">Month ends<a class="heading-anchor" href="#month-ends" aria-label="Link to Month ends">#</a></h2><p>Native Salesforce date arithmetic determines core month addition. <strong>31 January
+2026 plus one month is 28 February 2026</strong>. This clamping behaviour differs from
+recurrence generation, where an invalid recurring month-end date is skipped.
+Do not substitute repeated <code>addMonths</code> calls for a recurrence rule without
+checking the intended month-end policy.</p>
+<h2 id="a-clock-change-example">A clock-change example<a class="heading-anchor" href="#a-clock-change-example" aria-label="Link to A clock-change example">#</a></h2><p>Start at London <strong>28 March 2026, 12:00</strong>. Add one calendar day and the result is
+<strong>29 March 12:00</strong>, only 23 elapsed hours later. Add 24 elapsed hours and the
+result is <strong>29 March 13:00</strong>.</p>
+<p>Zoned calendar arithmetic resolves the target local clock. The default rejects
+a repeated or missing target; supported overloads can select an overlap
+occurrence. Plain date/time arithmetic works on wall fields and needs no timezone
+until you convert its result into an instant.</p>
+<h2 id="duration-addition">Duration addition<a class="heading-anchor" href="#duration-addition" aria-label="Link to Duration addition">#</a></h2><p>A duration keeps calendar months, calendar days and elapsed milliseconds.
+Zoned addition applies months and days locally, resolves that intermediate local
+time, then adds the elapsed part. Order matters around month ends and transitions.</p>
+<p>Instants accept elapsed durations. Plain times wrap across midnight and reject
+calendar components. Plain dates accept calendar units. A month-day needs a
+reference year before dated arithmetic can be meaningful.</p>
+<h2 id="difference">Difference<a class="heading-anchor" href="#difference" aria-label="Link to Difference">#</a></h2><p>Elapsed difference is signed end minus start. The Difference action accepts
+native DateTime or ISO instant/zoned endpoints; local values need resolving
+first. An optional saved OperatingHours ID restricts the difference to open time.</p>
+<p>CalendarDifference reports whole calendar units and a separate time remainder.
+Use the calendar part alone when your process intentionally ignores the
+remainder. Different input zones require an explicit common calculation zone
+where local calendar comparison needs one.</p>
+<h2 id="rounding-and-boundaries">Rounding and boundaries<a class="heading-anchor" href="#rounding-and-boundaries" aria-label="Link to Rounding and boundaries">#</a></h2><p>Round is an explicit operation with unit, increment and rounding policy. Do not
+rely on display formatting to round a stored value. PeriodBoundary finds the
+start/end of the selected local period; exact inputs need zone context.</p>
+<p>Ranges use an exclusive upper bound. A last representable time inside a range
+is not the same as its exclusive endpoint. This distinction matters when you
+chain period, range and availability operations.</p>
+<p>See the <a href="../reference/actions/index.html">action reference</a> for each operation&#39;s
+accepted types and options, and <a href="allocation.html">time allocation</a> for its separate
+precision and rounding rules.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#month-ends">Month ends</a></li><li><a href="#a-clock-change-example">A clock-change example</a></li><li><a href="#duration-addition">Duration addition</a></li><li><a href="#difference">Difference</a></li><li><a href="#rounding-and-boundaries">Rounding and boundaries</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

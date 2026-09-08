@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Chrono to a record page · Chrono</title><meta name="description" content="Use Chrono: Record date and time in Lightning App Builder when users should edit a native Date or DateTime field with timezone and operating-hours validation. The record adapter adds persist">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/record-pages.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html" aria-current="page">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Add Chrono to a record page</div>
+<article><h1 id="add-chrono-to-a-record-page">Add Chrono to a record page</h1><p>Use <strong>Chrono: Record date and time</strong> in Lightning App Builder when users should
+edit a native Date or DateTime field with timezone and operating-hours validation.
+The record adapter adds persistence around the reusable control.</p>
+<h2 id="configure-the-field-mapping">Configure the field mapping<a class="heading-anchor" href="#configure-the-field-mapping" aria-label="Link to Configure the field mapping">#</a></h2><div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Property</th><th scope="col">Set it to</th></tr></thead><tbody><tr><td>Date or DateTime field API name</td><td>The field to edit, for example <code>Appointment__c</code></td></tr><tr><td>Timezone text field API name</td><td>Optional field storing a named timezone ID</td></tr><tr><td>OperatingHours lookup field API name</td><td>Optional lookup containing the schedule ID</td></tr><tr><td>Default timezone ID</td><td>Fallback when the mapped timezone field has no value</td></tr><tr><td>Fixed OperatingHours ID</td><td>Fallback when the mapped schedule field has no value</td></tr><tr><td>Allow timezone changes</td><td>Whether users can change the display/input zone</td></tr><tr><td>Date display length</td><td><code>short</code>, <code>medium</code> or <code>long</code>, interpreted through user locale</td></tr></tbody></table></div><p>Use field API names, not labels or relationship paths. The mapped value field
+must actually be Date or DateTime. The optional timezone field must store text
+(String/Picklist) and the schedule field must be a lookup. Configure an actual
+OperatingHours relationship, not an unrelated lookup with a similar label.</p>
+<p>The adapter reads the record&#39;s timezone/schedule field first, then uses the fixed
+fallback. If there is no configured zone value it uses the running user&#39;s zone.</p>
+<h2 id="saving">Saving<a class="heading-anchor" href="#saving" aria-label="Link to Saving">#</a></h2><p>The component reads and updates through Lightning Data Service. Users need the
+appropriate record and field permissions. The adapter checks the loaded
+LastModifiedDate when saving, so a concurrent edit is surfaced instead of quietly
+overwriting it.</p>
+<p>A date/time selection remains a draft until Save. A Flow screen component, or
+the UI-only picker composed elsewhere, does not inherit this persistence.</p>
+<p>For a Date field the adapter uses date mode. A calendar date is not silently
+converted to an exact midnight timestamp just because this component can also
+edit DateTime fields.</p>
+<h2 id="verify-your-page">Verify your page<a class="heading-anchor" href="#verify-your-page" aria-label="Link to Verify your page">#</a></h2><p>Try an ordinary value, a repeated local time and a closed schedule time. Verify
+that your selected timezone field is writable if it should be saved. Confirm the
+intended fallback when mapped fields are empty, and test with the actual user&#39;s
+permissions rather than only a system administrator.</p>
+<p>See <a href="../reference/components/chronoRecordDateTime.html">record component properties</a>
+and <a href="security.html">permissions</a>.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#configure-the-field-mapping">Configure the field mapping</a></li><li><a href="#saving">Saving</a></li><li><a href="#verify-your-page">Verify your page</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Time allocation and billing blocks · Chrono</title><meta name="description" content="ChronoTimeAllocationService.allocate(request) breaks one continuous worked interval into named time blocks. It calculates durations, not prices or invoices. For split shifts or unpaid breaks">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/time-allocation.html"><link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css"><script type="module" src="assets/site.mjs"></script></head>
+<body data-base="" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="index.html" aria-label="Chrono documentation home"><img src="assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="index.html">Overview</a></li><li><a href="handbook/installation.html">Install Chrono</a></li><li><a href="handbook/first-flow.html">Your first Flow</a></li><li><a href="handbook/apex.html">Apex quick start</a></li><li><a href="handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="handbook/types.html">Values &amp; ISO formats</a></li><li><a href="handbook/iso-formats.html">ISO transport</a></li><li><a href="handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="handbook/arithmetic.html">Arithmetic</a></li><li><a href="handbook/operating-hours.html">Operating hours</a></li><li><a href="handbook/availability.html">Availability</a></li><li><a href="handbook/allocation.html">Time allocation</a></li><li><a href="handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="handbook/flow-configuration.html">Action configuration</a></li><li><a href="handbook/collections.html">Bulk &amp; collections</a></li><li><a href="handbook/screen-configuration.html">Flow screens</a></li><li><a href="handbook/components.html">LWC composition</a></li><li><a href="handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="reference/actions/index.html">54 Flow actions</a></li><li><a href="reference/apex/index.html">Global Apex API</a></li><li><a href="reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="handbook/security.html">Permissions</a></li><li><a href="handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="handbook/limits.html">Limits &amp; performance</a></li><li><a href="handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Time allocation and billing blocks</div>
+<article><h1 id="time-allocation-and-billing-blocks">Time allocation and billing blocks</h1><p><code>ChronoTimeAllocationService.allocate(request)</code> breaks one continuous worked
+interval into named time blocks. It calculates durations, not prices or invoices.
+For split shifts or unpaid breaks, supply separate worked intervals to the
+collection action. Each interval retains its own ordered result.</p>
+<h2 id="rules">Rules<a class="heading-anchor" href="#rules" aria-label="Link to Rules">#</a></h2><ul>
+<li><strong>Strict</strong> (default): fail if worked time matches more than one eligible block.</li>
+<li><strong>Lax</strong>: the first matching block in the configured list receives the time.
+Later matches remain visible with zero credit in the segment results.</li>
+<li><strong>Duplicate</strong>: every matching block receives the entire overlapping duration.</li>
+<li><strong>Split</strong>: divide each overlapping segment equally among its matching blocks.
+Recalculate shares when the matching set changes.</li>
+</ul>
+<p>All boundaries are half-open: start included, end excluded. The block list defines
+priority, both for lax selection and deterministic split rounding. Blocks have
+stable keys and labels; adjacent blocks are never merged across different keys.
+Totals include zero-credit blocks in the original order.</p>
+<p>A block has start weekdays (ISO 1 Monday through 7 Sunday), a local start/end,
+and a normal/holiday classification. An end before the start continues into the
+next day. <code>00:00</code>–<code>24:00</code> means a full day; equal start/end times are rejected.
+Weekdays apply to the date the block starts. Holiday classification applies to
+<strong>each actual calendar day</strong>, so an overnight normal block stops at a holiday
+midnight unless an eligible holiday block covers the following time.</p>
+<p>Native <code>Holiday</code> collections provide the calendar, including unsaved, recurring,
+partial-day and overlapping holiday records. Their dates and local hours are
+interpreted in the required block timezone. Holiday windows are unioned before
+classification: overlapping holiday records do not duplicate time. Holidays
+replace normal blocks; a holiday with no matching holiday block is unallocated.
+The service does not infer public holidays or query records. Flow can obtain the
+relevant native Holiday records, including those associated with OperatingHours,
+and pass the collection. No separate schedule wrapper is needed.</p>
+<h2 id="elapsed-and-clock-time">Elapsed and clock time<a class="heading-anchor" href="#elapsed-and-clock-time" aria-label="Link to Elapsed and clock time">#</a></h2><p><strong>Elapsed</strong> is the default and measures actual instants. Repeated hours count
+actual time worked; nonexistent clock time contributes nothing. Segment endpoints
+are zoned ISO strings.</p>
+<p><strong>Clock</strong> projects both worked endpoints into the block timezone and measures the
+nominal local interval. A 00:00–03:00 interval is three clock hours even on a day
+when elapsed time is two or four hours. Clock segment endpoints are plain ISO
+date/time strings; they must not be mistaken for exact instants. If a backward
+clock change makes the local end precede the local start, clock mode fails with
+an instruction to use elapsed mode. Equal local endpoints have zero clock duration.
+Local Flow inputs still require explicit timezone resolution; ambiguous endpoints
+require a repeated-time choice. Use native/ISO exact endpoints when the occurrence
+is already known.</p>
+<h2 id="rounding-and-reconciliation">Rounding and reconciliation<a class="heading-anchor" href="#rounding-and-reconciliation" aria-label="Link to Rounding and reconciliation">#</a></h2><p>The default allocation unit is one millisecond. Whole-second and whole-minute
+allocation are optional. Within <strong>each atomic segment</strong>, split whole units equally
+and award remaining whole units to the earliest matching blocks. For ten minutes
+and three matches this gives:</p>
+<ul>
+<li>Milliseconds: 3 minutes 20 seconds each.</li>
+<li>Whole minutes: 4, 3 and 3 minutes.</li>
+</ul>
+<p>Any sub-unit remainder is reported in <code>roundingMilliseconds</code>; it is never silently
+dropped. Rounding happens per segment, not once over the entire worked interval.
+In <strong>lax mode</strong>, rounding instead applies to each continuous interval with the
+same winning block. Boundaries belonging only to losing blocks do not change
+the winner&#39;s credit. Diagnostic segment rows retain millisecond precision; any
+discarded remainder is attributed to the end of that winning interval. A gap
+or a change of winner ends the interval. Default millisecond allocation discards
+no whole milliseconds in either case.
+Duplicate mode reports its additional pre-rounding budget in
+<code>duplicateMilliseconds</code>. Every successful result satisfies:</p>
+<pre><code class="language-text">inputMilliseconds + duplicateMilliseconds
+  = allocatedMilliseconds + unallocatedMilliseconds + roundingMilliseconds
+</code></pre>
+<p><code>totals</code> and <code>segments</code> contain flat data rows with block key/label,
+<code>matchedMilliseconds</code>, <code>allocatedMilliseconds</code> and <code>allocatedDuration</code> (the
+credited ISO duration). Segment rows also include
+start/end strings. Unallocated segments have a null block key and zero credited
+milliseconds; their <code>matchedMilliseconds</code> is the uncovered duration. A zero-credit
+row can also represent a lower-priority match or a rounded-down split share.</p>
+<h2 id="apex-and-flow">Apex and Flow<a class="heading-anchor" href="#apex-and-flow" aria-label="Link to Apex and Flow">#</a></h2><pre><code class="language-apex">skel.ChronoTimeBlock block = new skel.ChronoTimeBlock();
+block.key = &#39;morning&#39;;
+block.label = &#39;Morning&#39;;
+block.weekdays = &#39;1,2,3,4,5&#39;;
+block.startTime = &#39;08:00&#39;;
+block.endTime = &#39;12:00&#39;;
+
+skel.ChronoTimeAllocationRequest request = new skel.ChronoTimeAllocationRequest();
+request.startInstant = Datetime.newInstanceGmt(2026, 9, 7, 7, 0, 0);
+request.endInstant = Datetime.newInstanceGmt(2026, 9, 7, 11, 0, 0);
+request.timeZoneId = &#39;Europe/London&#39;;
+request.blocks = new List&lt;skel.ChronoTimeBlock&gt;{ block };
+request.overlapMode = &#39;split&#39;;
+skel.ChronoTimeAllocationResult result = skel.ChronoTimeAllocationService.allocate(request);
+</code></pre>
+<p>The example uses subscriber Apex namespace qualification (<code>skel.</code>). Core input and output records
+are data-only; validation, allocation and serialisation are performed by services.
+Construct these managed-package inputs using their global constructors and fields,
+as above. Subscriber-side <code>JSON.deserialize</code> into <code>ChronoTimeBlock</code> or
+<code>ChronoTimeAllocationInput</code> is rejected by Salesforce. Flow&#39;s <code>blocksText</code> input
+is parsed inside the package and remains supported.
+The service does not mutate input records and performs no queries or DML.</p>
+<p>Flow actions under <strong>Chrono: Time allocation</strong>:</p>
+<ul>
+<li><strong>Allocate time to blocks</strong></li>
+<li><strong>Allocate time to blocks (collection)</strong></li>
+</ul>
+<p>They accept ISO date/local-datetime/instant/zoned-datetime inputs and native
+Salesforce Date/Datetime variants through the existing editor controls. A native
+Date means local midnight; interval ends remain exclusive. The custom editor
+provides inline block rows, weekday buttons, holiday selection and priority moves.
+Alternatively, bind <code>blocksText</code> to a Text resource containing the same definition:</p>
+<pre><code class="language-json">[
+  {
+    &quot;key&quot;: &quot;one&quot;,
+    &quot;label&quot;: &quot;Block 1&quot;,
+    &quot;startTime&quot;: &quot;08:00&quot;,
+    &quot;endTime&quot;: &quot;10:00&quot;
+  },
+  {
+    &quot;key&quot;: &quot;two&quot;,
+    &quot;label&quot;: &quot;Block 2&quot;,
+    &quot;startTime&quot;: &quot;10:00&quot;,
+    &quot;endTime&quot;: &quot;11:00&quot;
+  },
+  {
+    &quot;key&quot;: &quot;three&quot;,
+    &quot;label&quot;: &quot;Block 3&quot;,
+    &quot;startTime&quot;: &quot;11:00&quot;,
+    &quot;endTime&quot;: &quot;15:00&quot;
+  },
+  {
+    &quot;key&quot;: &quot;holiday&quot;,
+    &quot;dayType&quot;: &quot;holiday&quot;,
+    &quot;startTime&quot;: &quot;08:00&quot;,
+    &quot;endTime&quot;: &quot;12:00&quot;
+  }
+]
+</code></pre>
+<p><code>ChronoTimeBlock</code> is the native Apex block contract. Flow block configuration uses
+Text; no core Chrono date/time objects or schedule wrappers cross that boundary.
+Returned rows are top-level DTOs containing only primitive fields, following
+<a href="https://developer.salesforce.com/docs/platform/lwc/guide/use-flow-data-types">Salesforce&#39;s supported Flow types</a>.
+The dedicated subscriber fixtures check actual scalar/collection transport and a
+Flow loop reading row fields; packaging evidence is recorded in <code>validation.md</code>.</p>
+<p>Both actions preserve interview and collection order, isolate item failures and
+return independent result graphs. Identical requests within an invocation reuse
+the calculation. Invalid blocks, strict overlaps or limits produce an error with
+no partial allocation. Limits are 50 blocks, 1000 holiday records, 366 days and
+1000 segment rows by default (configurable to 5000). Complex inputs can still
+consume the caller transaction&#39;s CPU budget; limits are not a performance guarantee.</p>
+<p><code>ChronoExampleTimeAllocation</code> demonstrates the three-block 2/1/1-hour result and
+an unsaved Tuesday holiday. It writes no records. Its range picker uses the existing
+compact Salesforce component; the block editor is reusable independently.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#rules">Rules</a></li><li><a href="#elapsed-and-clock-time">Elapsed and clock time</a></li><li><a href="#rounding-and-reconciliation">Rounding and reconciliation</a></li><li><a href="#apex-and-flow">Apex and Flow</a></li></ol><a class="contents-help" href="handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="licence.txt">Licence</a></span></footer>
+</body></html>

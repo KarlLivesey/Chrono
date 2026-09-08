@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operating hours and holidays · Chrono</title><meta name="description" content="OperatingHours answers “when is this schedule open?” Working-time arithmetic consumes only those open intervals. The schedule&#39;s timezone controls its slots and holidays even when the input o">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/operating-hours.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html" aria-current="page">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Operating hours and holidays</div>
+<article><h1 id="operating-hours-and-holidays">Operating hours and holidays</h1><p>OperatingHours answers “when is this schedule open?” Working-time arithmetic
+consumes only those open intervals. The schedule&#39;s timezone controls its slots
+and holidays even when the input or displayed result uses another zone.</p>
+<h2 id="the-friday-to-tuesday-example">The Friday-to-Tuesday example<a class="heading-anchor" href="#the-friday-to-tuesday-example" aria-label="Link to The Friday-to-Tuesday example">#</a></h2><p>Use 09:00–17:00 Monday–Friday hours in <code>Europe/London</code>, with <strong>Monday 31 August
+2026</strong> as an all-day holiday. Starting <strong>Friday 28 August at 16:30</strong>:</p>
+<ol>
+<li>Consume 30 minutes before Friday closes.</li>
+<li>Skip the weekend and Monday&#39;s holiday.</li>
+<li>Consume the remaining 30 minutes on Tuesday.</li>
+</ol>
+<p>The result is <strong>Tuesday 1 September, 09:30 London</strong>. The unrestricted elapsed
+difference between those endpoints is <strong>89 hours</strong>; the working difference is
+<strong>one hour</strong>.</p>
+<h2 id="saved-configuration">Saved configuration<a class="heading-anchor" href="#saved-configuration" aria-label="Link to Saved configuration">#</a></h2><p>Saved schedules use <code>OperatingHours</code>, its normal <code>TimeSlot</code> records, and
+<code>OperatingHoursHoliday</code> links to <code>Holiday</code>. Use explicit record IDs where possible;
+names are not unique identifiers. Holidays are not automatically inferred from a
+country or timezone. Provide the records representing your organisation&#39;s rules.</p>
+<p>Single query-backed Apex working-time overloads perform three user-mode queries
+per schedule load. Flow batches common schedules across requests. Access failures
+are not interpreted as an empty schedule; they are reported as errors.</p>
+<h2 id="supplied-native-records">Supplied native records<a class="heading-anchor" href="#supplied-native-records" aria-label="Link to Supplied native records">#</a></h2><p>Use an OperatingHours record plus TimeSlot and Holiday collections when the
+schedule is dynamic or already loaded. Records may be unsaved. Supplying all
+three inputs uses their fields directly, with no schedule queries or DML—even if
+some records happen to have IDs.</p>
+<pre><code class="language-apex">OperatingHours hours = new OperatingHours(TimeZone = &#39;Europe/London&#39;);
+List&lt;TimeSlot&gt; slots = new List&lt;TimeSlot&gt;();
+for (String day : new List&lt;String&gt;{&#39;Monday&#39;, &#39;Tuesday&#39;, &#39;Wednesday&#39;, &#39;Thursday&#39;, &#39;Friday&#39;}) {
+    slots.add(new TimeSlot(DayOfWeek = day, Type = &#39;Normal&#39;,
+        StartTime = Time.newInstance(9, 0, 0, 0), EndTime = Time.newInstance(17, 0, 0, 0)));
+}
+List&lt;Holiday&gt; holidays = new List&lt;Holiday&gt;{
+    new Holiday(ActivityDate = Date.newInstance(2026, 8, 31), IsAllDay = true)
+};
+skel.ChronoZonedDateTime start = skel.ChronoZonedDateTimeService.parseIso(&#39;2026-08-28T16:30:00.000+01:00[Europe/London]&#39;);
+skel.ChronoZonedDateTime endValue = skel.ChronoZonedDateTimeService.addHours(start, 1, hours, slots, holidays);
+Assert.areEqual(&#39;2026-09-01T09:30:00.000+01:00[Europe/London]&#39;, skel.ChronoZonedDateTimeService.toIsoString(endValue));
+</code></pre>
+<h2 id="pick-the-working-operation">Pick the working operation<a class="heading-anchor" href="#pick-the-working-operation" aria-label="Link to Pick the working operation">#</a></h2><div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Need</th><th scope="col">Operation</th></tr></thead><tbody><tr><td>Add or subtract hours/minutes while open</td><td>WorkingTime</td></tr><tr><td>Count open time between exact endpoints</td><td>Difference + saved OperatingHours ID</td></tr><tr><td>Is this value open?</td><td>CheckWorkingTime</td></tr><tr><td>Move to the next or previous open time</td><td>FindWorkingTime</td></tr><tr><td>Move a number of working calendar dates</td><td>WorkingDays</td></tr><tr><td>List openings or find appointments</td><td>Availability</td></tr></tbody></table></div><p>The elapsed Difference action takes a saved ID; it does not expose the full
+supplied-record input set used by the other schedule operations. Do not infer
+identical inputs just because two actions use the same underlying schedule model.</p>
+<p>WorkingDays excludes the starting date when counting nonzero days. Timed values
+retain the schedule-local clock, then apply <code>keep</code>, <code>reject</code>, <code>next</code> or <code>previous</code>
+if it is closed. This differs from adding eight working hours.</p>
+<h2 id="boundaries-and-holidays">Boundaries and holidays<a class="heading-anchor" href="#boundaries-and-holidays" aria-label="Link to Boundaries and holidays">#</a></h2><p>An opening is start-inclusive and end-exclusive. At a 17:00 closing, 17:00 itself
+is closed. A previous-open correction can therefore be 16:59:59.999. Multiple
+overlapping openings are merged and are not counted twice.</p>
+<p>All-day, partial-day and supported Salesforce recurring holidays remove time from
+the normal schedule. Native recurrence fields must be supplied when using an
+unsaved recurring Holiday. The fixed screen editor supports all-day and partial
+closures; use record collections for recurring definitions.</p>
+<p>Clock gaps consume no elapsed working time. Repeated openings count actual
+occurrences. Extended slots are not generic availability and are excluded;
+conditional normal slots require appointment context and raise an explicit error.
+Represent overnight OperatingHours coverage as valid slots on separate days.</p>
+<h2 id="businesshours-is-separate">BusinessHours is separate<a class="heading-anchor" href="#businesshours-is-separate" aria-label="Link to BusinessHours is separate">#</a></h2><p>The native BusinessHours overload requires a saved BusinessHours record and
+delegates to Salesforce&#39;s native calculation. Its timezone and holiday links
+belong to that model. The richer OperatingHours search/availability APIs should
+not be assumed to accept a BusinessHours ID.</p>
+<p>See <a href="security.html">permissions</a>, <a href="screen-configuration.html">screen schedule choices</a>
+and <a href="limits.html">limits</a> before processing large schedule ranges.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#the-friday-to-tuesday-example">The Friday-to-Tuesday example</a></li><li><a href="#saved-configuration">Saved configuration</a></li><li><a href="#supplied-native-records">Supplied native records</a></li><li><a href="#pick-the-working-operation">Pick the working operation</a></li><li><a href="#boundaries-and-holidays">Boundaries and holidays</a></li><li><a href="#businesshours-is-separate">BusinessHours is separate</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

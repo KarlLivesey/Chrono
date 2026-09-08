@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChronoPlainDateService · Chrono</title><meta name="description" content="Released Apex reference · 0.1.0.19 · Subscriber name: skel.ChronoPlainDateService. Stable public API for PlainDate values. Internal operations own validation and calculations. Call these sta">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/reference/apex/ChronoPlainDateService.html"><link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/site.css"><script type="module" src="../../assets/site.mjs"></script></head>
+<body data-base="../../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../../index.html" aria-label="Chrono documentation home"><img src="../../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../../index.html">Overview</a></li><li><a href="../../handbook/installation.html">Install Chrono</a></li><li><a href="../../handbook/first-flow.html">Your first Flow</a></li><li><a href="../../handbook/apex.html">Apex quick start</a></li><li><a href="../../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../../handbook/iso-formats.html">ISO transport</a></li><li><a href="../../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../../handbook/operating-hours.html">Operating hours</a></li><li><a href="../../handbook/availability.html">Availability</a></li><li><a href="../../handbook/allocation.html">Time allocation</a></li><li><a href="../../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../../handbook/components.html">LWC composition</a></li><li><a href="../../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../../reference/actions/index.html">54 Flow actions</a></li><li><a href="../../reference/apex/index.html" class="current-section">Global Apex API</a></li><li><a href="../../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../../handbook/security.html">Permissions</a></li><li><a href="../../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Reference <span>/</span> ChronoPlainDateService</div>
+<article><h1 id="chronoplaindateservice">ChronoPlainDateService</h1><p>Released Apex reference · <code>0.1.0.19</code> · Subscriber name: <code>skel.ChronoPlainDateService</code>.</p>
+<p>Stable public API for PlainDate values. Internal operations own validation and calculations.</p>
+<p>Call these static entry points from subscriber Apex. Core operations return new values and validate their source. The package owns the implementation behind these signatures. See <a href="../../handbook/apex.html">Apex usage</a> and <a href="../../handbook/arithmetic.html">arithmetic semantics</a>.</p>
+<h2 id="declaration">Declaration<a class="heading-anchor" href="#declaration" aria-label="Link to Declaration">#</a></h2><pre><code class="language-apex">global with sharing class ChronoPlainDateService
+</code></pre>
+<p>Stable public API for PlainDate values. Internal operations own validation and calculations.</p>
+<p>Types: <a href="ChronoPlainDateService.html">ChronoPlainDateService</a>.</p>
+<h2 id="chronoplaindateservice-1">ChronoPlainDateService<a class="heading-anchor" href="#chronoplaindateservice-1" aria-label="Link to ChronoPlainDateService">#</a></h2><h3 id="create">create<a class="heading-anchor" href="#create" aria-label="Link to create">#</a></h3><pre><code class="language-apex">global static ChronoPlainDate create(Date value)
+</code></pre>
+<p>Constructs an date value.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="parseiso">parseIso<a class="heading-anchor" href="#parseiso" aria-label="Link to parseIso">#</a></h3><pre><code class="language-apex">global static ChronoPlainDate parseIso(String value)
+</code></pre>
+<p>Parses an ISO representation.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="toisostring">toIsoString<a class="heading-anchor" href="#toisostring" aria-label="Link to toIsoString">#</a></h3><pre><code class="language-apex">global static String toIsoString(ChronoPlainDate source)
+</code></pre>
+<p>Serialises an ISO representation.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="todate">toDate<a class="heading-anchor" href="#todate" aria-label="Link to toDate">#</a></h3><pre><code class="language-apex">global static Date toDate(ChronoPlainDate source)
+</code></pre>
+<p>Returns the native Salesforce value.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="adddays">addDays<a class="heading-anchor" href="#adddays" aria-label="Link to addDays">#</a></h3><pre><code class="language-apex">global static ChronoPlainDate addDays(ChronoPlainDate source, Integer amount)
+</code></pre>
+<p>Adds calendar days using native date arithmetic.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="adddays-1">addDays<a class="heading-anchor" href="#adddays-1" aria-label="Link to addDays">#</a></h3><pre><code class="language-apex">global static ChronoPlainDate addDays(Date source, Integer amount)
+</code></pre>
+<p>Adds calendar days using native date arithmetic.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="addmonths">addMonths<a class="heading-anchor" href="#addmonths" aria-label="Link to addMonths">#</a></h3><pre><code class="language-apex">global static ChronoPlainDate addMonths(ChronoPlainDate source, Integer amount)
+</code></pre>
+<p>Adds calendar months using native date arithmetic.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="addmonths-1">addMonths<a class="heading-anchor" href="#addmonths-1" aria-label="Link to addMonths">#</a></h3><pre><code class="language-apex">global static ChronoPlainDate addMonths(Date source, Integer amount)
+</code></pre>
+<p>Adds calendar months using native date arithmetic.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="addyears">addYears<a class="heading-anchor" href="#addyears" aria-label="Link to addYears">#</a></h3><pre><code class="language-apex">global static ChronoPlainDate addYears(ChronoPlainDate source, Integer amount)
+</code></pre>
+<p>Adds calendar years using native date arithmetic.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="addyears-1">addYears<a class="heading-anchor" href="#addyears-1" aria-label="Link to addYears">#</a></h3><pre><code class="language-apex">global static ChronoPlainDate addYears(Date source, Integer amount)
+</code></pre>
+<p>Adds calendar years using native date arithmetic.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<h3 id="toplaindatetime">toPlainDateTime<a class="heading-anchor" href="#toplaindatetime" aria-label="Link to toPlainDateTime">#</a></h3><pre><code class="language-apex">global static ChronoPlainDateTime toPlainDateTime(ChronoPlainDate source, Time localTime)
+</code></pre>
+<p>Combines the date with a local time.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>, <a href="ChronoPlainDateTime.html">ChronoPlainDateTime</a>.</p>
+<h3 id="toplainyearmonth">toPlainYearMonth<a class="heading-anchor" href="#toplainyearmonth" aria-label="Link to toPlainYearMonth">#</a></h3><pre><code class="language-apex">global static ChronoPlainYearMonth toPlainYearMonth(ChronoPlainDate source)
+</code></pre>
+<p>Extracts the year and month.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>, <a href="ChronoPlainYearMonth.html">ChronoPlainYearMonth</a>.</p>
+<h3 id="toplainmonthday">toPlainMonthDay<a class="heading-anchor" href="#toplainmonthday" aria-label="Link to toPlainMonthDay">#</a></h3><pre><code class="language-apex">global static ChronoPlainMonthDay toPlainMonthDay(ChronoPlainDate source)
+</code></pre>
+<p>Extracts the month and day.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>, <a href="ChronoPlainMonthDay.html">ChronoPlainMonthDay</a>.</p>
+<h3 id="validate">validate<a class="heading-anchor" href="#validate" aria-label="Link to validate">#</a></h3><pre><code class="language-apex">global static void validate(ChronoPlainDate source)
+</code></pre>
+<p>Rejects incomplete or invalid data before use.</p>
+<p>Types: <a href="ChronoPlainDate.html">ChronoPlainDate</a>.</p>
+<p>Generated from the released source declarations. Signatures shown without bodies are reference declarations, not a complete runnable Apex class. See <a href="../../handbook/apex.html">examples</a>.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#declaration">Declaration</a></li><li><a href="#chronoplaindateservice-1">ChronoPlainDateService</a></li></ol><a class="contents-help" href="../../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../../licence.txt">Licence</a></span></footer>
+</body></html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Permissions and execution context · Chrono</title><meta name="description" content="Install the managed package and assign Chrono Flow User for the relevant package Apex entry points. Then grant access to the business data the operation actually uses. Installing a package d">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/security.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html" aria-current="page">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Permissions and execution context</div>
+<article><h1 id="permissions-and-execution-context">Permissions and execution context</h1><p>Install the managed package and assign <strong>Chrono Flow User</strong> for the relevant
+package Apex entry points. Then grant access to the business data the operation
+actually uses. Installing a package does not give every user access to every
+schedule or field.</p>
+<h2 id="saved-operating-hours">Saved operating hours<a class="heading-anchor" href="#saved-operating-hours" aria-label="Link to Saved operating hours">#</a></h2><p>Schedule loads and selection use user-mode reads. The user needs the required
+OperatingHours, TimeSlot, OperatingHoursHoliday and Holiday object/field access.
+Malformed, excluded or inaccessible IDs produce errors. A filter is validated
+again on selection; typing an ID is not a way to bypass its restrictions.</p>
+<p>The configuration resource lookup loads readable schema for record fields and
+relationships. Matching an already supplied record resource is distinct from
+querying a saved schedule. Unsaved records can be passed directly where supported.</p>
+<h2 id="supplied-records">Supplied records<a class="heading-anchor" href="#supplied-records" aria-label="Link to Supplied records">#</a></h2><p>Supplied schedules and time-allocation requests perform their calculations over
+the records provided, without hidden schedule queries or DML. Your caller is
+responsible for how it obtained or constructed those records. Chrono cannot
+decide that arbitrary supplied data belongs to a record the user may update.</p>
+<p>Use the supplied-record mode deliberately; do not treat it as permission to
+extract inaccessible records through a different path.</p>
+<h2 id="record-editing">Record editing<a class="heading-anchor" href="#record-editing" aria-label="Link to Record editing">#</a></h2><p>The record-page adapter uses Lightning Data Service. It checks the configured
+field types/access and uses the loaded modification date when saving to detect
+conflicting edits. It saves only through the record adapter&#39;s explicit Save
+operation. UI-only components and Flow screen adapters do not save records.</p>
+<h2 id="package-boundaries">Package boundaries<a class="heading-anchor" href="#package-boundaries" aria-label="Link to Package boundaries">#</a></h2><p>Subscriber Apex calls the documented global services with <code>skel.</code> qualification.
+Internal operations and controllers are not public extension points. A component
+inside Chrono calls its own Apex controllers. Another package must not rely on
+calling those controllers directly from its LWC.</p>
+<p>Cross-namespace LWC composition requires Lightning Web Security; legacy Locker
+does not support that composition. Use exposed UI/control components as designed
+and keep business persistence in the owning application.</p>
+<h2 id="diagnose-without-leaking-data">Diagnose without leaking data<a class="heading-anchor" href="#diagnose-without-leaking-data" aria-label="Link to Diagnose without leaking data">#</a></h2><p>Errors should identify the invalid value or missing context in the user&#39;s
+workflow. Avoid logging complete request collections, customer-entered data or
+record payloads just to report a parse failure. Apex governor-limit failures
+remain platform failures; bulk actions cannot promise per-item recovery from an
+exhausted transaction limit.</p>
+<p>See <a href="troubleshooting.html">troubleshooting</a> and <a href="https://developer.salesforce.com/docs/platform/lwc/guide/apex-expose-method.html">the platform&#39;s LWC Apex boundary</a>.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#saved-operating-hours">Saved operating hours</a></li><li><a href="#supplied-records">Supplied records</a></li><li><a href="#record-editing">Record editing</a></li><li><a href="#package-boundaries">Package boundaries</a></li><li><a href="#diagnose-without-leaking-data">Diagnose without leaking data</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configure a date and time screen · Chrono</title><meta name="description" content="Add Chrono: Date and time to a Flow Screen. Its sidebar uses inline sections for field settings, timezones, operating hours and interaction. Runtime users see a compact date/time pair with i">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/screen-configuration.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html" aria-current="page">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Configure a date and time screen</div>
+<article><h1 id="configure-a-date-and-time-screen">Configure a date and time screen</h1><p>Add <strong>Chrono: Date and time</strong> to a Flow Screen. Its sidebar uses inline sections
+for field settings, timezones, operating hours and interaction. Runtime users
+see a compact date/time pair with independent timezone and Hours controls.</p>
+<h2 id="field-settings">Field settings<a class="heading-anchor" href="#field-settings" aria-label="Link to Field settings">#</a></h2><p>Choose <code>date</code> for a calendar date or <code>datetime</code> for a timezone-aware date and
+clock. Supply a useful label, optional help, required/disabled settings and a
+date display length.</p>
+<p>The admin chooses <strong>short</strong>, <strong>medium</strong> or <strong>long</strong>; the user&#39;s Salesforce locale
+determines the order and punctuation for that length. Short gives a UK user a
+numeric day/month/year presentation. It does not force every user&#39;s date format
+to be the same. The datetime Flow component defaults to medium; the record-page
+adapter defaults to short. Native mobile controls follow device presentation.</p>
+<h2 id="one-initial-value">One initial value<a class="heading-anchor" href="#one-initial-value" aria-label="Link to One initial value">#</a></h2><p>Choose a fixed value or a compatible Flow resource. Native Date, native DateTime
+and ISO Text are supported. A Text resource can contain a date, plain datetime,
+instant or zoned datetime. Time-only, duration and partial dates cannot initialise
+a dated picker.</p>
+<p>An exact initial instant is projected into the configured zone. A date in
+datetime mode starts at local midnight. A local datetime is resolved in the
+selected zone and can require a repeated-time choice. Invalid runtime resource
+contents are reported rather than turned into a blank valid value.</p>
+<h2 id="timezone-choices">Timezone choices<a class="heading-anchor" href="#timezone-choices" aria-label="Link to Timezone choices">#</a></h2><div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Admin intention</th><th scope="col">Configuration</th></tr></thead><tbody><tr><td>One fixed zone</td><td>Supply a default ID; disallow user timezone changes</td></tr><tr><td>User&#39;s zone by default</td><td>Omit the default; the running user&#39;s zone is used</td></tr><tr><td>Any supported zone</td><td>Allow selection with scope <code>all</code></td></tr><tr><td>Restrict choices</td><td>Allow selection with scope <code>list</code>; supply fixed IDs and/or a Text collection</td></tr></tbody></table></div><p>The allowed list can combine fixed entries with Flow-supplied IDs. An empty
+restricted list is an error, not permission to choose every zone. A configured
+default must belong to the list. Use named IDs such as <code>Europe/London</code>, not a
+fixed offset pretending to be a timezone.</p>
+<h2 id="operating-hours-choices">Operating-hours choices<a class="heading-anchor" href="#operating-hours-choices" aria-label="Link to Operating-hours choices">#</a></h2><div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Source mode</th><th scope="col">Supply</th><th scope="col">Result</th></tr></thead><tbody><tr><td><code>none</code></td><td>Nothing</td><td>No schedule restriction</td></tr><tr><td><code>id</code></td><td>One OperatingHours ID</td><td>One fixed saved schedule</td></tr><tr><td><code>ids</code></td><td>Fixed IDs and/or ID collection</td><td>Choose from those saved schedules</td></tr><tr><td><code>filter</code></td><td>Structured criteria</td><td>Choose from accessible matches</td></tr><tr><td><code>all</code></td><td>Nothing</td><td>Choose from accessible schedules</td></tr><tr><td><code>record</code></td><td>Saved OperatingHours record</td><td>Load its saved related slots/holidays</td></tr><tr><td><code>records</code></td><td>Saved OperatingHours collection</td><td>Choose a saved schedule</td></tr><tr><td><code>supplied</code></td><td>OperatingHours + TimeSlots + Holidays</td><td>Evaluate supplied fields, including unsaved records</td></tr><tr><td><code>fixed</code></td><td>Inline weekly hours and holidays</td><td>Build a native schedule without saving records</td></tr></tbody></table></div><p>For search/list sources, enable <strong>Lock operating-hours selection</strong> when users
+must retain the supplied selection. Single, fixed and supplied schedules are
+already fixed. Locking Hours does not lock the timezone, or vice versa.</p>
+<p>A saved record mode is not the same as supplied mode. Use <code>supplied</code> when your
+unsaved slots and holidays are the actual definition; a saved record selection
+loads the relationships associated with its ID.</p>
+<h2 id="filters">Filters<a class="heading-anchor" href="#filters" aria-label="Link to Filters">#</a></h2><p>Filters accept up to ten ANDed criteria over <code>Name</code> and <code>TimeZone</code>, using <code>eq</code>,
+<code>ne</code>, <code>contains</code> or <code>startsWith</code>. They are structured data, not raw SOQL.</p>
+<pre><code class="language-json">{
+  &quot;criteria&quot;: [
+    { &quot;fieldPath&quot;: &quot;TimeZone&quot;, &quot;operator&quot;: &quot;eq&quot;, &quot;value&quot;: &quot;Europe/London&quot; }
+  ]
+}
+</code></pre>
+<p>The server rechecks restrictions when validating the selected ID. Search returns
+at most 50 matches; narrow the name search when necessary. The schedule zone can
+be different from the selected display zone.</p>
+<h2 id="offset-and-closed-time-choices">Offset and closed-time choices<a class="heading-anchor" href="#offset-and-closed-time-choices" aria-label="Link to Offset and closed-time choices">#</a></h2><p>The offset control shows the current abbreviation/offset and can be reopened.
+A newly entered repeated time needs an occurrence choice. A missing time offers
+the nearest valid boundaries. If a schedule is configured, a closed time offers
+the previous open millisecond or next opening.</p>
+<p>Only enable supplied-offset overrides when your business process needs them.
+Preserve <code>offsetOverride</code> with the native instant when reconstructing that entry.
+See <a href="timezones.html">timezone behaviour</a>.</p>
+<h2 id="outputs-and-navigation">Outputs and navigation<a class="heading-anchor" href="#outputs-and-navigation" aria-label="Link to Outputs and navigation">#</a></h2><p>Use native <code>dateValue</code> for a Date field and <code>dateTimeValue</code> for a DateTime field.
+ISO outputs are <code>chronoDateValue</code>, <code>chronoTimeValue</code>,
+<code>chronoPlainDateTimeValue</code>, <code>chronoInstantValue</code> and <code>chronoZonedDateTimeValue</code>.
+Date mode produces date outputs only. Unresolved or invalid edits clear ISO
+outputs and block navigation while resolution is required or pending.</p>
+<p>The adapter implements Flow validation and attribute-change events. Going
+Previous preserves the restored native outputs rather than blindly resetting
+to the original initial value. Later reactive input changes are revalidated.
+See the <a href="../reference/components/chronoFlowDateTime.html">property reference</a>.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#field-settings">Field settings</a></li><li><a href="#one-initial-value">One initial value</a></li><li><a href="#timezone-choices">Timezone choices</a></li><li><a href="#operating-hours-choices">Operating-hours choices</a></li><li><a href="#filters">Filters</a></li><li><a href="#offset-and-closed-time-choices">Offset and closed-time choices</a></li><li><a href="#outputs-and-navigation">Outputs and navigation</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

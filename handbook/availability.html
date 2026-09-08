@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Availability and appointments · Chrono</title><meta name="description" content="Use Availability to calculate open intervals or appointment candidates inside a bounded search range. It reads schedule definitions and returns data; it does not reserve an appointment or cr">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/availability.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html" aria-current="page">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Availability and appointments</div>
+<article><h1 id="availability-and-appointments">Availability and appointments</h1><p>Use Availability to calculate open intervals or appointment candidates inside a
+bounded search range. It reads schedule definitions and returns data; it does
+not reserve an appointment or create records.</p>
+<h2 id="find-appointment-candidates">Find appointment candidates<a class="heading-anchor" href="#find-appointment-candidates" aria-label="Link to Find appointment candidates">#</a></h2><p>Choose the Availability action&#39;s <code>appointments</code> operation. Supply a supported
+dated source type, start/end, a saved or supplied OperatingHours schedule and an
+elapsed duration such as <code>PT30M</code>. Use exact ISO endpoints or native DateTime when
+the intended instants are already known.</p>
+<p>You can then add:</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Option</th><th scope="col">Meaning</th></tr></thead><tbody><tr><td>Busy ranges</td><td>Exact ISO start/end intervals to exclude</td></tr><tr><td>Buffer before/after</td><td>Free elapsed time required around each appointment</td></tr><tr><td>Minimum notice</td><td>Delay after an explicit reference datetime</td></tr><tr><td>Booking horizon</td><td>Latest boundary relative to the explicit reference</td></tr><tr><td>Grid anchor</td><td>Exact instant aligning starts across all available windows</td></tr></tbody></table></div><p>The complete appointment and its buffers must fit the relevant free windows.
+Calendar months/days are not valid appointment lengths. A positive horizon and
+nonnegative notice/buffers use elapsed ISO durations.</p>
+<p>Without a grid anchor, each free window starts its own appointment grid. With an
+anchor, openings separated by closures or busy periods keep the same alignment.
+This can change which appointment starts are returned.</p>
+<h2 id="multiple-schedules">Multiple schedules<a class="heading-anchor" href="#multiple-schedules" aria-label="Link to Multiple schedules">#</a></h2><p>Use <code>shared</code>/<code>all</code> when every participating schedule must be open. Use
+<code>anySchedule</code>/<code>any</code> when one is enough, according to the selected operation&#39;s
+fields. Each schedule is evaluated in its own zone before intersection or union.
+Do not compare two schedules simply by matching their local hour labels.</p>
+<p>The primary and additional saved schedules share a bulk load. Their permissions
+are still checked. An inaccessible schedule must not silently disappear from an
+“everyone is available” calculation.</p>
+<h2 id="other-operations">Other operations<a class="heading-anchor" href="#other-operations" aria-label="Link to Other operations">#</a></h2><p><code>windows</code> returns open windows; <code>boundaries</code> returns boundaries clipped to the
+search interval. <code>containsRange</code> checks a complete range, including the relevant
+booking constraints. <code>continuous</code> finds room for a continuous elapsed duration.
+<code>workingDates</code>, <code>holidays</code> and <code>validateSchedule</code> inspect configuration; listing
+holidays or working dates does not apply appointment notice/horizon limits.</p>
+<p>All windows use inclusive starts and exclusive ends. Search is bounded to 366
+days and remains subject to the transaction&#39;s CPU and heap limits.</p>
+<h2 id="present-the-choices">Present the choices<a class="heading-anchor" href="#present-the-choices" aria-label="Link to Present the choices">#</a></h2><p>Use <strong>Chrono: Available appointment</strong> where exposed by the Flow availability
+adapter, or compose the UI-only availability picker in your own LWC. The
+<a href="../reference/components/chronoFlowAvailability.html">component reference</a> lists
+the exact Builder label and properties.</p>
+<p>Keep the final record creation or booking check in your application. Another
+transaction can book a slot after it was displayed; Chrono&#39;s candidate list is
+not a lock on availability. Example 11 demonstrates selecting a candidate and
+then applying a working-calendar-day action.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#find-appointment-candidates">Find appointment candidates</a></li><li><a href="#multiple-schedules">Multiple schedules</a></li><li><a href="#other-operations">Other operations</a></li><li><a href="#present-the-choices">Present the choices</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

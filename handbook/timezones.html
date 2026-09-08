@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timezones, offsets and clock changes · Chrono</title><meta name="description" content="A timezone is a set of date-dependent rules. An offset is the difference from UTC at an instant. Europe/London is not permanently +00:00 or +01:00. Use the date being calculated, never today">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/timezones.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html" aria-current="page">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Timezones, offsets and clock changes</div>
+<article><h1 id="timezones-offsets-and-clock-changes">Timezones, offsets and clock changes</h1><p>A timezone is a set of date-dependent rules. An offset is the difference from
+UTC at an instant. <code>Europe/London</code> is not permanently <code>+00:00</code> or <code>+01:00</code>.
+Use the date being calculated, never today&#39;s offset, to interpret another date.</p>
+<h2 id="keep-the-instant-or-keep-the-clock">Keep the instant or keep the clock<a class="heading-anchor" href="#keep-the-instant-or-keep-the-clock" aria-label="Link to Keep the instant or keep the clock">#</a></h2><p>Changing a zoned value&#39;s zone through <code>ChronoZonedDateTimeService.withTimeZone</code>
+preserves the instant. 09:00 in London can become a different clock reading in
+New York while describing the same moment.</p>
+<p>Keeping the local clock is a different operation. 09:00 London → 09:00 New York
+changes the instant and may need another ambiguity check. ZoneTools exposes an
+explicit <code>instant</code> or <code>localClock</code> conversion mode.</p>
+<p>The screen picker preserves the entered clock when the <strong>user selects</strong> another
+zone. When its parent changes the zone input for an already resolved instant,
+the controller projects that instant into the new zone. Do not assume those two
+interactions mean the same thing.</p>
+<h2 id="repeated-local-times">Repeated local times<a class="heading-anchor" href="#repeated-local-times" aria-label="Link to Repeated local times">#</a></h2><p>London&#39;s <strong>25 October 2026, 01:30</strong> occurs twice:</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Choice</th><th scope="col">Local representation</th><th scope="col">Exact instant</th></tr></thead><tbody><tr><td>First</td><td><code>01:30 +01:00</code> (BST)</td><td><code>00:30Z</code></td></tr><tr><td>Second</td><td><code>01:30 +00:00</code> (GMT)</td><td><code>01:30Z</code></td></tr></tbody></table></div><p>The core plain-to-zoned conversion rejects ambiguity by default. Pass <code>earlier</code>
+or <code>later</code> to select an occurrence. The screen offers both choices and keeps a
+clickable offset indicator so the user can reopen their choice.</p>
+<pre><code class="language-apex">skel.ChronoPlainDateTime local = skel.ChronoPlainDateTimeService.parseIso(&#39;2026-10-25T01:30&#39;);
+skel.ChronoZonedDateTime second = skel.ChronoPlainDateTimeService.toZonedDateTime(local, &#39;Europe/London&#39;, &#39;later&#39;);
+Assert.areEqual(Datetime.newInstanceGmt(2026, 10, 25, 1, 30, 0), second.instant);
+</code></pre>
+<h2 id="missing-local-times">Missing local times<a class="heading-anchor" href="#missing-local-times" aria-label="Link to Missing local times">#</a></h2><p>London&#39;s <strong>29 March 2026, 01:30</strong> does not exist. The picker and ResolveLocal
+action can offer the nearest valid boundaries:</p>
+<ul>
+<li>Backward: <code>2026-03-29T00:59:59.999+00:00[Europe/London]</code>.</li>
+<li>Forward: <code>2026-03-29T02:00:00.000+01:00[Europe/London]</code>.</li>
+</ul>
+<p>Forward means the first valid boundary, not 02:30. Backward means the final valid
+millisecond before the gap, not 00:30. This also matters for half-hour changes
+and skipped dates. The core plain-to-zoned service still rejects gaps; an
+<code>earlier</code>/<code>later</code> overlap policy does not silently correct one.</p>
+<h2 id="explicit-customer-offsets">Explicit customer offsets<a class="heading-anchor" href="#explicit-customer-offsets" aria-label="Link to Explicit customer offsets">#</a></h2><p>Some source systems send a summer offset before a destination zone has switched.
+When that business case is intentional, enable the picker&#39;s supplied-offset
+override or use ZoneTools <code>overrideOffset</code>.</p>
+<p>At <strong>15 March 2026, 10:00</strong>, a supplied <code>+01:00</code> means <strong>09:00Z</strong>. London is
+actually on GMT then, so the canonical London projection is 09:00, not 10:00.
+Chrono marks this as an override rather than calling it BST.</p>
+<p>Preserve the supplied offset separately if you must reconstruct the original
+wall-clock entry. The canonical zoned output always obeys the named zone&#39;s real
+rules. A normal zoned parser rejects contradictory offset/zone pairs.</p>
+<p>An offset override never rewrites an OperatingHours schedule&#39;s timezone rules.
+The resulting instant must still fall in that schedule&#39;s open time.</p>
+<h2 id="three-zones-can-coexist">Three zones can coexist<a class="heading-anchor" href="#three-zones-can-coexist" aria-label="Link to Three zones can coexist">#</a></h2><p>The user&#39;s display zone, the input value&#39;s zone and the operating schedule&#39;s
+zone can differ. Evaluate each schedule&#39;s slots and holidays in its own zone,
+then compare exact instants. Present the result in the chosen output zone.
+Timezone abbreviations are hints for people; keep a named zone ID for calculations.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#keep-the-instant-or-keep-the-clock">Keep the instant or keep the clock</a></li><li><a href="#repeated-local-times">Repeated local times</a></li><li><a href="#missing-local-times">Missing local times</a></li><li><a href="#explicit-customer-offsets">Explicit customer offsets</a></li><li><a href="#three-zones-can-coexist">Three zones can coexist</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

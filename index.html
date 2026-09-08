@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dates and times, on Salesforce terms. · Chrono</title><meta name="description" content="Chrono adds timezone-aware date and time operations to Salesforce&#39;s native values. Use it in Flow, Apex and Lightning components: convert a customer&#39;s local time, calculate a deadline inside">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/index.html"><link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css"><script type="module" src="assets/site.mjs"></script></head>
+<body data-base="" class="home-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="index.html" aria-label="Chrono documentation home"><img src="assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="index.html" aria-current="page">Overview</a></li><li><a href="handbook/installation.html">Install Chrono</a></li><li><a href="handbook/first-flow.html">Your first Flow</a></li><li><a href="handbook/apex.html">Apex quick start</a></li><li><a href="handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="handbook/types.html">Values &amp; ISO formats</a></li><li><a href="handbook/iso-formats.html">ISO transport</a></li><li><a href="handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="handbook/arithmetic.html">Arithmetic</a></li><li><a href="handbook/operating-hours.html">Operating hours</a></li><li><a href="handbook/availability.html">Availability</a></li><li><a href="handbook/allocation.html">Time allocation</a></li><li><a href="handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="handbook/flow-configuration.html">Action configuration</a></li><li><a href="handbook/collections.html">Bulk &amp; collections</a></li><li><a href="handbook/screen-configuration.html">Flow screens</a></li><li><a href="handbook/components.html">LWC composition</a></li><li><a href="handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="reference/actions/index.html">54 Flow actions</a></li><li><a href="reference/apex/index.html">Global Apex API</a></li><li><a href="reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="handbook/security.html">Permissions</a></li><li><a href="handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="handbook/limits.html">Limits &amp; performance</a></li><li><a href="handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">The Chrono handbook <span>/</span> Release 0.1.0.19</div>
+<article><h1 id="dates-and-times-on-salesforce-terms">Dates and times, on Salesforce terms.</h1><p>Chrono adds timezone-aware date and time operations to Salesforce&#39;s native values.
+Use it in Flow, Apex and Lightning components: convert a customer&#39;s local time,
+calculate a deadline inside operating hours, find an appointment, or divide work
+into named billing blocks.</p>
+<p><strong>Released version 0.1.0.19 · Namespace <code>skel</code> · BSD-3-Clause</strong></p>
+<h2 id="start-with-your-job">Start with your job<a class="heading-anchor" href="#start-with-your-job" aria-label="Link to Start with your job">#</a></h2><div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">I want to…</th><th scope="col">Start here</th></tr></thead><tbody><tr><td>Install Chrono and give people access</td><td><a href="handbook/installation.html">Installation</a></td></tr><tr><td>Build a Flow without writing Apex</td><td><a href="handbook/first-flow.html">Your first Flow</a></td></tr><tr><td>Pick dates, timezones and operating hours on a screen</td><td><a href="handbook/screen-configuration.html">Screen configuration</a></td></tr><tr><td>Call the library from Apex</td><td><a href="handbook/apex.html">Apex quick start</a></td></tr><tr><td>Find the right action</td><td><a href="reference/actions/index.html">Action reference</a></td></tr><tr><td>Try complete working examples</td><td><a href="handbook/examples.html">Example library</a></td></tr></tbody></table></div><h2 id="understand-the-value-before-calculating">Understand the value before calculating<a class="heading-anchor" href="#understand-the-value-before-calculating" aria-label="Link to Understand the value before calculating">#</a></h2><p>A calendar date, a local clock reading and an exact instant answer different
+questions. Chrono preserves those differences. A duration of one calendar day can
+cross a clock change; a duration of 24 elapsed hours always measures 24 hours.</p>
+<p>The <a href="handbook/types.html">type guide</a> explains all eight values. The
+<a href="handbook/timezones.html">timezone guide</a> covers repeated times, missing times,
+offsets and changing a zone without accidentally changing the instant.</p>
+<h2 id="build-the-rest-of-the-journey">Build the rest of the journey<a class="heading-anchor" href="#build-the-rest-of-the-journey" aria-label="Link to Build the rest of the journey">#</a></h2><ul>
+<li><a href="handbook/operating-hours.html">Operating hours and holidays</a>: add working time,
+count working differences and use unsaved native records.</li>
+<li><a href="handbook/availability.html">Availability and appointments</a>: intersect schedules,
+remove busy intervals and apply buffers and notice periods.</li>
+<li><a href="handbook/allocation.html">Time allocation</a>: normal and holiday blocks, overlaps,
+millisecond precision and reconciled totals.</li>
+<li><a href="handbook/ranges-recurrence.html">Ranges and recurrence</a>: half-open intervals,
+recurring dates and the supported RRULE subset.</li>
+<li><a href="handbook/formatting.html">Formatting and localisation</a>: user locale, display
+length, ISO transport and explicit parsing patterns.</li>
+<li><a href="handbook/troubleshooting.html">Troubleshooting</a>: errors, permissions, Flow
+resource types and unresolved local times.</li>
+</ul>
+<h2 id="reference-and-release-evidence">Reference and release evidence<a class="heading-anchor" href="#reference-and-release-evidence" aria-label="Link to Reference and release evidence">#</a></h2><p>The reference covers the released <a href="reference/apex/index.html">global Apex API</a>,
+all <strong>27 Flow families / 54 actions</strong>, and the
+<a href="reference/components/index.html">exposed components</a>. Core values are data-only;
+their services own construction, validation and calculations.</p>
+<p>The released candidate passed <strong>210 Apex tests</strong>, <strong>30 shared conformance cases</strong>
+and the installed configuration checks for all <strong>54 actions</strong>, with <strong>91% package
+coverage</strong>. See <a href="handbook/releases.html">release notes</a> for the evidence and its limits.</p>
+<p>Chrono uses Salesforce timezone rules and millisecond arithmetic. It does not
+bundle another timezone database, implement alternative calendars, or claim
+complete JavaScript Temporal compatibility. See <a href="handbook/limits.html">supported behaviour and limits</a>.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#start-with-your-job">Start with your job</a></li><li><a href="#understand-the-value-before-calculating">Understand the value before calculating</a></li><li><a href="#build-the-rest-of-the-journey">Build the rest of the journey</a></li><li><a href="#reference-and-release-evidence">Reference and release evidence</a></li></ol><a class="contents-help" href="handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="licence.txt">Licence</a></span></footer>
+</body></html>

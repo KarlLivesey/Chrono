@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supported behaviour and limits · Chrono</title><meta name="description" content="Chrono is a native-backed Salesforce library, not a complete JavaScript Temporal polyfill. The limits below are part of choosing an appropriate operation, not requests to add missing feature">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/limits.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html" aria-current="page">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Supported behaviour and limits</div>
+<article><h1 id="supported-behaviour-and-limits">Supported behaviour and limits</h1><p>Chrono is a native-backed Salesforce library, not a complete JavaScript Temporal
+polyfill. The limits below are part of choosing an appropriate operation, not
+requests to add missing features to an existing workflow.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Area</th><th scope="col">Defined limit or behaviour</th></tr></thead><tbody><tr><td>Precision</td><td>Millisecond arithmetic; longer input fractions truncated</td></tr><tr><td>Calendars</td><td>Native Gregorian model; alternative annotations rejected</td></tr><tr><td>Operating-hours traversal</td><td>At most 3,660 calendar days</td></tr><tr><td>Working difference</td><td>At most 3,660 UTC dates per item</td></tr><tr><td>Availability</td><td>At most 366 days</td></tr><tr><td>Recurrence</td><td>At most 3,660 days and 1–1,000 results</td></tr><tr><td>Zone transition search</td><td>At most 366 days; hourly brackets with millisecond bisection</td></tr><tr><td>Allocation</td><td>50 blocks, 1,000 holidays, 366 days, default 1,000 segment rows; maximum 5,000</td></tr><tr><td>Picker schedule search</td><td>At most 50 matches per search</td></tr><tr><td>Picker structured filter</td><td>At most ten ANDed Name/TimeZone criteria</td></tr><tr><td>Locale display patterns</td><td>279 Salesforce locale IDs; unknown locale falls back to ISO</td></tr></tbody></table></div><h2 id="timezone-coverage">Timezone coverage<a class="heading-anchor" href="#timezone-coverage" aria-label="Link to Timezone coverage">#</a></h2><p>Salesforce provides the offset rules. Chrono does not bundle its own timezone
+database. Zone-interval traversal samples offsets every six hours; transition
+listing uses hourly brackets. Those algorithms assume multiple offset changes
+do not occur within their sampling interval. Detected transitions are located
+to millisecond precision.</p>
+<p>Historical offsets containing seconds cannot currently be serialised as normal
+zoned strings. An explicit supplied-offset workflow is distinct from claiming
+that every historical named-zone instant has a supported canonical string.</p>
+<h2 id="governor-limits-still-apply">Governor limits still apply<a class="heading-anchor" href="#governor-limits-still-apply" aria-label="Link to Governor limits still apply">#</a></h2><p>Search limits are safety bounds, not performance promises. Complex allocation
+overlaps, holiday recurrence and many schedule windows can exhaust CPU or heap
+before a day-count limit. Supplied schedule records avoid queries; saved loads
+need object/field access and consume query resources.</p>
+<p>The measured mixed-workload subscriber benchmark used 200 distinct allocations
+and 20 real Flow interviews per transaction. Three post-warmup measurements used
+6,063 / 6,301 / 7,023 ms CPU; worst total including setup/assertions was 7,053 ms
+of a 10,000 ms limit. These are measurements for 0.1.0.18&#39;s implementation,
+unchanged in the released 0.1.0.19 candidate, not a universal capacity guarantee.</p>
+<h2 id="deliberate-exclusions">Deliberate exclusions<a class="heading-anchor" href="#deliberate-exclusions" aria-label="Link to Deliberate exclusions">#</a></h2><p>There is no external holiday feed, natural-language date guessing, background
+scheduling engine, price calculation, alternative calendar support or
+sub-millisecond arithmetic. RRULE support is a strict documented subset.
+Long duration/relative wording is English; locale-aware date/time display has
+a broader set of supported patterns.</p>
+<h2 id="evidence-boundaries">Evidence boundaries<a class="heading-anchor" href="#evidence-boundaries" aria-label="Link to Evidence boundaries">#</a></h2><p>The released package passed standard validation, package coverage and installed
+subscriber tests. Browser rendering was not inspected, in accordance with this
+project&#39;s no-screen-capture requirement. An upgrade from a released ancestor was
+not possible for the first release; that requires a later descendant candidate.</p>
+<p>See <a href="releases.html">release notes</a> for exact test counts. Benchmark measurements
+use a warmup followed by separate measured transactions, assert the results and
+record CPU including setup as well as the calculation itself.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#timezone-coverage">Timezone coverage</a></li><li><a href="#governor-limits-still-apply">Governor limits still apply</a></li><li><a href="#deliberate-exclusions">Deliberate exclusions</a></li><li><a href="#evidence-boundaries">Evidence boundaries</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

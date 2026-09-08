@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choose the right value · Chrono</title><meta name="description" content="Use a value that carries exactly the context your calculation needs. A native Salesforce Datetime represents an instant. Its display in a user&#39;s timezone does not change that instant. A plai">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/types.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html" aria-current="page">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Choose the right value</div>
+<article><h1 id="choose-the-right-value">Choose the right value</h1><p>Use a value that carries exactly the context your calculation needs. A native
+Salesforce <code>Datetime</code> represents an instant. Its display in a user&#39;s timezone
+does not change that instant. A plain local datetime has no instant until you
+supply a zone and resolve any clock-change ambiguity.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Value type</th><th scope="col">Carries</th><th scope="col">ISO example</th><th scope="col">Apex data fields</th></tr></thead><tbody><tr><td><code>PlainDate</code></td><td>Calendar date</td><td><code>2026-09-08</code></td><td><code>value</code></td></tr><tr><td><code>PlainTime</code></td><td>Local clock, no date</td><td><code>09:30:00.000</code></td><td><code>value</code></td></tr><tr><td><code>PlainDateTime</code></td><td>Local date and clock, no zone</td><td><code>2026-09-08T09:30:00.000</code></td><td><code>localDate</code>, <code>localTime</code></td></tr><tr><td><code>Instant</code></td><td>Exact point in time</td><td><code>2026-09-08T08:30:00.000Z</code></td><td><code>value</code></td></tr><tr><td><code>ZonedDateTime</code></td><td>Instant and named zone</td><td><code>2026-09-08T09:30:00.000+01:00[Europe/London]</code></td><td><code>instant</code>, <code>timeZoneId</code></td></tr><tr><td><code>PlainYearMonth</code></td><td>Year and month</td><td><code>2026-09</code></td><td><code>year</code>, <code>month</code></td></tr><tr><td><code>PlainMonthDay</code></td><td>Month and day</td><td><code>--09-08</code></td><td><code>month</code>, <code>day</code></td></tr><tr><td><code>Duration</code></td><td>Calendar and elapsed components</td><td><code>P1M2DT3H</code></td><td><code>months</code>, <code>days</code>, <code>milliseconds</code></td></tr></tbody></table></div><p>The Apex names add <code>Chrono</code>, such as <code>skel.ChronoPlainDate</code>, and the matching
+service adds <code>Service</code>, such as <code>skel.ChronoPlainDateService</code>.</p>
+<h2 id="missing-context-is-a-decision">Missing context is a decision<a class="heading-anchor" href="#missing-context-is-a-decision" aria-label="Link to Missing context is a decision">#</a></h2><p>A birthday&#39;s month and day need a year before they become a date. A local time
+needs a date before it can be resolved in a timezone. An exact instant needs a
+zone before you can ask which local day it falls on. Chrono requires that context
+rather than borrowing an unrelated date or timezone from the running user.</p>
+<p>The picker has a documented convenience default of the running user&#39;s timezone.
+That UI default is separate from Apex and action operations which require an
+explicit calculation zone where the operation needs one.</p>
+<h2 id="what-crosses-flow-boundaries">What crosses Flow boundaries<a class="heading-anchor" href="#what-crosses-flow-boundaries" aria-label="Link to What crosses Flow boundaries">#</a></h2><p>Ordinary date/time payloads are <strong>ISO Text or native Salesforce Date/DateTime</strong>.
+You do not need an Apex-defined <code>ChronoPlainDate</code> variable to hold a date in Flow.
+Clock-only values use Text because the Flow boundary does not use Apex <code>Time</code>.</p>
+<p>Some collection actions use Apex-defined <strong>request and result records</strong>. These
+are operation envelopes with fields such as source type, ISO value and options;
+they are distinct from the eight core data values. Schedule inputs use native
+OperatingHours, TimeSlot and Holiday records, not redundant schedule wrappers.</p>
+<h2 id="date-mode-and-midnight">Date mode and midnight<a class="heading-anchor" href="#date-mode-and-midnight" aria-label="Link to Date mode and midnight">#</a></h2><p>Date-only picker mode produces a date, not a hidden instant. When a dated
+operation explicitly promotes a date to a local datetime, or a datetime picker
+receives only a date, midnight is the local clock default. Resolving that midnight
+still needs a zone and can encounter a transition. A date is not intrinsically a
+UTC midnight timestamp.</p>
+<h2 id="precision-and-calendars">Precision and calendars<a class="heading-anchor" href="#precision-and-calendars" aria-label="Link to Precision and calendars">#</a></h2><p>Arithmetic has millisecond precision. ISO input may contain more fractional
+digits; Chrono truncates after three without rounding. A negative fractional
+duration is truncated towards zero at that precision.</p>
+<p>Only the native Gregorian calendar model is supported. Alternative calendar
+annotations are rejected. Partial dates retain their partial representation;
+Chrono does not quietly invent a year or day merely to serialise them.</p>
+<p>Continue with <a href="iso-formats.html">ISO formats</a>, <a href="arithmetic.html">calendar versus elapsed arithmetic</a>
+and <a href="../reference/apex/index.html">Apex reference</a>.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#missing-context-is-a-decision">Missing context is a decision</a></li><li><a href="#what-crosses-flow-boundaries">What crosses Flow boundaries</a></li><li><a href="#date-mode-and-midnight">Date mode and midnight</a></li><li><a href="#precision-and-calendars">Precision and calendars</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>

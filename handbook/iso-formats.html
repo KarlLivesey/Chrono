@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISO formats and transport · Chrono</title><meta name="description" content="Use ISO values for machine interchange and locale formatting for presentation. Do not parse a displayed 09/08/2026 without knowing its intended pattern. | Type           | Accepted shape    ">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/handbook/iso-formats.html"><link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css"><script type="module" src="../assets/site.mjs"></script></head>
+<body data-base="../" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="../index.html" aria-label="Chrono documentation home"><img src="../assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="../search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="../handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="../index.html">Overview</a></li><li><a href="../handbook/installation.html">Install Chrono</a></li><li><a href="../handbook/first-flow.html">Your first Flow</a></li><li><a href="../handbook/apex.html">Apex quick start</a></li><li><a href="../handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="../handbook/types.html">Values &amp; ISO formats</a></li><li><a href="../handbook/iso-formats.html" aria-current="page">ISO transport</a></li><li><a href="../handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="../handbook/arithmetic.html">Arithmetic</a></li><li><a href="../handbook/operating-hours.html">Operating hours</a></li><li><a href="../handbook/availability.html">Availability</a></li><li><a href="../handbook/allocation.html">Time allocation</a></li><li><a href="../handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="../handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="../handbook/flow-configuration.html">Action configuration</a></li><li><a href="../handbook/collections.html">Bulk &amp; collections</a></li><li><a href="../handbook/screen-configuration.html">Flow screens</a></li><li><a href="../handbook/components.html">LWC composition</a></li><li><a href="../handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="../reference/actions/index.html">54 Flow actions</a></li><li><a href="../reference/apex/index.html">Global Apex API</a></li><li><a href="../reference/components/index.html">Components</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="../handbook/security.html">Permissions</a></li><li><a href="../handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="../handbook/limits.html">Limits &amp; performance</a></li><li><a href="../handbook/releases.html">Release notes</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> ISO formats and transport</div>
+<article><h1 id="iso-formats-and-transport">ISO formats and transport</h1><p>Use ISO values for machine interchange and locale formatting for presentation.
+Do not parse a displayed <code>09/08/2026</code> without knowing its intended pattern.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Type</th><th scope="col">Accepted shape</th><th scope="col">Canonical example</th></tr></thead><tbody><tr><td>Plain date</td><td><code>YYYY-MM-DD</code></td><td><code>2026-09-08</code></td></tr><tr><td>Plain time</td><td><code>HH:mm</code>, optional seconds/fraction</td><td><code>09:30:00.000</code></td></tr><tr><td>Plain datetime</td><td>Date + <code>T</code> + local time</td><td><code>2026-09-08T09:30:00.000</code></td></tr><tr><td>Instant</td><td>Date/time + <code>Z</code> or numeric offset</td><td><code>2026-09-08T08:30:00.000Z</code></td></tr><tr><td>Zoned datetime</td><td>Date/time + offset + <code>[zone]</code></td><td><code>2026-09-08T09:30:00.000+01:00[Europe/London]</code></td></tr><tr><td>Year-month</td><td><code>YYYY-MM</code></td><td><code>2026-09</code></td></tr><tr><td>Month-day</td><td><code>--MM-DD</code></td><td><code>--09-08</code></td></tr><tr><td>Duration</td><td>Signed ISO duration</td><td><code>P1M2DT3H</code></td></tr></tbody></table></div><p>Use <code>parseIso</code> and <code>toIsoString</code> on the relevant service. Parsing validates the
+value. Zoned parsing checks the numeric offset against the named zone at the
+represented instant. The bracketed ID is not decorative metadata.</p>
+<h2 id="fractions">Fractions<a class="heading-anchor" href="#fractions" aria-label="Link to Fractions">#</a></h2><p>Fractions beyond milliseconds are accepted and truncated, not rounded:</p>
+<pre><code class="language-text">2021-01-13T20:57:01.500944804Z → 2021-01-13T20:57:01.500Z
+PT7.987654321S → PT7.987S
+-PT0.0009S → zero milliseconds
+</code></pre>
+<p>Do not use the output as a lossless archive of nanosecond input. Preserve the raw
+source text separately if that matters to another system.</p>
+<h2 id="durations">Durations<a class="heading-anchor" href="#durations" aria-label="Link to Durations">#</a></h2><p>Years become calendar months; weeks become calendar days. Months, days and elapsed
+milliseconds remain separate. Components must have a consistent sign. A calendar
+duration cannot be totalled as milliseconds without the context that gives those
+calendar units a length.</p>
+<p><code>P1D</code> is one calendar day. <code>PT24H</code> is 24 elapsed hours. On a zoned value they can
+produce different instants across a daylight-saving transition.</p>
+<h2 id="range-strings">Range strings<a class="heading-anchor" href="#range-strings" aria-label="Link to Range strings">#</a></h2><p>Range operations use ISO endpoint strings separated by <code>/</code>, for example:</p>
+<pre><code class="language-text">2026-09-08T09:00:00.000Z/2026-09-08T10:00:00.000Z
+</code></pre>
+<p>The slash inside a bracketed timezone ID belongs to the endpoint. Use Chrono&#39;s
+range operations instead of splitting blindly on every slash. Intervals are
+start-inclusive and end-exclusive. Consult <a href="ranges-recurrence.html">ranges</a>.</p>
+<h2 id="what-is-not-a-serialisation-contract">What is not a serialisation contract<a class="heading-anchor" href="#what-is-not-a-serialisation-contract" aria-label="Link to What is not a serialisation contract">#</a></h2><p>Generic JSON deserialisation into managed Apex request classes is not the
+supported subscriber construction API. Create request objects with their global
+constructors and assign fields. Flow transports those envelopes through its own
+supported mechanisms.</p>
+<p>ISO Text and the documented time-block <code>blocksText</code> definition are intentional
+text contracts. They do not make every internal JSON representation a public API.
+Alternative calendar annotations and unsupported historical second-offset zoned
+serialisation are described in <a href="limits.html">limits</a>.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Written for the released API. <a href="../handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#fractions">Fractions</a></li><li><a href="#durations">Durations</a></li><li><a href="#range-strings">Range strings</a></li><li><a href="#what-is-not-a-serialisation-contract">What is not a serialisation contract</a></li></ol><a class="contents-help" href="../handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="../licence.txt">Licence</a></span></footer>
+</body></html>
