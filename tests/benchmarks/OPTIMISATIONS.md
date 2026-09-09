@@ -98,3 +98,44 @@ All 33 targeted Apex tests passed with the candidate and after restoration;
 
 Select `optimise-picker-projection`, `optimise-picker-overlap` and
 `optimise-resolution-gap` for the same comparison.
+
+## 4. Compile the instant regex once — rejected
+
+The candidate moved the existing expression to a private static final Pattern
+and created a fresh Matcher for every call. It preserved the expression and all
+parsing validation. Fractional-offset parsing improved in this run, but UTC and
+time-only callers became more expensive; the original implementation was restored.
+
+| Public parse/format workload, 200 calls | Before median | Candidate median |
+| --------------------------------------- | ------------: | ---------------: |
+| UTC instant                             |         75 ms |            81 ms |
+| Fractional seconds and +05:45 offset    |         93 ms |            81 ms |
+| PlainDate control                       |         42 ms |            42 ms |
+| PlainTime control                       |         27 ms |            32 ms |
+
+The plain-value controls matter because these callers also initialise the shared
+ChronoIso class. These samples do not isolate the cause of each timing difference;
+they establish that a general CPU benefit was not demonstrated. All 46 targeted
+Apex tests passed with the candidate, as did 20 contract tests and focused Apex lint.
+
+- [Candidate diff](experiments/compile-instant-regex-once.patch)
+- [Before](results/optimise-regex-before.json)
+- [Candidate](results/optimise-regex-after.json)
+
+Select `optimise-instant-utc`, `optimise-instant-fractional-offset`,
+`optimise-instant-control-PlainDate` and `optimise-instant-control-PlainTime`.
+
+## Decision
+
+None of these four candidates is retained. The earlier five-point timezone scan
+remains unchanged. The benchmark workloads, raw measurements, rejected diffs and
+closed-day holiday regression test are retained so future work can compare real
+costs without repeating these assumptions. A faster median for one path is not
+sufficient evidence for a blanket performance claim.
+
+Final validation after restoring all four implementations: all **243 local Apex
+tests passed** in `chrono-dev` (deployment `0AfG100000LO6ubKAD`), along with the
+20 contract tests. Tooling API source reads confirmed that the five affected
+implementation classes and the holiday regression test match the repository.
+The production changes from all four experiments are absent; the earlier
+five-point resolver remains intact.

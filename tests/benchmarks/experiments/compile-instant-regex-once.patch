@@ -1,0 +1,24 @@
+diff --git a/force-app/main/default/classes/ChronoIso.cls b/force-app/main/default/classes/ChronoIso.cls
+index b724877..900a221 100644
+--- a/force-app/main/default/classes/ChronoIso.cls
++++ b/force-app/main/default/classes/ChronoIso.cls
+@@ -1,6 +1,9 @@
+ // Copyright (c) 2026, Karl. SPDX-License-Identifier: BSD-3-Clause
+ /** @description Internal ISO parsing and serialisation at native millisecond precision. */
+ public with sharing class ChronoIso {
++  private static final Pattern INSTANT_PATTERN = Pattern.compile(
++    '^(.+T.+)(Z|[+-]\\d{2}:\\d{2})$'
++  );
+   public static String pad(Integer value, Integer size) {
+     return String.valueOf(value).leftPad(size, '0');
+   }
+@@ -68,8 +71,7 @@ public with sharing class ChronoIso {
+   }
+   public static Datetime parseInstant(String value) {
+     ChronoSupport.requireValue(value, 'Instant');
+-    Matcher parts = Pattern.compile('^(.+T.+)(Z|[+-]\\d{2}:\\d{2})$')
+-      .matcher(value);
++    Matcher parts = INSTANT_PATTERN.matcher(value);
+     if (!parts.matches()) {
+       throw new ChronoException(
+         'An instant requires Z or a numeric UTC offset.'

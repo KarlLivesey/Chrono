@@ -1,0 +1,330 @@
+{
+  "createdAt": "2026-09-09T11:35:24.042576+00:00",
+  "targetOrg": "chrono-dev",
+  "label": "Candidate: compile instant regex once per transaction",
+  "operationsPerSample": 200,
+  "measuredSamples": 5,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "optimise-instant-utc",
+      "description": "Public instant parse/format with utc input.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 79,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 79,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 80,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 80,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 82,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 81,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 92,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 91,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 78,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 78,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 106,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 105,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 78,
+        "median": 81,
+        "max": 105
+      },
+      "medianCpuMsPerOperation": 0.405
+    },
+    {
+      "name": "optimise-instant-fractional-offset",
+      "description": "Public instant parse/format with fractional-offset input.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 87,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 87,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 96,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 95,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 80,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 80,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 82,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 81,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 86,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 85,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 81,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 395,
+          "heapAfterBytes": 1450,
+          "cpuMs": 81,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 80,
+        "median": 81,
+        "max": 95
+      },
+      "medianCpuMsPerOperation": 0.405
+    },
+    {
+      "name": "optimise-instant-control-PlainDate",
+      "description": "Control for instant-regex initialisation: Parse and serialise PlainDate through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 44,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 366,
+          "heapAfterBytes": 1421,
+          "cpuMs": 44,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 42,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 366,
+          "heapAfterBytes": 1421,
+          "cpuMs": 41,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 51,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 366,
+          "heapAfterBytes": 1421,
+          "cpuMs": 51,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 49,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 366,
+          "heapAfterBytes": 1421,
+          "cpuMs": 49,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 42,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 366,
+          "heapAfterBytes": 1421,
+          "cpuMs": 42,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 42,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 366,
+          "heapAfterBytes": 1421,
+          "cpuMs": 41,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 41,
+        "median": 42,
+        "max": 51
+      },
+      "medianCpuMsPerOperation": 0.21
+    },
+    {
+      "name": "optimise-instant-control-PlainTime",
+      "description": "Control for instant-regex initialisation: Parse and serialise PlainTime through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 47,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 326,
+          "heapAfterBytes": 1381,
+          "cpuMs": 47,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 28,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 326,
+          "heapAfterBytes": 1381,
+          "cpuMs": 28,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 32,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 326,
+          "heapAfterBytes": 1381,
+          "cpuMs": 32,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 36,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 326,
+          "heapAfterBytes": 1381,
+          "cpuMs": 35,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 32,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 326,
+          "heapAfterBytes": 1381,
+          "cpuMs": 32,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 25,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 326,
+          "heapAfterBytes": 1381,
+          "cpuMs": 25,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 25,
+        "median": 32,
+        "max": 35
+      },
+      "medianCpuMsPerOperation": 0.16
+    }
+  ]
+}
