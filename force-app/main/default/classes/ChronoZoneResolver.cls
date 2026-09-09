@@ -20,7 +20,7 @@ public with sharing class ChronoZoneResolver {
     matches.sort();
     return matches;
   }
-  /** @description Samples nearby offsets for exact resolution and explicit picker gap corrections. */
+  /** @description Samples offsets at -48, -24, 0, +24 and +48 hours from UTC midnight for exact resolution and picker gap corrections. */
   public static Set<Integer> sampleOffsets(Date localDate, String zoneId) {
     TimeZone zone = ChronoSupport.zone(zoneId);
     Datetime midnight = Datetime.newInstanceGmt(
@@ -28,7 +28,7 @@ public with sharing class ChronoZoneResolver {
       Time.newInstance(0, 0, 0, 0)
     );
     Set<Integer> offsets = new Set<Integer>();
-    for (Integer hour = -72; hour <= 72; hour += 6) {
+    for (Integer hour = -48; hour <= 48; hour += 24) {
       offsets.add(zone.getOffset(midnight.addHours(hour)));
     }
     return offsets;

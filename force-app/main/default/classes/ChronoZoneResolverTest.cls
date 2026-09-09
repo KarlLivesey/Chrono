@@ -71,7 +71,8 @@ private class ChronoZoneResolverTest {
       'America/New_York' => '2026-03-08T02:30',
       'Europe/Paris' => '2026-03-29T02:30',
       'Europe/London' => '2026-03-29T01:30',
-      'Australia/Lord_Howe' => '2026-10-04T02:15'
+      'Australia/Lord_Howe' => '2026-10-04T02:15',
+      'Pacific/Apia' => '2011-12-30T12:00'
     };
     for (String zoneId : gaps.keySet()) {
       for (String policy : new List<String>{ 'reject', 'earlier', 'later' }) {
