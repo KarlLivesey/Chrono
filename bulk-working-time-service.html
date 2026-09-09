@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bulk working-time service · Chrono</title><meta name="description" content="The next Chrono package version adds ChronoWorkingTimeService.add(requests). It is not present in released version 0.1.0.19. Existing working-time Flow actions retain their method signatures">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/bulk-working-time-service.html"><link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css"><script type="module" src="assets/site.mjs"></script></head>
+<body data-base="" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="index.html" aria-label="Chrono documentation home"><img src="assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="index.html">Overview</a></li><li><a href="handbook/installation.html">Install Chrono</a></li><li><a href="handbook/first-flow.html">Your first Flow</a></li><li><a href="handbook/apex.html">Apex quick start</a></li><li><a href="handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="handbook/types.html">Values &amp; ISO formats</a></li><li><a href="handbook/iso-formats.html">ISO transport</a></li><li><a href="handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="handbook/arithmetic.html">Arithmetic</a></li><li><a href="handbook/operating-hours.html">Operating hours</a></li><li><a href="handbook/availability.html">Availability</a></li><li><a href="handbook/allocation.html">Time allocation</a></li><li><a href="handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="handbook/flow-configuration.html">Action configuration</a></li><li><a href="handbook/collections.html">Bulk &amp; collections</a></li><li><a href="handbook/screen-configuration.html">Flow screens</a></li><li><a href="handbook/components.html">LWC composition</a></li><li><a href="handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="reference/actions/index.html">54 Flow actions</a></li><li><a href="reference/apex/index.html">Global Apex API</a></li><li><a href="reference/components/index.html">Components</a></li><li><a href="bulk-apex-services.html">Bulk Apex (0.2 development)</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="handbook/security.html">Permissions</a></li><li><a href="handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="handbook/limits.html">Limits &amp; performance</a></li><li><a href="handbook/releases.html">Release notes</a></li><li><a href="service-audit-2026-09.html">Service audit</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Bulk working-time service</div>
+<article><h1 id="bulk-working-time-service">Bulk working-time service</h1><p>The next Chrono package version adds <code>ChronoWorkingTimeService.add(requests)</code>.
+It is not present in released version 0.1.0.19. Existing working-time Flow actions
+retain their method signatures and now adapt this service&#39;s typed results. Optional date/clock and supplied-record inputs extend the existing request contracts.</p>
+<pre><code class="language-apex">List&lt;skel.ChronoWorkingTimeInput&gt; requests = new List&lt;skel.ChronoWorkingTimeInput&gt;();
+// Add one input per calculation, with its own start, amount, zone and schedule.
+List&lt;skel.ChronoWorkingTimeResult&gt; results = skel.ChronoWorkingTimeService.add(requests);
+</code></pre>
+<p>Each input uses the existing data-only <code>ChronoWorkingTimeInput</code>:</p>
+<ul>
+<li>One starting representation: <code>startInstant</code> (native Datetime), <code>startValue</code> (ISO date/local date-time/instant/zoned date-time), or <code>startDate</code> with optional <code>startTime</code>. A date alone means local midnight.</li>
+<li><code>timeZoneId</code>: explicit timezone for local inputs and the result; openings follow the schedule&#39;s timezone.</li>
+<li><code>disambiguation</code>: <code>reject</code> (default), <code>earlier</code> or <code>later</code> for repeated times; nonexistent local times are rejected.</li>
+<li><code>amount</code>: signed integer; negative values subtract.</li>
+<li><code>unit</code>: <code>hours</code> or <code>minutes</code>.</li>
+<li><code>scheduleType</code>: <code>OperatingHours</code> or <code>BusinessHours</code>.</li>
+<li><code>scheduleId</code>: saved record ID, or <code>operatingHours</code>, <code>timeSlots</code> and optional <code>holidays</code> for supplied native records. Do not provide both. Supplied records can be unsaved and require <code>scheduleType = OperatingHours</code>.</li>
+</ul>
+<p>Each result has <code>success</code>, <code>errorMessage</code> and <code>value</code>. On success, <code>value</code> is a
+<code>ChronoZonedDateTime</code>; on failure it is null and <code>errorMessage</code> contains the
+ordinary item failure. Convert a successful value with the zoned service or read
+its native <code>instant</code> and <code>timeZoneId</code> fields. The service does not return a Flow
+transport envelope. Its data-only result is an Apex contract, not a new
+Apex-defined Flow resource.</p>
+<p>Call once with the complete list. OperatingHours schedules share three user-mode
+queries for the batch; supplied-only batches use no queries. BusinessHours requests add one user-mode record lookup and
+use Salesforce&#39;s native arithmetic. Results preserve input order; both result
+objects and nested zoned values are independent. Identical calculations share
+work only within this call. Requests are not mutated. Null/empty lists return an
+empty list; a null item returns a failed item. Governor limits still apply.</p>
+<p>The global service delegates to internal <code>ChronoWorkingTimeOperations</code>;
+<code>ChronoWorkingTimeContext</code> owns schedule loading and calculation. Flow adapters
+only map existing inputs and convert the service results to native/ISO outputs.
+Working differences retain the same shared schedule context. Native and ISO endpoint resolution is shared through an internal helper.</p>
+<p>Existing methods, field types and constructors are retained. The schedule ID becomes optional when supplying native records; the request gains optional date, clock, policy and native schedule fields. The additive global service and typed
+result follow <a href="https://developer.salesforce.com/docs/platform/pkg2-dev/guide/sfdx-dev-dev2gp-namespace-visibility.html">managed 2GP namespace visibility</a>.
+A new minor package version is needed; this addition is not a patch to 0.1.0.19.</p>
+<p>The wider <a href="bulk-apex-services.html">bulk Apex service catalogue</a> covers the other calculation families in the upcoming 0.2 version.</p>
+<h2 id="subscriber-check">Subscriber check<a class="heading-anchor" href="#subscriber-check" aria-label="Link to Subscriber check">#</a></h2><p>With the existing London and New York example schedules, run the
+<a href="https://github.com/KarlLivesey/Chrono/blob/main/tests/subscriber/scripts/working-time-service.apex">subscriber check</a>:</p>
+<pre><code class="language-sh">sf apex run --target-org chrono-subscriber --file tests/subscriber/scripts/working-time-service.apex
+</code></pre>
+<p>It checks 200 mixed native/ISO requests across both schedules, ordered typed
+outputs, independent nested values, unchanged inputs and an isolated invalid
+item. It performs no DML. The package query count is visible under the <code>skel</code>
+namespace in the Apex execution log; the subscriber namespace&#39;s own counter does
+not include managed-package queries.</p>
+<h2 id="validation-8-september-2026">Validation — 8 September 2026<a class="heading-anchor" href="#validation-8-september-2026" aria-label="Link to Validation — 8 September 2026">#</a></h2><ul>
+<li>Development deployment <code>0AfG100000LNarWKAT</code>: 207 Apex tests, zero failures.</li>
+<li>Contract checks: all released global declarations unchanged; seven additive
+declarations across the new service/result classes. All 14 contract tests pass.</li>
+<li>PMD passes the configured severity threshold; only low-severity findings remain.</li>
+<li>One skip-validation build: <code>0.2.0.1</code>, subscriber version <code>04tgK000000KHXlQAO</code>,
+request <code>08cgK000000H3xZQAS</code>, ancestor released <code>0.1.0.19</code>.</li>
+<li>Existing subscriber org upgraded successfully, install <code>0HfAs000002bYETKA2</code>.</li>
+<li>Subscriber Apex check: 200 mixed native/ISO inputs across two schedules plus
+one invalid item; ordered typed values and independent nested copies verified.
+The execution log reports exactly three SOQL queries in the <code>skel</code> namespace.</li>
+<li>All 49 tests in the eight existing subscriber integration classes passed;
+test run <code>707As00001Vw9hO</code>.</li>
+</ul>
+<p>The subscriber check compares individual public fields: attempting to JSON-serialise
+these managed input objects from the subscriber raised <code>System.JSONException</code>.
+This service supports typed Apex calls; it does not promise subscriber-side JSON
+serialisation of its input/result objects. Flow retains native/ISO transport.</p>
+<p>This is an unreleased test build. Validation was skipped, no package coverage was
+calculated, and no standard build or promotion was performed for this extraction.
+The public documentation for released 0.1.0.19 continues to describe the action
+entry point that is actually available in that version.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Check release notes for released and development API availability. <a href="handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#subscriber-check">Subscriber check</a></li><li><a href="#validation-8-september-2026">Validation — 8 September 2026</a></li></ol><a class="contents-help" href="handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="licence.txt">Licence</a></span></footer>
+</body></html>

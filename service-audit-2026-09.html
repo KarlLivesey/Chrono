@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apex services and bulk-operation audit — 9 September 2026 · Chrono</title><meta name="description" content="There was further work to do. This review reproduced an arithmetic defect, found holes in the architecture checks, and found misleading version labels in the documentation pipeline. Those ar">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f6f4ee">
+<link rel="canonical" href="https://karllivesey.github.io/Chrono/service-audit-2026-09.html"><link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/site.css"><script type="module" src="assets/site.mjs"></script></head>
+<body data-base="" class="document-page">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header"><a class="brand" href="index.html" aria-label="Chrono documentation home"><img src="assets/mark.svg" alt="" width="31" height="31"><span>Chrono<span class="brand-caption">Salesforce date &amp; time</span></span></a>
+<form class="site-search" role="search" action="search.html"><label class="sr-only" for="site-search">Search documentation</label><span class="search-symbol" aria-hidden="true">⌕</span><input id="site-search" name="q" type="search" placeholder="Find a guide, action or method…" autocomplete="off"><kbd aria-hidden="true">/</kbd></form>
+<div class="header-actions"><a class="release" href="handbook/releases.html">v0.1.0.19<span class="release-dot" aria-hidden="true"></span></a><button class="theme-button" type="button" aria-label="Change colour theme">Theme: system</button><a class="repo-link" href="https://github.com/KarlLivesey/Chrono">GitHub <span aria-hidden="true">↗</span></a></div></header>
+<div class="layout"><aside class="sidebar"><details class="mobile-navigation" open><summary>Documentation menu</summary><nav aria-label="Documentation"><section class="nav-group"><h2>Start here</h2><ul><li><a href="index.html">Overview</a></li><li><a href="handbook/installation.html">Install Chrono</a></li><li><a href="handbook/first-flow.html">Your first Flow</a></li><li><a href="handbook/apex.html">Apex quick start</a></li><li><a href="handbook/examples.html">Example library</a></li></ul></section><section class="nav-group"><h2>Work with time</h2><ul><li><a href="handbook/types.html">Values &amp; ISO formats</a></li><li><a href="handbook/iso-formats.html">ISO transport</a></li><li><a href="handbook/timezones.html">Timezones &amp; clock changes</a></li><li><a href="handbook/arithmetic.html">Arithmetic</a></li><li><a href="handbook/operating-hours.html">Operating hours</a></li><li><a href="handbook/availability.html">Availability</a></li><li><a href="handbook/allocation.html">Time allocation</a></li><li><a href="handbook/ranges-recurrence.html">Ranges &amp; recurrence</a></li><li><a href="handbook/formatting.html">Formatting &amp; locale</a></li></ul></section><section class="nav-group"><h2>Build experiences</h2><ul><li><a href="handbook/flow-configuration.html">Action configuration</a></li><li><a href="handbook/collections.html">Bulk &amp; collections</a></li><li><a href="handbook/screen-configuration.html">Flow screens</a></li><li><a href="handbook/components.html">LWC composition</a></li><li><a href="handbook/record-pages.html">Record pages</a></li></ul></section><section class="nav-group"><h2>Reference</h2><ul><li><a href="reference/actions/index.html">54 Flow actions</a></li><li><a href="reference/apex/index.html">Global Apex API</a></li><li><a href="reference/components/index.html">Components</a></li><li><a href="bulk-apex-services.html">Bulk Apex (0.2 development)</a></li></ul></section><section class="nav-group"><h2>Keep it reliable</h2><ul><li><a href="handbook/security.html">Permissions</a></li><li><a href="handbook/troubleshooting.html">Troubleshooting</a></li><li><a href="handbook/limits.html">Limits &amp; performance</a></li><li><a href="handbook/releases.html">Release notes</a></li><li><a href="service-audit-2026-09.html" aria-current="page">Service audit</a></li></ul></section></nav></details></aside>
+<main id="content" tabindex="-1"><div class="eyebrow">Guide <span>/</span> Apex services and bulk-operation audit — 9 September 2026</div>
+<article><h1 id="apex-services-and-bulk-operation-audit-9-september-2026">Apex services and bulk-operation audit — 9 September 2026</h1><p><strong>There was further work to do.</strong> This review reproduced an arithmetic defect,
+found holes in the architecture checks, and found misleading version labels in
+the documentation pipeline. Those are corrected in source. This is a review of
+the current implementation, not a claim that no future defect or useful feature
+can exist.</p>
+<p>The baseline was installed beta <strong>0.2.0.3</strong> (<code>04tgK000000KIYfQAO</code>). The source
+workspace was reconnected during the review. The corrections below preserve the
+1,604 global declarations and 121 core method signatures. They do not change
+request fields, Flow metadata or the published package installation link.</p>
+<h2 id="confirmed-findings-and-corrections">Confirmed findings and corrections<a class="heading-anchor" href="#confirmed-findings-and-corrections" aria-label="Link to Confirmed findings and corrections">#</a></h2><h3 id="zero-calendar-arithmetic-discarded-a-known-repeated-time-occurrence">Zero calendar arithmetic discarded a known repeated-time occurrence<a class="heading-anchor" href="#zero-calendar-arithmetic-discarded-a-known-repeated-time-occurrence" aria-label="Link to Zero calendar arithmetic discarded a known repeated-time occurrence">#</a></h3><p>On the installed subscriber package, the input
+<code>2026-10-25T01:30:00.000+00:00[Europe/London]</code> identifies the second occurrence.
+<code>ChronoWorkingTimeService.addDays</code> with amount zero and default disambiguation
+returned an error. With <code>earlier</code>, it returned <code>00:30Z</code> instead of <code>01:30Z</code>.
+The core <code>addDays</code>, <code>addMonths</code> and <code>addYears</code> methods also rejected zero with
+the default policy. These were actual subscriber executions, not inferred
+failures from reading the code.</p>
+<p>The core calendar implementation now preserves the instant when its resulting
+local fields are unchanged, returning an independent value. Working-day addition
+preserves its resolved instant for zero and still applies the requested
+closed-time policy. A repeated target reached by nonzero arithmetic still needs
+its normal disambiguation; invalid policies still fail.</p>
+<p>Changes: <a href="https://github.com/KarlLivesey/Chrono/blob/main/force-app/main/default/classes/ChronoZonedDateTimeOperations.cls">core calendar implementation</a>,
+<a href="https://github.com/KarlLivesey/Chrono/blob/main/force-app/main/default/classes/ChronoWorkingDays.cls">working-day implementation</a>.
+Regression tests cover repeated occurrences, all supported policies, independent
+results, a null batch item and zero with a closed-time rejection. Both regression
+tests failed on the original implementation before the correction.</p>
+<h3 id="service-coverage-checks-had-a-blind-spot">Service coverage checks had a blind spot<a class="heading-anchor" href="#service-coverage-checks-had-a-blind-spot" aria-label="Link to Service coverage checks had a blind spot">#</a></h3><p>The route inventory pointed two families at Flow adapters rather than their
+actual Apex service. The dependency check also excluded every <code>ChronoFlow*</code>
+class, including reusable arithmetic implementations. That exclusion could let a
+future shared calculator call a UI controller or an invocable entry point without
+failing the check.</p>
+<p>The inventory now names all 27 direct service routes. Tests separately verify the
+two necessary Flow adapters, inspect shared calculators regardless of historical
+name, and require every global service to have a reviewed boundary guard. Existing
+core guards verify exact signatures and delegation; batch guards verify thin
+facades. No new runtime interface or public abstraction was needed.</p>
+<h3 id="the-documentation-could-describe-development-apis-as-released">The documentation could describe development APIs as released<a class="heading-anchor" href="#the-documentation-could-describe-development-apis-as-released" aria-label="Link to The documentation could describe development APIs as released">#</a></h3><p>The generator read current source but hard-coded <code>0.1.0.19</code> and 1,471 declarations.
+Rebuilding after the bulk work would publish new services under a released-version
+label. The handbook also continued recommending <code>ChronoWorkingTimeAction.run</code>
+as the Apex entry point, while the new service guide was outside that chapter.</p>
+<p>References now derive the source version and declaration count, explicitly say
+<strong>development source</strong>, and link to release status. The OperatingHours handbook
+leads with the direct 0.2 service, retaining the action-based route only as a
+clearly labelled compatibility note for installed 0.1.0.19. The public installer
+still points to the released package. No beta is presented as a production release.</p>
+<h3 id="fallback-component-tests-depended-on-the-hosts-temporal-availability">Fallback component tests depended on the host&#39;s Temporal availability<a class="heading-anchor" href="#fallback-component-tests-depended-on-the-hosts-temporal-availability" aria-label="Link to Fallback component tests depended on the host&amp;39;s Temporal availability">#</a></h3><p>Eight LWC tests failed under Node 26 because native Temporal ran instead of the
+mocked Apex bridge. The fallback suite now explicitly disables Temporal for that
+suite and restores the original global afterwards. Native Temporal remains
+covered by the separate JavaScript conformance tests. No production component
+behaviour was changed to make the tests pass.</p>
+<h3 id="javascript-lint-had-not-been-completing">JavaScript lint had not been completing<a class="heading-anchor" href="#javascript-lint-had-not-been-completing" aria-label="Link to JavaScript lint had not been completing">#</a></h3><p>The broad PMD scan attempted to parse modern LWC JavaScript and crashed on four
+files while returning a successful CLI exit status. The workflow now runs PMD
+only on Apex and Salesforce&#39;s ESLint engine on LWC, including component tests.
+The completed ESLint scan led to local state handling fixes, removal of unused
+bindings and safer test DOM cleanup. <code>chronoFlowValueInput.value</code> remains readable
+and writable, now through a getter/setter backed by internal state; its contract
+baseline and parent-update/clear regression test were updated together.</p>
+<p>Intentional timing exceptions remain beside each debounce/focus call. The
+platform rule that forbids those inline explanations is disabled in
+<code>code-analyzer.yml</code>; the underlying async-operation rule remains enabled.
+Native DOM events and mocked wire emitters have test-only explanations. No new
+library was added. Both engines complete with zero severity 1–3 findings;
+<strong>760 low Apex findings and 43 low LWC findings remain</strong>. These mostly concern
+API documentation/style and SLDS styling suggestions and are not represented as
+zero findings. See <a href="https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/engine-eslint.html">Salesforce&#39;s ESLint integration</a>.</p>
+<h2 id="coverage-examined">Coverage examined<a class="heading-anchor" href="#coverage-examined" aria-label="Link to Coverage examined">#</a></h2><p>The review traced the 54 scalar/collection action entry points through their
+adapters, the 20 global service classes and their implementations. It checked
+actual query sites, shared configuration loaders, request normalisation,
+result copying, per-item error handling, public signature guards, generated
+references and the relevant tests. Large generated locale tables were treated
+as data, not as a reason to invent another service.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Area</th><th scope="col">Direct Apex entry points</th><th scope="col">What the implementation provides</th></tr></thead><tbody><tr><td>Eight core values</td><td>Eight matching value services</td><td>Query-free construction, validation, native/ISO conversion and applicable arithmetic; saved working-time conveniences delegate to the existing loader</td></tr><tr><td>Value operations</td><td><code>ChronoValueService</code></td><td>Convert, create, replace, parse, validate, epoch conversion and details</td></tr><tr><td>Calculations</td><td><code>ChronoCalculationService</code></td><td>Adjustment, elapsed/scheduled difference, calendar difference, comparison, boundaries and rounding</td></tr><tr><td>Timezones</td><td><code>ChronoTimeZoneService</code></td><td>Local resolution, conversion, offsets, zone lists and bounded transition searches</td></tr><tr><td>Working time</td><td><code>ChronoWorkingTimeService</code></td><td>Add, check, find and working-day addition; saved or supplied native OperatingHours configuration</td></tr><tr><td>Durations</td><td><code>ChronoDurationCalculationService</code></td><td>Components, sign, totals, balancing, multiplication and division</td></tr><tr><td>Ranges and collections</td><td><code>ChronoRangeService</code>, <code>ChronoCollectionService</code></td><td>Interval operations, splitting, coverage, ordering, deduplication, filtering, grouping, nearest values and duration sums</td></tr><tr><td>Schedules</td><td><code>ChronoAvailabilityService</code>, <code>ChronoRecurrenceService</code></td><td>Availability, booking windows, holiday/open-date listings and bounded recurrence</td></tr><tr><td>Fiscal periods</td><td><code>ChronoFiscalPeriodService</code></td><td>One shared organisation-calendar query or query-free explicit month-based calendars</td></tr><tr><td>Formatting</td><td><code>ChronoFormattingService</code></td><td>Values, ranges, durations and relative display</td></tr><tr><td>Allocation</td><td><code>ChronoTimeAllocationService</code></td><td>Scalar allocation and <code>allocateAll</code>, named blocks, holiday rules, four overlap modes and precision controls</td></tr></tbody></table></div><p>The <a href="bulk-apex-services.html">complete bulk catalogue</a> gives request/result types
+and examples. No existing action family lacks a direct bulk Apex route. Pure
+single-value core operations do not need a separate list overload for each method:
+they are query-free, and the batch families already cover the corresponding work.</p>
+<h2 id="query-and-batch-behaviour">Query and batch behaviour<a class="heading-anchor" href="#query-and-batch-behaviour" aria-label="Link to Query and batch behaviour">#</a></h2><p>All explicit production SOQL is concentrated in four places:</p>
+<ul>
+<li><code>ChronoOperatingSchedules</code>: three shared queries for schedules, normal slots
+and holiday links, used by all saved OperatingHours calculation families.</li>
+<li><code>ChronoWorkingTimeContext</code>: one optional BusinessHours configuration query.</li>
+<li><code>ChronoFiscalPeriods</code>: one query for the requested organisation-calendar range.</li>
+<li><code>ChronoPickerScheduleQuery</code>: bounded UI search, not calculation performed once
+per Apex item. It is deliberately not another global service.</li>
+</ul>
+<p>Batch services preserve input order, isolate ordinary item failures, reuse
+identical calculations within a call and return independent result graphs.
+Native-record schedules avoid queries and DML. Saved and supplied schedules use
+the same interval/holiday engine. The previous 0.2.0.3 tests already established
+mixed saved/native 200-item query budgets and actual subscriber Flow execution;
+this audit does not relabel those earlier runs as new tests.</p>
+<p>Independent calls still load their own configuration. There is no public
+transaction-wide cache. Batch loading does not remove CPU, heap or output-size
+limits: <a href="https://resources.docs.salesforce.com/latest/latest/en-us/sfdc/pdf/salesforce_app_limits_cheatsheet.pdf">Salesforce governor-limit reference</a>.
+A new shared context would add lifecycle/permission semantics and a permanent
+managed API; this review found no need to introduce one speculatively.</p>
+<h2 id="further-operations-that-are-possible-but-not-implemented-by-this-audit">Further operations that are possible, but not implemented by this audit<a class="heading-anchor" href="#further-operations-that-are-possible-but-not-implemented-by-this-audit" aria-label="Link to Further operations that are possible, but not implemented by this audit">#</a></h2><p>These are concrete capability limits, not missing bulk routes or new promises:</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Possible addition</th><th scope="col">Current behaviour and an additive route</th></tr></thead><tbody><tr><td>Sub-minute working-time addition</td><td>The internal engine measures milliseconds, but the public working-time request accepts whole hours/minutes. Additional second/millisecond units or an optional elapsed-duration field could expose that precision without changing existing signatures.</td></tr><tr><td>BusinessHours parity</td><td>Native BusinessHours is supported by add; check/find/scheduled difference currently target OperatingHours. Supporting the native BusinessHours methods would need explicit request/editor configuration and behaviour tests.</td></tr><tr><td>Multiple supplied schedules in one intersection/union</td><td>The primary schedule can use supplied records; additional schedules currently use saved IDs. Supporting several unsaved configurations needs an unambiguous way to associate each schedule&#39;s slots and holidays.</td></tr></tbody></table></div><p>The selected existing scope does not require alternative calendars, nanoseconds,
+a second scheduling object model, one public interface per implementation, or
+new classes merely to remove historical <code>ChronoFlow</code> names. These would not fix
+the confirmed issues above. Current service signatures remain static facades over
+internal implementations and can gain additive overloads/options subject to
+<a href="https://developer.salesforce.com/docs/platform/pkg2-dev/guide/sfdx-dev2gp-rules-ancestry-upgrades.html">Salesforce manageability rules</a>.</p>
+<h2 id="benchmarks-and-validation">Benchmarks and validation<a class="heading-anchor" href="#benchmarks-and-validation" aria-label="Link to Benchmarks and validation">#</a></h2><p>Four new read-only benchmarks call services directly from subscriber Apex. Each
+uses 200 inputs, one warm-up and three measured samples, with a fresh transaction
+per sample. Every expected output is asserted; errors are not counted as fast
+successful work. <a href="https://github.com/KarlLivesey/Chrono/blob/main/tests/benchmarks/results/bulk-services-0.2.0.3.json">Raw measurements</a>.</p>
+<div class="table-scroll" role="region" aria-label="Reference table" tabindex="0"><table><thead><tr><th scope="col">Installed 0.2.0.3 workload</th><th scope="col">Median operation CPU</th></tr></thead><tbody><tr><td>Repeated conversions</td><td>197 ms</td></tr><tr><td>Distinct conversions</td><td>507 ms</td></tr><tr><td>Distinct availability requests, four zones, ten slots, 64 holidays</td><td>2,817 ms</td></tr><tr><td>Distinct recurrence requests with the same schedule complexity</td><td>4,681 ms</td></tr></tbody></table></div><p>These are measured workloads, not a guarantee for arbitrary horizons or the
+caller&#39;s surrounding automation. In particular, query bulkification alone does
+not prove adequate CPU headroom.</p>
+<p>Full development deployment <code>0AfG100000LNwtpKAD</code> succeeded with <strong>242 Apex tests</strong>.
+The subsequent LWC-only deployment <code>0AfG100000LO1tLKAT</code> succeeded for all <strong>84
+component bundles</strong>. The final local suites passed <strong>147 LWC tests</strong>, <strong>43
+Temporal tests</strong>, <strong>20 contract tests</strong> and <strong>5 documentation tests</strong>. Formatting
+passed. The documentation build checked <strong>224 HTML pages and 11,345 local
+links/assets/fragments</strong>. Both completed lint engines have no severity 1–3
+findings, with the low-severity findings and narrow exclusions described above.</p>
+<p>The installed subscriber beta remains 0.2.0.3; the new zero-arithmetic correction
+requires a later package build/install before it can be verified there. This
+review uses the existing orgs and does not consume a package build allocation.
+Browser rendering is unverified; no screen capture or Computer Use was started.</p>
+</article><footer class="article-footer"><p>Chrono 0.1.0.19 · <code>skel</code> namespace</p><p>Check release notes for released and development API availability. <a href="handbook/releases.html">Validation &amp; release notes</a></p></footer></main>
+<aside class="contents" aria-label="On this page"><p>On this page</p><ol><li><a href="#confirmed-findings-and-corrections">Confirmed findings and corrections</a></li><li><a href="#coverage-examined">Coverage examined</a></li><li><a href="#query-and-batch-behaviour">Query and batch behaviour</a></li><li><a href="#further-operations-that-are-possible-but-not-implemented-by-this-audit">Further operations that are possible, but not implemented by this audit</a></li><li><a href="#benchmarks-and-validation">Benchmarks and validation</a></li></ol><a class="contents-help" href="handbook/troubleshooting.html">Need a hand?<br><span>Troubleshooting →</span></a></aside></div>
+<footer class="site-footer"><span>Chrono. A Salesforce library by Karl.</span><span>BSD-3-Clause <span aria-hidden="true">·</span> <a href="licence.txt">Licence</a></span></footer>
+</body></html>
