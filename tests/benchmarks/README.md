@@ -72,7 +72,8 @@ python3 tests/benchmarks/compare.py tests/benchmarks/results/baseline-apex.json 
 ```
 
 See the [readable baseline](BASELINE.md), [hardened package comparison](COMPARISON.md)
-and [distinct-workload follow-up](FOLLOWUP.md).
+[distinct-workload follow-up](FOLLOWUP.md) and
+[timezone sampling comparison](TIMEZONE-SAMPLING.md).
 
 ## Direct Apex services (0.2 beta)
 

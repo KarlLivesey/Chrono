@@ -167,5 +167,29 @@
     "setup": "List<String> zoneIds=new List<String>{'UTC','Europe/London','America/New_York','Australia/Sydney'};List<OperatingHours> schedules=new List<OperatingHours>();for(String zoneId:zoneIds)schedules.add(new OperatingHours(TimeZone=zoneId));List<TimeSlot> slots=new List<TimeSlot>();for(String weekday:new List<String>{'Monday','Tuesday','Wednesday','Thursday','Friday'}){slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(12,0,0,0)));slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(13,0,0,0),EndTime=Time.newInstance(17,0,0,0)));}List<Holiday> holidays=new List<Holiday>();Set<Date> closedDates=new Set<Date>();Date anchor=Date.newInstance(2026,1,1);for(Integer h=0;h<64;h++){Date day=anchor.addDays(h*3);holidays.add(new Holiday(ActivityDate=day,IsAllDay=true));closedDates.add(day);}List<skel.ChronoRecurrenceInput> requests=new List<skel.ChronoRecurrenceInput>();List<List<Date>> expected=new List<List<Date>>();for(Integer i=0;i<$COUNT;i++){Date start=anchor.addDays(i);skel.ChronoRecurrenceInput item=new skel.ChronoRecurrenceInput();item.operation='rrule';item.valueType='PlainDate';item.dateValue=start;item.rule='FREQ=DAILY;COUNT=10';item.untilDate=start.addDays(20);item.closedPolicy='skip';item.operatingHours=schedules[Math.mod(i,4)];item.timeSlots=slots;item.holidays=holidays;requests.add(item);List<Date> openDays=new List<Date>();for(Integer d=0;d<10;d++){Date day=start.addDays(d);Integer weekday=Math.mod(Date.newInstance(2000,1,3).daysBetween(day),7);if(weekday<5&&!closedDates.contains(day))openDays.add(day);}expected.add(openDays);}",
     "body": "List<skel.ChronoRecurrenceResult> rows=skel.ChronoRecurrenceService.generate(requests);",
     "assert": "Assert.areEqual($COUNT,rows.size());for(Integer i=0;i<rows.size();i++){Assert.isTrue(rows[i].success,rows[i].errorMessage==null?'Recurrence success':rows[i].errorMessage);Assert.areEqual(expected[i],rows[i].dates,'Ordered open dates for interview '+i);}"
+  },
+  {
+    "name": "timezone-offset-sampling-25",
+    "description": "Isolated native offset-sampling loop: 25 lookups per scan; excludes Chrono validation and candidate matching.",
+    "setup": "TimeZone zone=TimeZone.getTimeZone('Europe/London'); Datetime midnight=Datetime.newInstanceGmt(2026,10,25,0,0,0);",
+    "body": "Set<Integer> offsets; for(Integer index=0;index<$COUNT;index++){ offsets=new Set<Integer>(); for(Integer hour=-72;hour<=72;hour+=6) offsets.add(zone.getOffset(midnight.addHours(hour))); }",
+    "assert": "Assert.areEqual(new Set<Integer>{0,3600000},offsets);",
+    "freshTransactionPerSample": true
+  },
+  {
+    "name": "timezone-offset-sampling-5",
+    "description": "Isolated native offset-sampling loop: 5 lookups per scan; excludes Chrono validation and candidate matching.",
+    "setup": "TimeZone zone=TimeZone.getTimeZone('Europe/London'); Datetime midnight=Datetime.newInstanceGmt(2026,10,25,0,0,0);",
+    "body": "Set<Integer> offsets; for(Integer index=0;index<$COUNT;index++){ offsets=new Set<Integer>(); for(Integer hour=-48;hour<=48;hour+=24) offsets.add(zone.getOffset(midnight.addHours(hour))); }",
+    "assert": "Assert.areEqual(new Set<Integer>{0,3600000},offsets);",
+    "freshTransactionPerSample": true
+  },
+  {
+    "name": "timezone-resolve-overlap",
+    "description": "Resolve the later London repeated hour through the public Apex value service, without batch deduplication.",
+    "setup": "skel.ChronoPlainDateTime value=skel.ChronoPlainDateTimeService.parseIso('2026-10-25T01:30');",
+    "body": "skel.ChronoZonedDateTime actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoPlainDateTimeService.toZonedDateTime(value,'Europe/London','later');",
+    "assert": "Assert.areEqual(Datetime.newInstanceGmt(2026,10,25,1,30,0),skel.ChronoZonedDateTimeService.toDatetime(actual));",
+    "freshTransactionPerSample": true
   }
 ]

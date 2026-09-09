@@ -1,0 +1,126 @@
+{
+  "createdAt": "2026-09-09T11:01:38.922599+00:00",
+  "targetOrg": "chrono-dev",
+  "label": "337b728 with resolver restored from parent: 25 offset samples",
+  "operationsPerSample": 200,
+  "measuredSamples": 3,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "calendar-dst-arithmetic",
+      "description": "Calendar-day arithmetic crossing the London DST boundary.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 254,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 236,
+          "heapAfterBytes": 2232,
+          "cpuMs": 245,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 533,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2750,
+          "cpuMs": 278,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 714,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2750,
+          "cpuMs": 180,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 894,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2750,
+          "cpuMs": 180,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perCase",
+      "cpuMs": {
+        "min": 180,
+        "median": 180,
+        "max": 278
+      },
+      "medianCpuMsPerOperation": 0.9
+    },
+    {
+      "name": "timezone-resolve-overlap",
+      "description": "Resolve the later London repeated hour through the public Apex value service, without batch deduplication.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 143,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 642,
+          "heapAfterBytes": 2039,
+          "cpuMs": 139,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 110,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 642,
+          "heapAfterBytes": 2039,
+          "cpuMs": 108,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 112,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 642,
+          "heapAfterBytes": 2039,
+          "cpuMs": 108,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 127,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 642,
+          "heapAfterBytes": 2039,
+          "cpuMs": 124,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 108,
+        "median": 108,
+        "max": 124
+      },
+      "medianCpuMsPerOperation": 0.54
+    }
+  ]
+}
