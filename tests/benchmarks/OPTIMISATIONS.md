@@ -42,3 +42,29 @@ Run `optimise-working-weekend` and `optimise-working-open-day` with
 `run-apex.py --target-org chrono-dev --samples 5 --count 200`, a descriptive
 `--label` and a new `--output` file. The runner measures the deployed code and
 does not deploy the experimental diff itself.
+
+## 2. Reuse gap-resolution offsets — rejected
+
+The candidate shared sampled offsets between exact resolution and gap correction
+through a new internal resolver method. No global signature changed. It did not
+produce a useful end-to-end CPU improvement, so the original resolver and gap
+implementation were restored before evaluating the next candidate.
+
+| Public resolution, 200 independent calls | Before median | Candidate median |
+| ---------------------------------------- | ------------: | ---------------: |
+| Unique local time                        |        777 ms |           797 ms |
+| Repeated local time                      |        839 ms |           832 ms |
+| Missing local time                       |        949 ms |         1,041 ms |
+
+These observations do not establish that every call regresses by the median
+difference, but they do not justify retaining the refactor for performance.
+All 33 resolver, picker, timezone-range and Flow-operation tests passed with the
+candidate and on restoration. The 20 contract tests and focused Apex lint passed.
+
+- [Candidate diff](experiments/reuse-gap-offsets.patch)
+- [Before](results/optimise-gap-before.json)
+- [Candidate](results/optimise-gap-after.json)
+
+The cases are `optimise-resolution-unique`, `optimise-resolution-overlap` and
+`optimise-resolution-gap`. Each calls the public service independently for every
+item so batch deduplication cannot disguise the cost of resolution.

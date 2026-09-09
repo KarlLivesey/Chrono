@@ -1,0 +1,250 @@
+{
+  "createdAt": "2026-09-09T11:25:51.619133+00:00",
+  "targetOrg": "chrono-dev",
+  "label": "Candidate: reuse gap offsets only",
+  "operationsPerSample": 200,
+  "measuredSamples": 5,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "optimise-resolution-unique",
+      "description": "Public local-resolution service called independently for each item: unique.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 981,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 26875,
+          "heapAfterBytes": 28033,
+          "cpuMs": 902,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 970,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 26875,
+          "heapAfterBytes": 28033,
+          "cpuMs": 884,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 820,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 26863,
+          "heapAfterBytes": 28021,
+          "cpuMs": 752,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 875,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 26875,
+          "heapAfterBytes": 28033,
+          "cpuMs": 797,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 808,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 26863,
+          "heapAfterBytes": 28021,
+          "cpuMs": 741,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1072,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 26875,
+          "heapAfterBytes": 28033,
+          "cpuMs": 984,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 741,
+        "median": 797,
+        "max": 984
+      },
+      "medianCpuMsPerOperation": 3.985
+    },
+    {
+      "name": "optimise-resolution-overlap",
+      "description": "Public local-resolution service called independently for each item: overlap.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1003,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43065,
+          "heapAfterBytes": 44223,
+          "cpuMs": 870,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1022,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43077,
+          "heapAfterBytes": 44235,
+          "cpuMs": 870,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 936,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43077,
+          "heapAfterBytes": 44235,
+          "cpuMs": 798,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1005,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43077,
+          "heapAfterBytes": 44235,
+          "cpuMs": 855,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 997,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43077,
+          "heapAfterBytes": 44235,
+          "cpuMs": 820,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 989,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43077,
+          "heapAfterBytes": 44235,
+          "cpuMs": 832,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 798,
+        "median": 832,
+        "max": 870
+      },
+      "medianCpuMsPerOperation": 4.16
+    },
+    {
+      "name": "optimise-resolution-gap",
+      "description": "Public local-resolution service called independently for each item: gap.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1057,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43080,
+          "heapAfterBytes": 44238,
+          "cpuMs": 904,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1120,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43080,
+          "heapAfterBytes": 44238,
+          "cpuMs": 969,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1187,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43080,
+          "heapAfterBytes": 44238,
+          "cpuMs": 1041,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1346,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43080,
+          "heapAfterBytes": 44238,
+          "cpuMs": 1090,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1045,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43080,
+          "heapAfterBytes": 44238,
+          "cpuMs": 902,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 1200,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 43080,
+          "heapAfterBytes": 44238,
+          "cpuMs": 1054,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 902,
+        "median": 1041,
+        "max": 1090
+      },
+      "medianCpuMsPerOperation": 5.205
+    }
+  ]
+}

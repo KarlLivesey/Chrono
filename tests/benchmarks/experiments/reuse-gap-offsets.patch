@@ -1,0 +1,75 @@
+diff --git a/force-app/main/default/classes/ChronoLocalCandidates.cls b/force-app/main/default/classes/ChronoLocalCandidates.cls
+index 819c93c..5e5afeb 100644
+--- a/force-app/main/default/classes/ChronoLocalCandidates.cls
++++ b/force-app/main/default/classes/ChronoLocalCandidates.cls
+@@ -8,10 +8,12 @@ public with sharing class ChronoLocalCandidates {
+   ) {
+     Date day = ChronoIso.parseDate(dateValue);
+     Time clockValue = ChronoIso.parseTime(timeValue);
+-    List<Datetime> matches = ChronoZoneResolver.resolve(
+-      day,
+-      clockValue,
+-      timeZoneId
++    Datetime wallClock = Datetime.newInstanceGmt(day, clockValue);
++    Set<Integer> offsets = ChronoZoneResolver.sampleOffsets(day, timeZoneId);
++    List<Datetime> matches = ChronoZoneResolver.resolveWithOffsets(
++      wallClock,
++      timeZoneId,
++      offsets
+     );
+     List<ChronoPickerOption> result = new List<ChronoPickerOption>();
+     for (Integer i = 0; i < matches.size(); i++) {
+@@ -26,25 +28,21 @@ public with sharing class ChronoLocalCandidates {
+     if (!matches.isEmpty()) {
+       return result;
+     }
+-    return gapOptions(Datetime.newInstanceGmt(day, clockValue), timeZoneId);
++    return gapOptions(wallClock, timeZoneId, offsets);
+   }
+   // Find the last/first valid millisecond around the actual transition.
+   // Core resolution still rejects gaps.
+   private static List<ChronoPickerOption> gapOptions(
+     Datetime wallClock,
+-    String zoneId
++    String zoneId,
++    Set<Integer> offsets
+   ) {
+     TimeZone zone = ChronoSupport.zone(zoneId);
+     Datetime beforeInstant;
+     Datetime afterInstant;
+     Datetime beforeLocal;
+     Datetime afterLocal;
+-    for (
+-      Integer offset : ChronoZoneResolver.sampleOffsets(
+-        wallClock.dateGmt(),
+-        zoneId
+-      )
+-    ) {
++    for (Integer offset : offsets) {
+       Datetime candidate = Datetime.newInstance(wallClock.getTime() - offset);
+       Datetime local = ChronoSupport.localValue(candidate, zoneId);
+       if (nearerBefore(local, beforeLocal, wallClock)) {
+diff --git a/force-app/main/default/classes/ChronoZoneResolver.cls b/force-app/main/default/classes/ChronoZoneResolver.cls
+index 16478fc..28cef3b 100644
+--- a/force-app/main/default/classes/ChronoZoneResolver.cls
++++ b/force-app/main/default/classes/ChronoZoneResolver.cls
+@@ -9,7 +9,18 @@ public with sharing class ChronoZoneResolver {
+     ChronoSupport.requireValue(localDate, 'Date');
+     ChronoSupport.requireValue(localTime, 'Time');
+     Datetime wallClock = Datetime.newInstanceGmt(localDate, localTime);
+-    Set<Integer> offsets = sampleOffsets(localDate, zoneId);
++    return resolveWithOffsets(
++      wallClock,
++      zoneId,
++      sampleOffsets(localDate, zoneId)
++    );
++  }
++  /** @description Matches a validated wall-clock value against previously sampled offsets. */
++  public static List<Datetime> resolveWithOffsets(
++    Datetime wallClock,
++    String zoneId,
++    Set<Integer> offsets
++  ) {
+     List<Datetime> matches = new List<Datetime>();
+     for (Integer offset : offsets) {
+       Datetime candidate = Datetime.newInstance(wallClock.getTime() - offset);
