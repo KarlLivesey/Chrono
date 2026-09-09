@@ -1,0 +1,90 @@
+{
+  "createdAt": "2026-09-09T11:22:52.291660+00:00",
+  "targetOrg": "chrono-dev",
+  "label": "Confirm same-day cost after restoring final lazy candidate",
+  "operationsPerSample": 200,
+  "measuredSamples": 5,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "optimise-working-open-day",
+      "description": "Public working-time addition with native records: open-day.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 216,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 795,
+          "heapAfterBytes": 3173,
+          "cpuMs": 206,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 179,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 795,
+          "heapAfterBytes": 3173,
+          "cpuMs": 175,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 254,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 795,
+          "heapAfterBytes": 3045,
+          "cpuMs": 245,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 219,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 795,
+          "heapAfterBytes": 3173,
+          "cpuMs": 211,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 292,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 795,
+          "heapAfterBytes": 3173,
+          "cpuMs": 287,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 202,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 795,
+          "heapAfterBytes": 3173,
+          "cpuMs": 196,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 175,
+        "median": 211,
+        "max": 287
+      },
+      "medianCpuMsPerOperation": 1.055
+    }
+  ]
+}

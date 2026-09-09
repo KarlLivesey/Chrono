@@ -1,6 +1,41 @@
 // Copyright (c) 2026, Karl. SPDX-License-Identifier: BSD-3-Clause
 @IsTest
 private class ChronoWorkingTimeTest {
+  @IsTest
+  static void closedWeekdaysStillValidateApplicableHolidays() {
+    OperatingHours hours = new OperatingHours(TimeZone = 'Europe/London');
+    List<TimeSlot> slots = new List<TimeSlot>{
+      new TimeSlot(
+        DayOfWeek = 'Monday',
+        StartTime = Time.newInstance(9, 0, 0, 0),
+        EndTime = Time.newInstance(17, 0, 0, 0)
+      )
+    };
+    List<Holiday> holidays = new List<Holiday>{
+      new Holiday(
+        ActivityDate = Date.newInstance(2026, 8, 29),
+        IsAllDay = false,
+        StartTimeInMinutes = 660,
+        EndTimeInMinutes = 600
+      )
+    };
+    try {
+      ChronoZonedDateTimeService.addHours(
+        Datetime.newInstanceGmt(2026, 8, 28, 12, 0, 0),
+        'Europe/London',
+        1,
+        hours,
+        slots,
+        holidays
+      );
+      Assert.fail('A closed Saturday must not conceal invalid holiday times.');
+    } catch (ChronoException expected) {
+      Assert.isTrue(
+        expected.getMessage().contains('holiday'),
+        'Holiday validation'
+      );
+    }
+  }
   @TestSetup
   static void holidaySetup() {
     insert new Holiday(

@@ -191,5 +191,21 @@
     "body": "skel.ChronoZonedDateTime actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoPlainDateTimeService.toZonedDateTime(value,'Europe/London','later');",
     "assert": "Assert.areEqual(Datetime.newInstanceGmt(2026,10,25,1,30,0),skel.ChronoZonedDateTimeService.toDatetime(actual));",
     "freshTransactionPerSample": true
+  },
+  {
+    "name": "optimise-working-weekend",
+    "description": "Public working-time addition with native records: weekend.",
+    "setup": "OperatingHours hours=new OperatingHours(TimeZone='Europe/London');List<TimeSlot> slots=new List<TimeSlot>();for(String weekday:new List<String>{'Monday','Tuesday','Wednesday','Thursday','Friday'}) slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(17,0,0,0)));List<Holiday> holidays=new List<Holiday>{new Holiday(ActivityDate=Date.newInstance(2026,8,31),IsAllDay=true)};skel.ChronoZonedDateTime value=skel.ChronoZonedDateTimeService.parseIso('2026-08-28T16:30:00+01:00[Europe/London]');",
+    "body": "skel.ChronoZonedDateTime actual;for(Integer index=0;index<$COUNT;index++)actual=skel.ChronoZonedDateTimeService.addHours(value,1,hours,slots,holidays);",
+    "assert": "Assert.areEqual('2026-09-01T09:30:00.000+01:00[Europe/London]',skel.ChronoZonedDateTimeService.toIsoString(actual),'Holiday and weekend boundaries');",
+    "freshTransactionPerSample": true
+  },
+  {
+    "name": "optimise-working-open-day",
+    "description": "Public working-time addition with native records: open-day.",
+    "setup": "OperatingHours hours=new OperatingHours(TimeZone='Europe/London');List<TimeSlot> slots=new List<TimeSlot>();for(String weekday:new List<String>{'Monday','Tuesday','Wednesday','Thursday','Friday'}) slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(17,0,0,0)));List<Holiday> holidays=new List<Holiday>{new Holiday(ActivityDate=Date.newInstance(2026,8,31),IsAllDay=true)};skel.ChronoZonedDateTime value=skel.ChronoZonedDateTimeService.parseIso('2026-08-28T10:30:00+01:00[Europe/London]');",
+    "body": "skel.ChronoZonedDateTime actual;for(Integer index=0;index<$COUNT;index++)actual=skel.ChronoZonedDateTimeService.addHours(value,1,hours,slots,holidays);",
+    "assert": "Assert.areEqual('2026-08-28T11:30:00.000+01:00[Europe/London]',skel.ChronoZonedDateTimeService.toIsoString(actual),'Holiday and weekend boundaries');",
+    "freshTransactionPerSample": true
   }
 ]

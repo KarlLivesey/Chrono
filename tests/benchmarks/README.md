@@ -82,3 +82,6 @@ distinct and schedule stress workloads as the action benchmarks. They require
 0.2.0.3 or later, use a fresh transaction per sample, and assert results and
 ordering. See [the September audit](../../docs/service-audit-2026-09.md) and
 [its measurements](results/bulk-services-0.2.0.3.json).
+
+See [individually measured optimisation candidates](OPTIMISATIONS.md) for
+before/after comparisons, rejected experiments and retained changes.

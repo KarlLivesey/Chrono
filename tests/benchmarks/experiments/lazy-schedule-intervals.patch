@@ -1,0 +1,39 @@
+diff --git a/force-app/main/default/classes/ChronoScheduleDay.cls b/force-app/main/default/classes/ChronoScheduleDay.cls
+index 6f715fe..4c9bef8 100644
+--- a/force-app/main/default/classes/ChronoScheduleDay.cls
++++ b/force-app/main/default/classes/ChronoScheduleDay.cls
+@@ -25,9 +25,12 @@ public with sharing class ChronoScheduleDay {
+   }
+   public List<Span> spansFor(Date day) {
+     List<Span> result = new List<Span>();
+-    ChronoZoneIntervals intervals = new ChronoZoneIntervals(day, zoneId);
++    // Closed weekdays need no UTC segments. Holidays still run through their
++    // existing evaluation and validation, even when there are no opening slots.
++    ChronoZoneIntervals intervals;
+     for (TimeSlot slot : slots) {
+       if (slot.DayOfWeek == WEEKDAYS[ChronoHolidays.weekday(day)]) {
++        intervals = intervalsFor(day, intervals);
+         result.addAll(
+           intervals.between(
+             Datetime.newInstanceGmt(day, slot.StartTime),
+@@ -52,6 +55,7 @@ public with sharing class ChronoScheduleDay {
+     result = merged;
+     for (Holiday holiday : holidays) {
+       if (ChronoHolidays.occurs(holiday, day)) {
++        intervals = intervalsFor(day, intervals);
+         for (Span closed : holidaySpans(holiday, day, intervals)) {
+           result = subtract(result, closed);
+         }
+@@ -59,6 +63,12 @@ public with sharing class ChronoScheduleDay {
+     }
+     return result;
+   }
++  private ChronoZoneIntervals intervalsFor(
++    Date day,
++    ChronoZoneIntervals existing
++  ) {
++    return existing == null ? new ChronoZoneIntervals(day, zoneId) : existing;
++  }
+   private List<Span> holidaySpans(
+     Holiday holiday,
+     Date day,
