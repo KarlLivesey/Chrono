@@ -56,7 +56,7 @@ export default class ChronoZoneDisplay extends LightningElement {
             datetime,
             offset: `${abbreviation} · ${offset}`
           };
-        } catch (error) {
+        } catch {
           return { key: zone, zone, error: `Unsupported timezone: ${zone}` };
         }
       });

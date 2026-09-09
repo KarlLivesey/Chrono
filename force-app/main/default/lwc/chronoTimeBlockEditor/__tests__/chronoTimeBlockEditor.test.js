@@ -10,7 +10,7 @@ function mount(value) {
   return el;
 }
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 });
 it("adds independent blocks and changes their priority without changing their keys", async () => {
   const el = mount();

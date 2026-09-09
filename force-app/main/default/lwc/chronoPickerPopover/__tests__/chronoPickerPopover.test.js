@@ -1,7 +1,8 @@
+/* eslint-disable @lwc/lwc/prefer-custom-event -- Tests simulate native DOM focus and click events. */
 import { createElement } from "lwc";
 import Popover from "c/chronoPickerPopover";
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 });
 it("keeps a narrow-column popover within the viewport and closes when disabled", async () => {
   const el = createElement("c-chrono-picker-popover", { is: Popover });
@@ -50,6 +51,7 @@ it("dismisses when keyboard focus leaves without entering another control inside
   el.shadowRoot
     .querySelector("button")
     .dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
+  // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
   await new Promise((done) => setTimeout(done, 5));
   expect(el.shadowRoot.querySelector("section")).toBeNull();
 });

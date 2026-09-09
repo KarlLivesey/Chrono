@@ -34,7 +34,7 @@ const field = (el, name) =>
     (item) => item.name === name
   );
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 });
 it("opens an existing native action with only its selected source representation", async () => {
   const el = mount("Convert", [
@@ -237,12 +237,20 @@ it("limits local resolution and period operations to meaningful source types", a
     expect(
       field(el, "valueType").options.some((item) => item.value === "Duration")
     ).toBe(false);
-    if (kind === "ResolveLocal")
-      expect(field(el, "resolution").options.map((item) => item.value)).toEqual(
-        ["inspect", "earlier", "later", "backward", "forward"]
-      );
+
     el.remove();
   }
+});
+it("offers each explicit local resolution policy", async () => {
+  const el = mount("ResolveLocal", [input("valueType", "PlainDate")]);
+  await flush();
+  expect(field(el, "resolution").options.map((item) => item.value)).toEqual([
+    "inspect",
+    "earlier",
+    "later",
+    "backward",
+    "forward"
+  ]);
 });
 it("validates rounding increments and shows only day rounding for a date", async () => {
   const el = mount("Round", [

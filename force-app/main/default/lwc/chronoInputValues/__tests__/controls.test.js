@@ -1,5 +1,7 @@
+/* eslint-disable @lwc/lwc/no-unexpected-wire-adapter-usages -- Jest wire mocks expose emit helpers for supplying records. */
 import { createElement } from "lwc";
 import Duration from "c/chronoDurationInput";
+import FlowValue from "c/chronoFlowValueInput";
 import Partial from "c/chronoPartialDateInput";
 import Range from "c/chronoRangePicker";
 import FlowRange from "c/chronoFlowRange";
@@ -420,4 +422,27 @@ it("keeps appointments selectable after a required-field validation error", asyn
   await flush();
   expect(el.validate().isValid).toBe(true);
   expect(el.shadowRoot.querySelector('[role="alert"]')).toBeNull();
+});
+
+it("keeps Flow value edits local and still accepts later parent values", async () => {
+  const el = await mount(FlowValue, { kind: "duration", value: "PT1H" });
+  const change = jest.fn();
+  el.addEventListener("lightning__flowattributechange", change);
+  const child = el.shadowRoot.querySelector("c-chrono-duration-input");
+  child.dispatchEvent(
+    new CustomEvent("valuechange", { detail: { value: "PT2H", valid: true } })
+  );
+  await flush();
+  expect(el.value).toBe("PT2H");
+  expect(child.value).toBe("PT2H");
+  expect(change).toHaveBeenCalledTimes(1);
+  el.value = "PT3H";
+  await flush();
+  expect(child.value).toBe("PT3H");
+  child.dispatchEvent(
+    new CustomEvent("valuechange", { detail: { value: null, valid: true } })
+  );
+  await flush();
+  expect(el.value).toBeNull();
+  expect(child.value).toBe("");
 });

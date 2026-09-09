@@ -96,6 +96,7 @@ export default class ChronoChoiceLookup extends LightningElement {
   }
   focusout() {
     clearTimeout(this.timer);
+    // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
     this.timer = setTimeout(() => this.close(), 0);
   }
   disconnectedCallback() {

@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/prefer-custom-event -- Tests simulate native DOM focus and click events. */
 import { createElement } from "lwc";
 import Component from "c/chronoFlowDateTime";
 import resolve from "@salesforce/apex/ChronoPickerController.resolveLocal";
@@ -287,6 +288,7 @@ it("selects an occurrence through the real slotted menu after focus moves from i
     new FocusEvent("focusout", { bubbles: true, relatedTarget: offset })
   );
   secondButton.focus();
+  // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
   await new Promise((done) => setTimeout(done, 5));
   await flush();
   expect(popover.shadowRoot.querySelector("section")).not.toBeNull();

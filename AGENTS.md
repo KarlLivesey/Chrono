@@ -217,7 +217,9 @@ rounding amounts. See docs/time-allocation.md for the precise contract.
 
 ## GitHub delivery
 
-Commit and push completed, checked chunks to GitHub as work progresses. Do not
+Commit and push small, coherent, checked chunks to GitHub as work progresses.
+Use descriptive commit messages explaining what changed and why; regular pushes
+also provide a remote backup. Do not
 leave completed authorised work accumulated locally until the end of a long task.
 Use ordinary commits and pushes; preserve other contributors' changes and inspect
 remote updates before integrating them. Report any failed push or CI run accurately.

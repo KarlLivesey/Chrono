@@ -88,6 +88,7 @@ export default class ChronoPickerPopover extends LightningElement {
     // Wait for the corresponding focusin. Slotted child controls belong to
     // another shadow tree, so relatedTarget/contains cannot identify them.
     clearTimeout(this.focusTimer);
+    // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
     this.focusTimer = setTimeout(() => this.close(false), 0);
   }
   handleFocusIn() {

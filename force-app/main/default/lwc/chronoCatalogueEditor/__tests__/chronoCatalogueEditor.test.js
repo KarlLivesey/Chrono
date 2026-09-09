@@ -32,7 +32,7 @@ const field = (el, name) =>
     (item) => item.name === name
   );
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 });
 it("offers only month/day components without requiring a made-up year", async () => {
   const el = mount("CreateValue", [

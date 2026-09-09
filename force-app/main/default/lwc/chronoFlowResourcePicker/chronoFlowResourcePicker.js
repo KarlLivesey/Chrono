@@ -227,6 +227,7 @@ export default class ChronoFlowResourcePicker extends LightningElement {
   }
   focusout() {
     clearTimeout(this.focusTimer);
+    // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
     this.focusTimer = setTimeout(() => this.close(), 0);
   }
   focusin() {

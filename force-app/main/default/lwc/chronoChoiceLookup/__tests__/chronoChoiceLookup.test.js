@@ -1,7 +1,8 @@
+/* eslint-disable @lwc/lwc/prefer-custom-event -- Tests simulate native DOM focus and click events. */
 import { createElement } from "lwc";
 import Lookup from "c/chronoChoiceLookup";
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 });
 it("searches supplied choices, emits only a chosen value and can clear it", async () => {
   const el = createElement("c-chrono-choice-lookup", { is: Lookup });

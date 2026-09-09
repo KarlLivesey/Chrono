@@ -1,7 +1,7 @@
 import { createElement } from "lwc";
 import Component from "c/chronoDateTimePicker";
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 });
 it("exposes hours beside a locked timezone without nesting it in the zone menu", async () => {
   const el = createElement("c-chrono-date-time-picker", { is: Component });

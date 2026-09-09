@@ -523,6 +523,7 @@ export default class ChronoDateTimeControl extends LightningElement {
     this.zoneOffsets = {};
     this._zoneRevision++;
     clearTimeout(this._zoneTimer);
+    // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
     this._zoneTimer = setTimeout(() => this.refreshZoneOffsets(), 250);
   }
   async refreshZoneOffsets() {
@@ -821,6 +822,7 @@ export default class ChronoDateTimeControl extends LightningElement {
     this._scheduleSearch = event.detail.value || "";
     clearTimeout(this._scheduleTimer);
     this._scheduleRevision++;
+    // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
     this._scheduleTimer = setTimeout(() => this.loadSchedules(), 250);
   }
   handleSchedule(event) {

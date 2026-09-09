@@ -1,7 +1,8 @@
+/* eslint-disable @lwc/lwc/prefer-custom-event -- Tests simulate native DOM focus and click events. */
 import { createElement } from "lwc";
 import OffsetPicker from "c/chronoOffsetPicker";
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 });
 it("shows selected offsets persistently and allows reopening to change the occurrence", async () => {
   const first = {
@@ -68,6 +69,7 @@ it("labels conflicting offsets as overrides and validates entered offsets", asyn
   input.dispatchEvent(
     new FocusEvent("focusin", { bubbles: true, composed: true }) // NOPMD - Simulates native focus propagation across the slot for this regression.
   );
+  // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
   await new Promise((done) => setTimeout(done, 5));
   expect(popover.shadowRoot.querySelector("section")).not.toBeNull();
   input.value = "+25:00";

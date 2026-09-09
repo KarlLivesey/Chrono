@@ -60,7 +60,9 @@ export default class ChronoDurationInput extends LightningElement {
     );
   }
   clear() {
-    this.value = "";
+    this._value = "";
+    this.parts = durationParts("");
+    this.error = "";
     this.dispatchEvent(
       new CustomEvent("valuechange", {
         detail: { value: null, valid: !this.required }

@@ -373,7 +373,8 @@ export default class ChronoCatalogueEditor extends LightningElement {
     });
   }
   handleValue(event) {
-    let { name, value, reference, dataType } = event.detail;
+    let { name, dataType } = event.detail;
+    const { value, reference } = event.detail;
     const descriptor = this.definition.fields.find(
       (field) => field.name === name
     );

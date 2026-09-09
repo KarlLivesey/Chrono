@@ -24,7 +24,7 @@ function select(el, value) {
     .dispatchEvent(new CustomEvent("select", { detail: { value } }));
 }
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
 });
 
 it("keeps the mode menu and labelled input together, with optional help", () => {

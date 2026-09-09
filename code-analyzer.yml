@@ -1,0 +1,7 @@
+rules:
+  eslint:
+    # Keep each timing exception next to its call, with a reason. The platform
+    # preset otherwise prohibits even a documented exception for lookup debounce
+    # and focus-event ordering. Other ESLint/LWC checks remain enabled.
+    "@lwc/lwc-platform/no-inline-disable":
+      disabled: true

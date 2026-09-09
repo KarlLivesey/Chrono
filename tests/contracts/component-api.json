@@ -5276,11 +5276,18 @@
         },
         {
           "name": "value",
-          "kind": "property",
-          "default": {
-            "type": "StringLiteral",
-            "value": ""
-          }
+          "kind": "get",
+          "parameters": []
+        },
+        {
+          "name": "value",
+          "kind": "set",
+          "parameters": [
+            {
+              "type": "Identifier",
+              "name": "value"
+            }
+          ]
         }
       ]
     },

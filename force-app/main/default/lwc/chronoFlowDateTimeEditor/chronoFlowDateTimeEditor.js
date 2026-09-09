@@ -374,6 +374,7 @@ export default class ChronoFlowDateTimeEditor extends LightningElement {
     const revision = ++this._savedRevision;
     this.savedPending = true;
     this.savedError = "";
+    // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
     this._savedTimer = setTimeout(async () => {
       try {
         const values = await searchHours({
@@ -576,7 +577,7 @@ export default class ChronoFlowDateTimeEditor extends LightningElement {
                 !zone.includes(item[0]) &&
                 item[3] !== "general"
       )
-      .map(([name, label, dataType, section, fallback, extra]) => ({
+      .map(([name, label, dataType, , fallback, extra]) => ({
         name,
         label,
         dataType,

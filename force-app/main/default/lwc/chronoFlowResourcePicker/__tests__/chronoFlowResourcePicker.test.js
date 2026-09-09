@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/prefer-custom-event -- Tests simulate native DOM focus and click events. */
 import { createElement } from "lwc";
 import Picker from "c/chronoFlowResourcePicker";
 import getFields from "@salesforce/apex/ChronoFlowEditorController.getFields";
@@ -45,7 +46,7 @@ it("accepts a declared union of native and specific Chrono Flow types", async ()
     expect(el.shadowRoot.querySelector(`[data-value="${name}"]`)).toBeNull();
 });
 afterEach(() => {
-  document.body.innerHTML = "";
+  document.body.replaceChildren();
   jest.clearAllMocks();
 });
 it("searches compatible nested fields directly and never commits typed text", async () => {
@@ -117,6 +118,7 @@ it("supports keyboard navigation, internal focus, Escape and clear", async () =>
   );
   const option = el.shadowRoot.querySelector('[data-value="Zones"]');
   expect(el.shadowRoot.activeElement).toBe(option);
+  // eslint-disable-next-line @lwc/lwc/no-async-operation -- Debounce lookups or defer focus checks until the current event finishes.
   await new Promise((done) => setTimeout(done, 5));
   expect(el.shadowRoot.querySelector('[role="listbox"]')).not.toBeNull();
   option.dispatchEvent(

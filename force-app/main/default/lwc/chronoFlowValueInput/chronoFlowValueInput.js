@@ -7,7 +7,13 @@ export default class ChronoFlowValueInput extends LightningElement {
   @api label = "Value";
   @api required = false;
   @api disabled = false;
-  @api value = "";
+  _value = "";
+  @api get value() {
+    return this._value;
+  }
+  set value(value) {
+    this._value = value;
+  }
   externalError = "";
   get duration() {
     return this.kind === "duration";
@@ -17,7 +23,7 @@ export default class ChronoFlowValueInput extends LightningElement {
   }
   change(event) {
     event.stopPropagation();
-    this.value = event.detail.value;
+    this._value = event.detail.value;
     this.dispatchEvent(new FlowAttributeChangeEvent("value", this.value));
   }
   @api validate() {

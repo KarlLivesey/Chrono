@@ -1,6 +1,5 @@
 // Copyright (c) 2026, Karl. SPDX-License-Identifier: BSD-3-Clause
 import { LightningElement, api } from "lwc";
-import { validTime } from "c/chronoPickerEngine";
 const blockFields = new Set([
   "key",
   "label",
@@ -148,7 +147,11 @@ export default class ChronoTimeBlockEditor extends LightningElement {
     this.emit();
   }
   emit() {
-    const rows = this.rows.map(({ uid, ...row }) => row);
+    const rows = this.rows.map((item) => {
+      const row = { ...item };
+      delete row.uid;
+      return row;
+    });
     this._value = JSON.stringify(rows);
     this.dispatchEvent(
       new CustomEvent("change", { detail: { value: this._value } })
