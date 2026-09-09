@@ -1,14 +1,14 @@
 # Install Chrono
 
-Install **0.1.0.19**, the first released managed-package version. Its namespace is
-`skel` and its subscriber version ID is `04tgK000000KFNtQAO`.
+Install **0.2.0.4**, the current released managed-package version. Its namespace
+is `skel` and its subscriber version ID is `04tgK000000KOZFQA4`.
 
 ## Install into your org
 
-| Your org                        | Install Chrono 0.1.0.19                                                                                                            |
+| Your org                        | Install Chrono 0.2.0.4                                                                                                             |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| Production or Developer Edition | **[Install in production / Developer Edition](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KFNtQAO)** |
-| Sandbox                         | **[Install in a sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KFNtQAO)**                       |
+| Production or Developer Edition | **[Install in production / Developer Edition](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KOZFQA4)** |
+| Sandbox                         | **[Install in a sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KOZFQA4)**                       |
 
 No repository clone, scratch org or Dev Hub is needed to install the package.
 Sign in to the intended org and review Salesforce's package installation screen.
@@ -17,7 +17,7 @@ Start with **Install for Admins Only**, then assign access deliberately.
 Alternatively, authenticate your org with Salesforce CLI and run:
 
 ```sh
-sf package install --package 04tgK000000KFNtQAO --target-org your-org --security-type AdminsOnly --wait 20
+sf package install --package 04tgK000000KOZFQA4 --target-org your-org --security-type AdminsOnly --wait 20
 ```
 
 Here `your-org` is your authenticated alias, not a Chrono requirement. An install

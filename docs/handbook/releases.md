@@ -1,6 +1,16 @@
 # Release notes
 
-## 0.2 — development, not released
+## 0.2.0.4 — 9 September 2026
+
+**Bulk Apex services release.** Namespace `skel`; subscriber package version
+`04tgK000000KOZFQA4`. Salesforce validation and promotion succeeded, with the
+package passing its 90% Apex coverage requirement.
+
+This release adds direct bulk Apex service entry points for the action families,
+including working-time calculations with supplied native schedules and local
+date/time inputs. The released package is based on `0.1.0.19`.
+
+## 0.2 — development notes
 
 Direct bulk Apex services cover all 27 action families. Working-time add,
 elapsed difference, check and find support supplied native schedules; add and
@@ -11,7 +21,7 @@ The installed test package is **0.2.0.3**, a skip-validation beta. Current sourc
 also includes the subsequent zero-calendar-arithmetic correction recorded in
 the [service audit](../service-audit-2026-09.md). It is not in that beta yet.
 Generated API references describe the development source and are labelled as such.
-The public installation link remains the released version below.
+The public installation link now targets released `0.2.0.4` above.
 
 ## 0.1.0.19 — 8 September 2026
 

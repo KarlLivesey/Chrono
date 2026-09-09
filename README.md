@@ -23,12 +23,12 @@ Chrono uses Salesforce's calendar and timezone rules, with millisecond precision
 
 ## Quick start
 
-Install **0.1.0.19**, a managed package in the **`skel`** namespace:
+Install **0.2.0.4**, a managed package in the **`skel`** namespace:
 
 | Your org                        | Install package                                                                                                     |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Production or Developer Edition | **[Install Chrono](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KFNtQAO)**             |
-| Sandbox                         | **[Install Chrono in a sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KFNtQAO)** |
+| Production or Developer Edition | **[Install Chrono](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KOZFQA4)**             |
+| Sandbox                         | **[Install Chrono in a sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KOZFQA4)** |
 
 1. Open the appropriate link, sign in to your org and select **Install for Admins Only**.
 2. In **Setup → Permission Sets → Chrono Flow User**, assign access to your users.
@@ -41,7 +41,7 @@ and holiday records. See the [installation guide](https://karllivesey.github.io/
 Already using Salesforce CLI? Replace `your-org` with your authenticated org alias:
 
 ```sh
-sf package install --package 04tgK000000KFNtQAO --target-org your-org --security-type AdminsOnly --wait 20
+sf package install --package 04tgK000000KOZFQA4 --target-org your-org --security-type AdminsOnly --wait 20
 ```
 
 ## Start building
