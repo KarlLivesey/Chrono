@@ -41,6 +41,63 @@ private class ChronoFlowOperationsTest {
     input.finish.value = last;
     return input;
   }
+  @SuppressWarnings('PMD.NcssCount')
+  @IsTest
+  static void resultTransportPreservesEveryField() {
+    ChronoOperationResult operation = new ChronoOperationResult();
+    operation.success = true;
+    operation.errorMessage = 'diagnostic';
+    operation.valueType = 'ZonedDateTime';
+    operation.value = '2026-09-07T10:15:00.000+01:00[Europe/London]';
+    operation.instantValue = Datetime.newInstanceGmt(2026, 9, 7, 9, 15, 0);
+    operation.dateValue = Date.newInstance(2026, 9, 7);
+    operation.timeValue = '10:15:00.000';
+    operation.timeZoneId = 'Europe/London';
+    operation.months = 2;
+    operation.days = 3;
+    operation.milliseconds = 4000;
+    operation.isOpen = true;
+    operation.comparison = -1;
+    operation.resolutionStatus = 'repeated';
+    operation.earlierValue = 'earlier';
+    operation.laterValue = 'later';
+    operation.previousValue = 'previous';
+    operation.nextValue = 'next';
+    operation.withinTolerance = true;
+    operation.samePeriod = false;
+    ChronoFlowResult result = ChronoFlowResults.fromOperation(operation);
+    Assert.areEqual(operation.success, result.success);
+    Assert.areEqual(operation.errorMessage, result.errorMessage);
+    Assert.areEqual(operation.valueType, result.valueType);
+    Assert.areEqual(operation.value, result.value);
+    Assert.areEqual(operation.instantValue, result.instantValue);
+    Assert.areEqual(operation.dateValue, result.dateValue);
+    Assert.areEqual(operation.timeValue, result.timeValue);
+    Assert.areEqual(operation.timeZoneId, result.timeZoneId);
+    Assert.areEqual(operation.months, result.months);
+    Assert.areEqual(operation.days, result.days);
+    Assert.areEqual(operation.milliseconds, result.milliseconds);
+    Assert.areEqual(operation.isOpen, result.isOpen);
+    Assert.areEqual(operation.comparison, result.comparison);
+    Assert.areEqual(operation.resolutionStatus, result.resolutionStatus);
+    Assert.areEqual(operation.earlierValue, result.earlierValue);
+    Assert.areEqual(operation.laterValue, result.laterValue);
+    Assert.areEqual(operation.previousValue, result.previousValue);
+    Assert.areEqual(operation.nextValue, result.nextValue);
+    Assert.areEqual(operation.withinTolerance, result.withinTolerance);
+    Assert.areEqual(operation.samePeriod, result.samePeriod);
+
+    ChronoFlowResult copied = ChronoFlowResults.copy(result);
+    copied.value = 'changed';
+    Assert.areEqual(operation.value, result.value);
+    Assert.areEqual('changed', copied.value);
+    Assert.isFalse(ChronoFlowResults.failure('bad input').success);
+    Assert.areEqual(
+      'bad input',
+      ChronoFlowResults.failure('bad input').errorMessage
+    );
+    Assert.isTrue(ChronoFlowResults.success().success);
+  }
   @IsTest
   static void compareExactAndPlainFamilies() {
     ChronoOperationInput input = pair(

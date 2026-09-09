@@ -43,24 +43,4 @@ global with sharing class ChronoCreateValueCollectionAction {
     }
     return ChronoFlowBatch.regroup(results, sizes);
   }
-  private static ChronoFlowCollectionResult group(
-    List<Object> values,
-    Integer cursor,
-    Integer size
-  ) {
-    ChronoFlowCollectionResult grouped = new ChronoFlowCollectionResult();
-    grouped.success = size >= 0;
-    if (size < 0) {
-      grouped.errorMessage = 'Provide an input collection; empty collections are allowed.';
-    }
-    for (Integer i = 0; i < size; i++) {
-      ChronoFlowResult value = (ChronoFlowResult) values[cursor + i];
-      grouped.results.add(value);
-      if (!value.success) {
-        grouped.success = false;
-        grouped.errorMessage = 'One or more items failed. Inspect the item results.';
-      }
-    }
-    return grouped;
-  }
 }

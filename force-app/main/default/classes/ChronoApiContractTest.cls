@@ -144,6 +144,224 @@ private class ChronoApiContractTest {
       )
     );
   }
+  @SuppressWarnings('PMD.NcssCount')
+  @IsTest
+  static void nativeServiceOverloadsPreserveTheirTypes() {
+    Datetime instantNative = Datetime.newInstanceGmt(2026, 1, 31, 23, 30, 0);
+    ChronoInstant instant = ChronoInstantService.create(instantNative);
+    Assert.areEqual(instantNative, ChronoInstantService.toDatetime(instant));
+    Assert.areEqual(
+      '2026-01-31T23:30:00.000Z',
+      ChronoInstantService.toIsoString(instant)
+    );
+    Assert.areEqual(
+      '2026-02-01T00:30:00.000Z',
+      ChronoInstantService.toIsoString(
+        ChronoInstantService.addHours(instant, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-02-01T00:30:00.000Z',
+      ChronoInstantService.toIsoString(
+        ChronoInstantService.addHours(instantNative, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:31:00.000Z',
+      ChronoInstantService.toIsoString(
+        ChronoInstantService.addMinutes(instant, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:31:00.000Z',
+      ChronoInstantService.toIsoString(
+        ChronoInstantService.addMinutes(instantNative, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:01.000Z',
+      ChronoInstantService.toIsoString(
+        ChronoInstantService.addSeconds(instant, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:01.000Z',
+      ChronoInstantService.toIsoString(
+        ChronoInstantService.addSeconds(instantNative, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:00.001Z',
+      ChronoInstantService.toIsoString(
+        ChronoInstantService.addMilliseconds(instant, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:00.001Z',
+      ChronoInstantService.toIsoString(
+        ChronoInstantService.addMilliseconds(instantNative, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:00.000+00:00[Europe/London]',
+      ChronoZonedDateTimeService.toIsoString(
+        ChronoInstantService.toZonedDateTime(instant, 'Europe/London')
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:00.000+00:00[Europe/London]',
+      ChronoZonedDateTimeService.toIsoString(
+        ChronoInstantService.toZonedDateTime(instantNative, 'Europe/London')
+      )
+    );
+    ChronoInstantService.validate(instant);
+
+    Time clockNative = Time.newInstance(23, 30, 0, 500);
+    ChronoPlainTime clock = ChronoPlainTimeService.create(clockNative);
+    Assert.areEqual(clockNative, ChronoPlainTimeService.toTime(clock));
+    Assert.areEqual('23:30:00.500', ChronoPlainTimeService.toIsoString(clock));
+    Assert.areEqual(
+      '01:30:00.500',
+      ChronoPlainTimeService.toIsoString(
+        ChronoPlainTimeService.addHours(clock, 2)
+      )
+    );
+    Assert.areEqual(
+      '01:30:00.500',
+      ChronoPlainTimeService.toIsoString(
+        ChronoPlainTimeService.addHours(clockNative, 2)
+      )
+    );
+    Assert.areEqual(
+      '23:31:00.500',
+      ChronoPlainTimeService.toIsoString(
+        ChronoPlainTimeService.addMinutes(clock, 1)
+      )
+    );
+    Assert.areEqual(
+      '23:31:00.500',
+      ChronoPlainTimeService.toIsoString(
+        ChronoPlainTimeService.addMinutes(clockNative, 1)
+      )
+    );
+    Assert.areEqual(
+      '23:30:01.500',
+      ChronoPlainTimeService.toIsoString(
+        ChronoPlainTimeService.addSeconds(clock, 1)
+      )
+    );
+    Assert.areEqual(
+      '23:30:01.500',
+      ChronoPlainTimeService.toIsoString(
+        ChronoPlainTimeService.addSeconds(clockNative, 1)
+      )
+    );
+    Assert.areEqual(
+      '23:30:01.500',
+      ChronoPlainTimeService.toIsoString(
+        ChronoPlainTimeService.addMilliseconds(clock, 1000)
+      )
+    );
+    Assert.areEqual(
+      '23:30:01.500',
+      ChronoPlainTimeService.toIsoString(
+        ChronoPlainTimeService.addMilliseconds(clockNative, 1000)
+      )
+    );
+    Assert.areEqual(
+      '2026-02-01T23:30:00.500',
+      ChronoPlainDateTimeService.toIsoString(
+        ChronoPlainTimeService.toPlainDateTime(
+          clock,
+          Date.newInstance(2026, 2, 1)
+        )
+      )
+    );
+    ChronoPlainTimeService.validate(clock);
+
+    Date localDate = Date.newInstance(2026, 1, 31);
+    Time localTime = Time.newInstance(23, 30, 0, 500);
+    ChronoPlainDateTime local = ChronoPlainDateTimeService.create(
+      localDate,
+      localTime
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:00.500',
+      ChronoPlainDateTimeService.toIsoString(local)
+    );
+    Assert.areEqual(localDate, ChronoPlainDateTimeService.toDate(local));
+    Assert.areEqual(localTime, ChronoPlainDateTimeService.toTime(local));
+    Assert.areEqual(
+      localDate,
+      ChronoPlainDateTimeService.toPlainDate(local).value
+    );
+    Assert.areEqual(
+      localTime,
+      ChronoPlainDateTimeService.toPlainTime(local).value
+    );
+    Assert.areEqual(
+      '2026-02-01T23:30:00.500',
+      ChronoPlainDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.addDays(local, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-02-28T23:30:00.500',
+      ChronoPlainDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.addMonths(local, 1)
+      )
+    );
+    Assert.areEqual(
+      '2027-01-31T23:30:00.500',
+      ChronoPlainDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.addYears(local, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-02-01T00:30:00.500',
+      ChronoPlainDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.addHours(local, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:31:00.500',
+      ChronoPlainDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.addMinutes(local, 1)
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:01.500',
+      ChronoPlainDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.addMilliseconds(local, 1000)
+      )
+    );
+    Assert.areEqual(
+      '2026-03-02T02:30:00.500',
+      ChronoPlainDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.add(
+          local,
+          ChronoDurationService.parseIso('P1M1DT3H')
+        )
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:00.500+00:00[Europe/London]',
+      ChronoZonedDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.toZonedDateTime(local, 'Europe/London')
+      )
+    );
+    Assert.areEqual(
+      '2026-01-31T23:30:00.500+00:00[Europe/London]',
+      ChronoZonedDateTimeService.toIsoString(
+        ChronoPlainDateTimeService.toZonedDateTime(
+          local,
+          'Europe/London',
+          'reject'
+        )
+      )
+    );
+    ChronoPlainDateTimeService.validate(local);
+  }
   @IsTest
   static void fiscalEndpointsComposeWithRanges() {
     List<ChronoFiscalPeriodAction.Request> requests = new List<ChronoFiscalPeriodAction.Request>();

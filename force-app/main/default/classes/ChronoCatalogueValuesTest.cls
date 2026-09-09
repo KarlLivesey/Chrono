@@ -86,6 +86,55 @@ private class ChronoCatalogueValuesTest {
     );
   }
   @IsTest
+  static void collectionValueActionsRetainInterviewAndItemOrder() {
+    ChronoCreateValueInput createItem = new ChronoCreateValueInput();
+    createItem.valueType = 'PlainDate';
+    createItem.year = 2026;
+    createItem.month = 9;
+    createItem.day = 7;
+    ChronoCreateValueCollectionAction.Request createRequest = new ChronoCreateValueCollectionAction.Request();
+    createRequest.items = new List<ChronoCreateValueInput>{ createItem, null };
+    ChronoCreateValueCollectionAction.Request emptyCreate = new ChronoCreateValueCollectionAction.Request();
+    emptyCreate.items = new List<ChronoCreateValueInput>();
+    List<ChronoFlowCollectionResult> created = ChronoCreateValueCollectionAction.run(
+      new List<ChronoCreateValueCollectionAction.Request>{
+        createRequest,
+        emptyCreate,
+        null
+      }
+    );
+    Assert.isFalse(created[0].success);
+    Assert.areEqual(2, created[0].results.size());
+    Assert.areEqual('2026-09-07', created[0].results[0].value);
+    Assert.isFalse(created[0].results[1].success);
+    Assert.isTrue(created[1].success);
+    Assert.isFalse(created[2].success);
+
+    ChronoParseValueInput parseItem = new ChronoParseValueInput();
+    parseItem.valueType = 'PlainDate';
+    parseItem.text = '2026-09-07';
+    parseItem.pattern = 'yyyy-MM-dd';
+    ChronoParseValueCollectionAction.Request parseRequest = new ChronoParseValueCollectionAction.Request();
+    parseRequest.items = new List<ChronoParseValueInput>{ parseItem };
+    List<ChronoFlowCollectionResult> parsed = ChronoParseValueCollectionAction.run(
+      new List<ChronoParseValueCollectionAction.Request>{ parseRequest }
+    );
+    Assert.isTrue(parsed[0].success);
+    Assert.areEqual('2026-09-07', parsed[0].results[0].value);
+
+    ChronoReplaceValueInput replaceItem = new ChronoReplaceValueInput();
+    replaceItem.valueType = 'PlainDate';
+    replaceItem.value = '2026-09-07';
+    replaceItem.day = 8;
+    ChronoReplaceValueCollectionAction.Request replaceRequest = new ChronoReplaceValueCollectionAction.Request();
+    replaceRequest.items = new List<ChronoReplaceValueInput>{ replaceItem };
+    List<ChronoFlowCollectionResult> replaced = ChronoReplaceValueCollectionAction.run(
+      new List<ChronoReplaceValueCollectionAction.Request>{ replaceRequest }
+    );
+    Assert.isTrue(replaced[0].success);
+    Assert.areEqual('2026-09-08', replaced[0].results[0].value);
+  }
+  @IsTest
   static void detailsUseDateSpecificZoneAndIsoWeekYear() {
     ChronoValueDetailsAction.Request value = new ChronoValueDetailsAction.Request();
     value.valueType = 'Instant';
