@@ -70,6 +70,25 @@ suite and restores the original global afterwards. Native Temporal remains
 covered by the separate JavaScript conformance tests. No production component
 behaviour was changed to make the tests pass.
 
+### JavaScript lint had not been completing
+
+The broad PMD scan attempted to parse modern LWC JavaScript and crashed on four
+files while returning a successful CLI exit status. The workflow now runs PMD
+only on Apex and Salesforce's ESLint engine on LWC, including component tests.
+The completed ESLint scan led to local state handling fixes, removal of unused
+bindings and safer test DOM cleanup. `chronoFlowValueInput.value` remains readable
+and writable, now through a getter/setter backed by internal state; its contract
+baseline and parent-update/clear regression test were updated together.
+
+Intentional timing exceptions remain beside each debounce/focus call. The
+platform rule that forbids those inline explanations is disabled in
+`code-analyzer.yml`; the underlying async-operation rule remains enabled.
+Native DOM events and mocked wire emitters have test-only explanations. No new
+library was added. Both engines complete with zero severity 1–3 findings;
+**760 low Apex findings and 43 low LWC findings remain**. These mostly concern
+API documentation/style and SLDS styling suggestions and are not represented as
+zero findings. See [Salesforce's ESLint integration](https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/engine-eslint.html).
+
 ## Coverage examined
 
 The review traced the 54 scalar/collection action entry points through their
@@ -158,13 +177,13 @@ caller's surrounding automation. In particular, query bulkification alone does
 not prove adequate CPU headroom.
 
 Full development deployment `0AfG100000LNwtpKAD` succeeded with **242 Apex tests**.
-The corrected fallback suite passed **145 LWC tests**; **43 Temporal tests**,
-**20 contract tests** and **5 documentation tests** passed. The documentation
-build checked **224 HTML pages and 11,345 local links/assets/fragments**.
-Formatting passed. The initial PMD run reported no severity 1–3 findings, but
-its JavaScript parser crashed on four modern LWC files; that scan must not be
-presented as complete JavaScript lint coverage. The remaining tooling correction
-is recorded in the follow-up commit.
+The subsequent LWC-only deployment `0AfG100000LO1tLKAT` succeeded for all **84
+component bundles**. The final local suites passed **147 LWC tests**, **43
+Temporal tests**, **20 contract tests** and **5 documentation tests**. Formatting
+passed. The documentation build checked **224 HTML pages and 11,345 local
+links/assets/fragments**. Both completed lint engines have no severity 1–3
+findings, with the low-severity findings and narrow exclusions described above.
+
 The installed subscriber beta remains 0.2.0.3; the new zero-arithmetic correction
 requires a later package build/install before it can be verified there. This
 review uses the existing orgs and does not consume a package build allocation.

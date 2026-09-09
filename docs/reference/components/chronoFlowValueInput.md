@@ -31,6 +31,7 @@ These are the checked `@api` members. JavaScript defaults are separate from Flow
 | `required`          | property | false        |
 | `setCustomValidity` | method   | Not declared |
 | `validate`          | method   | Not declared |
-| `value`             | property | ""           |
+| `value`             | get      | Not declared |
+| `value`             | set      | Not declared |
 
 Generated from exposed component metadata and the checked LWC public-member inventory. Custom events and validation behaviour are described in the component guide; metadata alone does not describe event semantics or prove browser rendering.

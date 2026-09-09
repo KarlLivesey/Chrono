@@ -1,5 +1,15 @@
 # Chrono validation
 
+## 9 September 2026: service audit and zero-arithmetic correction
+
+See the [complete service audit](service-audit-2026-09.md). Full development
+source deployment `0AfG100000LNwtpKAD` passed 242 Apex tests. LWC follow-up
+`0AfG100000LO1tLKAT` deployed all 84 bundles; 147 component tests, 43 Temporal
+tests and 20 contracts passed locally. PMD now scans Apex and Salesforce ESLint
+scans LWC; both completed with no severity 1–3 findings. Low findings remain.
+The known arithmetic bug was reproduced in installed 0.2.0.3 before correction;
+that subscriber beta has not been rebuilt. No package build allocation was used.
+
 ## Unreleased 0.2.0.3 — date and native-schedule coverage
 
 The two identified bulk-input gaps are fixed across Apex services, scalar/collection Flow actions and custom action editors:

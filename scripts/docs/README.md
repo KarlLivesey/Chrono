@@ -21,6 +21,13 @@ reference inventories or an invalid example bundle. The reference generator
 requires the global source inventory to match the reviewed baseline. Do not
 change the baseline merely to make a documentation build pass.
 
+## Source references and released installation
+
+The generated reference uses the current project version and is labelled as
+development source. The install links and site release badge identify the latest
+released package separately. Do not label APIs added in development as already
+available in that released package.
+
 ## Released documentation
 
 Release numbers and install IDs must come from a successful Salesforce version
