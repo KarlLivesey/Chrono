@@ -6,7 +6,12 @@ public with sharing class ChronoOperatingSchedules {
   public final Map<Id, List<Holiday>> holidays = new Map<Id, List<Holiday>>();
   public ChronoOperatingSchedules(Set<Id> ids) {
     operating = new Map<Id, OperatingHours>(
-      [SELECT Id, TimeZone FROM OperatingHours WHERE Id IN :ids WITH USER_MODE]
+      [
+        SELECT Id, Name, TimeZone
+        FROM OperatingHours
+        WHERE Id IN :ids
+        WITH USER_MODE
+      ]
     );
     for (TimeSlot slot : [
       SELECT
@@ -29,6 +34,8 @@ public with sharing class ChronoOperatingSchedules {
     for (OperatingHoursHoliday link : [
       SELECT
         OperatingHoursId,
+        Holiday.Id,
+        Holiday.Name,
         Holiday.IsAllDay,
         Holiday.ActivityDate,
         Holiday.StartTimeInMinutes,

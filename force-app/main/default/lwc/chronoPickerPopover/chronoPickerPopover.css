@@ -1,0 +1,37 @@
+:host {
+  display: inline-block;
+  min-width: 0;
+}
+.anchor {
+  position: relative;
+}
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  max-width: 100%;
+  min-height: 1.5rem;
+  color: var(--slds-g-color-accent-2, #0176d3);
+}
+.warning {
+  color: var(--slds-g-color-warning-1, #8c4b02);
+}
+.panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.25rem);
+  z-index: 7000;
+  width: min(22rem, calc(100vw - 2rem));
+  max-height: min(26rem, 60vh);
+  overflow: auto;
+  background: var(--slds-g-color-surface-container-1, #fff);
+  color: var(--slds-g-color-on-surface-1, #181818);
+  border-color: var(--slds-g-color-border-1, #c9c9c9);
+}
+.above {
+  top: auto;
+  bottom: calc(100% + 0.25rem);
+}
+.compact {
+  width: min(18rem, calc(100vw - 2rem));
+}

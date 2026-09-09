@@ -11,57 +11,101 @@ private class ChronoConsumerTest {
   }
   @IsTest
   static void allValueTypesAccessibleOutsideNamespace() {
-    skel.ChronoPlainDate day = new skel.ChronoPlainDate(
+    skel.ChronoPlainDate day = skel.ChronoPlainDateService.create(
       Date.newInstance(2024, 2, 29)
     );
-    skel.ChronoPlainTime clock = new skel.ChronoPlainTime(
+    skel.ChronoPlainTime clock = skel.ChronoPlainTimeService.create(
       Time.newInstance(9, 30, 0, 123)
     );
-    skel.ChronoPlainDateTime local = new skel.ChronoPlainDateTime(
-      day.toDate(),
-      clock.toTime()
+    skel.ChronoPlainDateTime local = skel.ChronoPlainDateTimeService.create(
+      skel.ChronoPlainDateService.toDate(day),
+      skel.ChronoPlainTimeService.toTime(clock)
     );
-    skel.ChronoZonedDateTime zoned = local.toZonedDateTime('Europe/London');
-    skel.ChronoInstant instant = new skel.ChronoInstant(zoned.toDatetime());
-    skel.ChronoPlainYearMonth month = new skel.ChronoPlainYearMonth(2024, 2);
-    skel.ChronoPlainMonthDay annual = new skel.ChronoPlainMonthDay(2, 29);
-    skel.ChronoDuration duration = new skel.ChronoDuration(0, 0, 3600000L);
+    skel.ChronoZonedDateTime zoned = skel.ChronoPlainDateTimeService.toZonedDateTime(
+      local,
+      'Europe/London'
+    );
+    skel.ChronoInstant instant = skel.ChronoInstantService.create(
+      skel.ChronoZonedDateTimeService.toDatetime(zoned)
+    );
+    skel.ChronoPlainYearMonth month = skel.ChronoPlainYearMonthService.create(
+      2024,
+      2
+    );
+    skel.ChronoPlainMonthDay annual = skel.ChronoPlainMonthDayService.create(
+      2,
+      29
+    );
+    skel.ChronoDuration duration = skel.ChronoDurationService.create(
+      0,
+      0,
+      3600000L
+    );
     Assert.areEqual(
       '2024-02-29',
-      day.toString(),
-      'Global constructor and override'
-    );
-    Assert.areEqual('09:30:00.123', clock.toString(), 'Global native time');
-    Assert.areEqual(
-      zoned.addHours(1).toString(),
-      skel.ChronoZonedDateTime.addHours(zoned, 1).toString(),
-      'Instance/static equivalence across namespace'
+      skel.ChronoPlainDateService.toIsoString(day),
+      'Global date service'
     );
     Assert.areEqual(
-      zoned.addHours(1).toString(),
-      skel.ChronoZonedDateTime.addHours(zoned.toDatetime(), 'Europe/London', 1)
-        .toString(),
+      '09:30:00.123',
+      skel.ChronoPlainTimeService.toIsoString(clock),
+      'Global native time'
+    );
+    Assert.areEqual(
+      '2024-02-29T10:30:00.123+00:00[Europe/London]',
+      skel.ChronoZonedDateTimeService.toIsoString(
+        skel.ChronoZonedDateTimeService.addHours(zoned, 1)
+      ),
+      'Source-first service arithmetic across namespace'
+    );
+    Assert.areEqual(
+      skel.ChronoZonedDateTimeService.toIsoString(
+        skel.ChronoZonedDateTimeService.addHours(zoned, 1)
+      ),
+      skel.ChronoZonedDateTimeService.toIsoString(
+        skel.ChronoZonedDateTimeService.addHours(
+          skel.ChronoZonedDateTimeService.toDatetime(zoned),
+          'Europe/London',
+          1
+        )
+      ),
       'Native static overload across namespace'
     );
     Assert.areEqual(
-      zoned.addHours(1).toString(),
-      zoned.add(duration).toString(),
+      skel.ChronoZonedDateTimeService.toIsoString(
+        skel.ChronoZonedDateTimeService.addHours(zoned, 1)
+      ),
+      skel.ChronoZonedDateTimeService.toIsoString(
+        skel.ChronoZonedDateTimeService.add(zoned, duration)
+      ),
       'Global duration signature'
     );
     Assert.areEqual(
       '2024-02-29T09:30:00.123Z',
-      instant.toString(),
+      skel.ChronoInstantService.toIsoString(instant),
       'Global instant'
     );
-    Assert.areEqual('2024-02', month.toString(), 'Year-month');
-    Assert.areEqual('--02-29', annual.toString(), 'Month-day');
     Assert.areEqual(
-      zoned.toDatetime(),
-      skel.ChronoZonedDateTime.parse(zoned.toString()).toDatetime(),
+      '2024-02',
+      skel.ChronoPlainYearMonthService.toIsoString(month),
+      'Year-month'
+    );
+    Assert.areEqual(
+      '--02-29',
+      skel.ChronoPlainMonthDayService.toIsoString(annual),
+      'Month-day'
+    );
+    Assert.areEqual(
+      skel.ChronoZonedDateTimeService.toDatetime(zoned),
+      skel.ChronoZonedDateTimeService.toDatetime(
+        skel.ChronoZonedDateTimeService.parseIso(
+          skel.ChronoZonedDateTimeService.toIsoString(zoned)
+        )
+      ),
       'Global parser'
     );
     try {
-      local.toZonedDateTime('invalid/zone');
+      skel.ChronoPlainDateTimeService.toZonedDateTime(local, 'invalid/zone');
       Assert.fail('Invalid zone accepted');
     } catch (skel.ChronoException expected) {
       Assert.isTrue(
@@ -108,34 +152,45 @@ private class ChronoConsumerTest {
         OperatingHoursId = schedule.Id,
         HolidayId = bank.Id
       );
-      skel.ChronoZonedDateTime friday = skel.ChronoZonedDateTime.parse(
+      skel.ChronoZonedDateTime friday = skel.ChronoZonedDateTimeService.parseIso(
         '2026-08-28T16:30+01:00[Europe/London]'
       );
       String expected = '2026-09-01T09:30:00.000+01:00[Europe/London]';
       Assert.areEqual(
         expected,
-        friday.addHours(1, schedule).toString(),
+        skel.ChronoZonedDateTimeService.toIsoString(
+          skel.ChronoZonedDateTimeService.addHours(friday, 1, schedule)
+        ),
         'Packaged instance skips weekend and bank holiday'
       );
       Assert.areEqual(
         expected,
-        skel.ChronoZonedDateTime.addHours(friday, 1, schedule).toString(),
+        skel.ChronoZonedDateTimeService.toIsoString(
+          skel.ChronoZonedDateTimeService.addHours(friday, 1, schedule)
+        ),
         'Packaged static accepts standard object'
       );
       Assert.areEqual(
         expected,
-        skel.ChronoZonedDateTime.addHours(
-            friday.toDatetime(),
+        skel.ChronoZonedDateTimeService.toIsoString(
+          skel.ChronoZonedDateTimeService.addHours(
+            skel.ChronoZonedDateTimeService.toDatetime(friday),
             'Europe/London',
             1,
             schedule
           )
-          .toString(),
+        ),
         'Native overload accepts standard object'
       );
       Assert.areEqual(
-        friday.toDatetime(),
-        friday.addHours(1, schedule).addHours(-1, schedule).toDatetime(),
+        skel.ChronoZonedDateTimeService.toDatetime(friday),
+        skel.ChronoZonedDateTimeService.toDatetime(
+          skel.ChronoZonedDateTimeService.addHours(
+            skel.ChronoZonedDateTimeService.addHours(friday, 1, schedule),
+            -1,
+            schedule
+          )
+        ),
         'Reverse working time'
       );
     }
@@ -148,13 +203,19 @@ private class ChronoConsumerTest {
       WHERE IsDefault = TRUE
       LIMIT 1
     ];
-    skel.ChronoZonedDateTime start = new skel.ChronoZonedDateTime(
+    skel.ChronoZonedDateTime start = skel.ChronoZonedDateTimeService.create(
       Datetime.newInstanceGmt(2026, 8, 28, 15, 30, 0),
       'Europe/London'
     );
     Assert.areEqual(
-      System.BusinessHours.addGmt(schedule.Id, start.toDatetime(), 3600000L),
-      skel.ChronoZonedDateTime.addHours(start, 1, schedule).toDatetime(),
+      System.BusinessHours.addGmt(
+        schedule.Id,
+        skel.ChronoZonedDateTimeService.toDatetime(start),
+        3600000L
+      ),
+      skel.ChronoZonedDateTimeService.toDatetime(
+        skel.ChronoZonedDateTimeService.addHours(start, 1, schedule)
+      ),
       'Native BusinessHours overload available across namespace'
     );
   }
@@ -162,7 +223,7 @@ private class ChronoConsumerTest {
   @IsTest
   static void invalidDatesRemainInvalidAcrossNamespace() {
     try {
-      skel.ChronoPlainDate.parse('2026-02-31');
+      skel.ChronoPlainDateService.parseIso('2026-02-31');
       Assert.fail('Invalid date rolled forward');
     } catch (skel.ChronoException expected) {
       Assert.isTrue(
@@ -171,7 +232,10 @@ private class ChronoConsumerTest {
       );
     }
     try {
-      skel.ChronoPlainMonthDay.parse('--02-29').toPlainDate(2026);
+      skel.ChronoPlainMonthDayService.toPlainDate(
+        skel.ChronoPlainMonthDayService.parseIso('--02-29'),
+        2026
+      );
       Assert.fail('Leap date rolled forward');
     } catch (skel.ChronoException expected) {
       Assert.isNotNull(expected.getMessage(), 'Invalid completion is rejected');

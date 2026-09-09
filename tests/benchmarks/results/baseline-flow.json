@@ -1,0 +1,54 @@
+{
+  "createdAt": "2026-09-08T01:49:14.487127+00:00",
+  "targetOrg": "chrono-subscriber",
+  "operationsPerSample": 200,
+  "measuredSamples": 3,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "flow-convert-interviews",
+      "description": "Twenty real autolaunched Flow interviews calling the installed conversion action; includes Flow CPU overhead.",
+      "operationsPerSample": 20,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 1274,
+          "heapAfterBytes": 2445,
+          "cpuMs": 1277,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2658,
+          "cpuMs": 1288,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2658,
+          "cpuMs": 1322,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2658,
+          "cpuMs": 1206,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 1206,
+        "median": 1288,
+        "max": 1322
+      },
+      "medianCpuMsPerOperation": 64.4
+    }
+  ]
+}

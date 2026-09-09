@@ -1,0 +1,27 @@
+// Read-only fixture execution through the installed managed package's global API.
+List<Object> fixtures=(List<Object>) JSON.deserializeUntyped('__FIXTURES__');
+for(Object item:fixtures) {
+ Map<String,Object> fixture=(Map<String,Object>) item;
+ Object actual;
+ try {
+  String operation=(String)fixture.get('operation');
+  if(operation=='duration') {
+   actual=skel.ChronoDurationService.toIsoString(skel.ChronoDurationService.parseIso((String)fixture.get('value')));
+  } else if(operation=='project') {
+   skel.ChronoInstant instant=skel.ChronoInstantService.parseIso((String)fixture.get('value'));
+   actual=new List<Object>{new Map<String,Object>{'choice'=>'exact','value'=>skel.ChronoZonedDateTimeService.toIsoString(skel.ChronoZonedDateTimeService.create(instant.value,(String)fixture.get('zone')))}};
+  } else {
+   skel.ChronoResolveLocalAction.Request request=new skel.ChronoResolveLocalAction.Request();
+   request.valueType='PlainDateTime';request.value=(String)fixture.get('date')+'T'+(String)fixture.get('time');request.timeZoneId=(String)fixture.get('zone');request.resolution='inspect';
+   skel.ChronoFlowResult result=skel.ChronoResolveLocalAction.run(new List<skel.ChronoResolveLocalAction.Request>{request})[0];
+   if(!result.success) {actual=new Map<String,Object>{'error'=>true};}
+   else {
+    List<Object> values=new List<Object>();
+    Map<String,String> choices=new Map<String,String>{'exact'=>result.value,'earlier'=>result.earlierValue,'later'=>result.laterValue,'backward'=>result.previousValue,'forward'=>result.nextValue};
+    for(String choice:new List<String>{'exact','earlier','later','backward','forward'})if(choices.get(choice)!=null)values.add(new Map<String,Object>{'choice'=>choice,'value'=>choices.get(choice)});
+    actual=values;
+   }
+  }
+ } catch(Exception ex) {actual=new Map<String,Object>{'error'=>true};}
+ System.debug(LoggingLevel.ERROR,'CHRONO_CONFORMANCE '+JSON.serialize(new Map<String,Object>{'id'=>fixture.get('id'),'actual'=>actual}));
+}

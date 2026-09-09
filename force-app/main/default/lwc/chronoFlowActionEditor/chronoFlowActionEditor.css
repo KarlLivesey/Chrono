@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.action-editor {
+  padding: var(--slds-g-spacing-2, 0.5rem);
+}
+lightning-combobox {
+  display: block;
+  margin-bottom: var(--slds-g-spacing-2, 0.5rem);
+}
+.source-group {
+  margin-bottom: var(--slds-g-spacing-3, 0.75rem);
+}

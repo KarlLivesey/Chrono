@@ -30,10 +30,8 @@ public with sharing class ChronoSupport {
     return result;
   }
   public static Datetime localValue(Datetime instant, String zoneId) {
-    requireValue(instant, 'Datetime');
-    return Datetime.newInstance(
-      instant.getTime() + zone(zoneId).getOffset(instant)
-    );
+    ChronoDates.validateInstant(instant);
+    return shift(instant, (Long) zone(zoneId).getOffset(instant));
   }
   public static Long hours(Integer amount) {
     requireValue(amount, 'Hours');
@@ -45,6 +43,16 @@ public with sharing class ChronoSupport {
   }
   public static Datetime shift(Datetime value, Long millis) {
     requireValue(millis, 'Milliseconds');
-    return Datetime.newInstance(value.getTime() + millis);
+    requireValue(value, 'Datetime');
+    Datetime result = Datetime.newInstance(
+      ChronoNumbers.milliseconds((Decimal) value.getTime() + millis)
+    );
+    ChronoDates.validateInstant(result);
+    return result;
+  }
+  public static void choice(String value, Set<String> allowed, String label) {
+    if (!allowed.contains(value)) {
+      throw new ChronoException('Unsupported ' + label + ': ' + value + '.');
+    }
   }
 }

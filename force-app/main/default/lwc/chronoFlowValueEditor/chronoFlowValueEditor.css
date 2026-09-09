@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+fieldset {
+  min-width: 0;
+}
+
+/* Override the SLDS floated legend while keeping one accessible field label. */
+legend {
+  float: none;
+  display: flex;
+  align-items: center;
+  gap: var(--slds-g-spacing-1, 0.25rem);
+  width: 100%;
+  margin: 0 0 var(--slds-g-spacing-1, 0.25rem);
+}
+
+.value-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--slds-g-spacing-1, 0.25rem);
+}
+
+lightning-button-menu {
+  flex: 0 0 auto;
+}
+
+.value-control {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+lightning-input,
+lightning-combobox,
+c-chrono-flow-resource-picker,
+c-chrono-choice-lookup {
+  display: block;
+}

@@ -1,0 +1,68 @@
+{
+  "createdAt": "2026-09-08T14:36:37.235469+00:00",
+  "targetOrg": "chrono-subscriber",
+  "label": "Chrono-0.1.0.18",
+  "operationsPerSample": 200,
+  "measuredSamples": 3,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "time-allocation-with-flow",
+      "description": "200 distinct allocations plus 20 real conversion Flow interviews in one transaction; asserts all block totals and every Flow output.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 6668,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 176163,
+          "heapAfterBytes": 218562,
+          "cpuMs": 6632,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 6336,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 176163,
+          "heapAfterBytes": 218562,
+          "cpuMs": 6301,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 6091,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 176163,
+          "heapAfterBytes": 218562,
+          "cpuMs": 6063,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 7053,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 175979,
+          "heapAfterBytes": 218378,
+          "cpuMs": 7023,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 6063,
+        "median": 6301,
+        "max": 7023
+      },
+      "medianCpuMsPerOperation": 31.505
+    }
+  ]
+}

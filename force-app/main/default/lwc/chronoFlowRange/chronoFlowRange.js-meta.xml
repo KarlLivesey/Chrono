@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningComponentBundle
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+><apiVersion>67.0</apiVersion><isExposed>true</isExposed><masterLabel
+  >Chrono: Date and time range</masterLabel><targets><target
+    >lightning__FlowScreen</target></targets><targetConfigs><targetConfig
+      targets="lightning__FlowScreen"
+    ><property
+        name="mode"
+        type="String"
+        label="date/datetime"
+        default="datetime"
+        role="inputOnly"
+      /><property
+        name="label"
+        type="String"
+        label="Label"
+        default="Date and time range"
+        role="inputOnly"
+      /><property
+        name="timeZoneId"
+        type="String"
+        label="Timezone"
+        role="inputOnly"
+      /><property
+        name="allowTimeZoneSelection"
+        type="Boolean"
+        label="Allow timezone changes"
+        default="false"
+        role="inputOnly"
+      /><property
+        name="dateStyle"
+        type="String"
+        label="Date length (user locale)"
+        default="short"
+        role="inputOnly"
+      /><property
+        name="required"
+        type="Boolean"
+        label="Required"
+        default="false"
+        role="inputOnly"
+      /><property
+        name="disabled"
+        type="Boolean"
+        label="Read only"
+        default="false"
+        role="inputOnly"
+      /><property
+        name="operatingHoursId"
+        type="String"
+        label="OperatingHours ID"
+        role="inputOnly"
+      /><property
+        name="operatingHoursRecord"
+        type="@salesforce/schema/OperatingHours"
+        label="OperatingHours record"
+        role="inputOnly"
+      /><property
+        name="timeSlots"
+        type="@salesforce/schema/TimeSlot[]"
+        label="Time slots"
+        role="inputOnly"
+      /><property
+        name="holidays"
+        type="@salesforce/schema/Holiday[]"
+        label="Holidays"
+        role="inputOnly"
+      /><property
+        name="startValue"
+        type="String"
+        label="Start ISO value"
+      /><property
+        name="endValue"
+        type="String"
+        label="End ISO value (exclusive)"
+      /><property
+        name="rangeValue"
+        type="String"
+        label="ISO interval"
+        role="outputOnly"
+      /><property
+        name="duration"
+        type="String"
+        label="ISO duration"
+        role="outputOnly"
+      /></targetConfig></targetConfigs></LightningComponentBundle>

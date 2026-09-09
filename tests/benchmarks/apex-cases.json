@@ -1,0 +1,171 @@
+[
+  {
+    "name": "parse-format-PlainDate",
+    "description": "Parse and serialise PlainDate through the global service.",
+    "body": "String actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoPlainDateService.toIsoString(skel.ChronoPlainDateService.parseIso('2026-09-08'));",
+    "assert": "Assert.areEqual('2026-09-08',actual,'Canonical round trip');"
+  },
+  {
+    "name": "parse-format-PlainTime",
+    "description": "Parse and serialise PlainTime through the global service.",
+    "body": "String actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoPlainTimeService.toIsoString(skel.ChronoPlainTimeService.parseIso('09:30:12.123'));",
+    "assert": "Assert.areEqual('09:30:12.123',actual,'Canonical round trip');"
+  },
+  {
+    "name": "parse-format-PlainDateTime",
+    "description": "Parse and serialise PlainDateTime through the global service.",
+    "body": "String actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoPlainDateTimeService.toIsoString(skel.ChronoPlainDateTimeService.parseIso('2026-09-08T09:30:12.123'));",
+    "assert": "Assert.areEqual('2026-09-08T09:30:12.123',actual,'Canonical round trip');"
+  },
+  {
+    "name": "parse-format-Instant",
+    "description": "Parse and serialise Instant through the global service.",
+    "body": "String actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoInstantService.toIsoString(skel.ChronoInstantService.parseIso('2026-09-08T08:30:12.123Z'));",
+    "assert": "Assert.areEqual('2026-09-08T08:30:12.123Z',actual,'Canonical round trip');"
+  },
+  {
+    "name": "parse-format-ZonedDateTime",
+    "description": "Parse and serialise ZonedDateTime through the global service.",
+    "body": "String actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoZonedDateTimeService.toIsoString(skel.ChronoZonedDateTimeService.parseIso('2026-09-08T09:30:12.123+01:00[Europe/London]'));",
+    "assert": "Assert.areEqual('2026-09-08T09:30:12.123+01:00[Europe/London]',actual,'Canonical round trip');"
+  },
+  {
+    "name": "parse-format-PlainYearMonth",
+    "description": "Parse and serialise PlainYearMonth through the global service.",
+    "body": "String actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoPlainYearMonthService.toIsoString(skel.ChronoPlainYearMonthService.parseIso('2026-09'));",
+    "assert": "Assert.areEqual('2026-09',actual,'Canonical round trip');"
+  },
+  {
+    "name": "parse-format-PlainMonthDay",
+    "description": "Parse and serialise PlainMonthDay through the global service.",
+    "body": "String actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoPlainMonthDayService.toIsoString(skel.ChronoPlainMonthDayService.parseIso('--02-29'));",
+    "assert": "Assert.areEqual('--02-29',actual,'Canonical round trip');"
+  },
+  {
+    "name": "parse-format-Duration",
+    "description": "Parse and serialise Duration through the global service.",
+    "body": "String actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoDurationService.toIsoString(skel.ChronoDurationService.parseIso('P14M25DT18367.987S'));",
+    "assert": "Assert.areEqual('P14M25DT18367.987S',actual,'Canonical round trip');"
+  },
+  {
+    "name": "calendar-dst-arithmetic",
+    "description": "Calendar-day arithmetic crossing the London DST boundary.",
+    "setup": "skel.ChronoZonedDateTime value=skel.ChronoZonedDateTimeService.parseIso('2026-03-28T12:00:00+00:00[Europe/London]');",
+    "body": "skel.ChronoZonedDateTime actual; for(Integer index=0;index<$COUNT;index++) actual=skel.ChronoZonedDateTimeService.addDays(value,1);",
+    "assert": "Assert.areEqual('2026-03-29T12:00:00.000+01:00[Europe/London]',skel.ChronoZonedDateTimeService.toIsoString(actual),'DST preserves the calendar clock');"
+  },
+  {
+    "name": "convert-200-repeated",
+    "description": "One bulk Flow action invocation; native instants are identical, exercising calculation reuse.",
+    "setup": "List<skel.ChronoConvertAction.Request> requests=new List<skel.ChronoConvertAction.Request>(); for(Integer index=0;index<$COUNT;index++){skel.ChronoConvertAction.Request item=new skel.ChronoConvertAction.Request(); item.valueType='Instant';item.targetType='ZonedDateTime';item.timeZoneId='America/New_York';item.instantValue=Datetime.newInstanceGmt(2026,9,8,9,0,0).addMinutes(0);requests.add(item);}",
+    "body": "List<skel.ChronoFlowResult> rows=skel.ChronoConvertAction.run(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size(),'Bulk cardinality');for(skel.ChronoFlowResult row:rows) Assert.isTrue(row.success,'Conversion must succeed');"
+  },
+  {
+    "name": "convert-200-distinct",
+    "description": "One bulk Flow action invocation; native instants vary by minute.",
+    "setup": "List<skel.ChronoConvertAction.Request> requests=new List<skel.ChronoConvertAction.Request>(); for(Integer index=0;index<$COUNT;index++){skel.ChronoConvertAction.Request item=new skel.ChronoConvertAction.Request(); item.valueType='Instant';item.targetType='ZonedDateTime';item.timeZoneId='America/New_York';item.instantValue=Datetime.newInstanceGmt(2026,9,8,9,0,0).addMinutes(index);requests.add(item);}",
+    "body": "List<skel.ChronoFlowResult> rows=skel.ChronoConvertAction.run(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size(),'Bulk cardinality');for(skel.ChronoFlowResult row:rows) Assert.isTrue(row.success,'Conversion must succeed');"
+  },
+  {
+    "name": "working-hours-native-records",
+    "description": "One working hour over a weekend and Monday holiday, with unsaved native schedule records.",
+    "setup": "OperatingHours hours=new OperatingHours(TimeZone='Europe/London');List<TimeSlot> slots=new List<TimeSlot>();for(String weekday:new List<String>{'Monday','Tuesday','Wednesday','Thursday','Friday'}) slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(17,0,0,0)));List<Holiday> holidays=new List<Holiday>{new Holiday(ActivityDate=Date.newInstance(2026,8,31),IsAllDay=true)};skel.ChronoZonedDateTime value=skel.ChronoZonedDateTimeService.parseIso('2026-08-28T16:30:00+01:00[Europe/London]');",
+    "body": "skel.ChronoZonedDateTime actual;for(Integer index=0;index<$COUNT;index++)actual=skel.ChronoZonedDateTimeService.addHours(value,1,hours,slots,holidays);",
+    "assert": "Assert.areEqual('2026-09-01T09:30:00.000+01:00[Europe/London]',skel.ChronoZonedDateTimeService.toIsoString(actual),'Holiday and weekend boundaries');"
+  },
+  {
+    "name": "calendar-difference-bulk",
+    "description": "200 identical zoned calendar differences across spring DST, through the bulk action.",
+    "setup": "List<skel.ChronoCalendarDifferenceAction.Request> requests=new List<skel.ChronoCalendarDifferenceAction.Request>();for(Integer i=0;i<$COUNT;i++){skel.ChronoCalendarDifferenceAction.Request r=new skel.ChronoCalendarDifferenceAction.Request();r.valueType='ZonedDateTime';r.value='2026-03-28T12:00+00:00[Europe/London]';r.endValueType='ZonedDateTime';r.endValue='2026-03-29T13:00+01:00[Europe/London]';r.largestUnit='day';requests.add(r);}",
+    "body": "List<skel.ChronoFlowResult> rows=skel.ChronoCalendarDifferenceAction.run(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size());for(skel.ChronoFlowResult row:rows){Assert.isTrue(row.success);Assert.areEqual(1,row.days);Assert.areEqual(3600000L,row.milliseconds);}"
+  },
+  {
+    "name": "recurrence-weekly-dst",
+    "description": "Bulk repeated three-occurrence rules, skipping the missing London clock time.",
+    "setup": "List<skel.ChronoRecurrenceAction.Request> requests=new List<skel.ChronoRecurrenceAction.Request>();for(Integer i=0;i<$COUNT;i++){skel.ChronoRecurrenceAction.Request r=new skel.ChronoRecurrenceAction.Request();r.operation='rrule';r.valueType='ZonedDateTime';r.value='2026-03-22T01:30+00:00[Europe/London]';r.rule='FREQ=WEEKLY;COUNT=3;BYDAY=SU';r.untilDate=Date.newInstance(2026,4,20);requests.add(r);}",
+    "body": "List<skel.ChronoRecurrenceResult> rows=skel.ChronoRecurrenceAction.run(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size());for(skel.ChronoRecurrenceResult row:rows){Assert.isTrue(row.success);Assert.areEqual(3,row.values.size());Assert.areEqual('2026-04-05T01:30:00.000+01:00[Europe/London]',row.values[1]);}"
+  },
+  {
+    "name": "availability-collection",
+    "description": "One collection interview with 200 requests sharing an unsaved schedule; copied window results.",
+    "setup": "skel.ChronoAvailabilityInput item=new skel.ChronoAvailabilityInput();item.operation='windows';item.valueType='ZonedDateTime';item.value='2026-09-07T09:00+01:00[Europe/London]';item.endValue='2026-09-07T10:00+01:00[Europe/London]';item.operatingHours=new OperatingHours(TimeZone='Europe/London');item.timeSlots=new List<TimeSlot>{new TimeSlot(DayOfWeek='Monday',StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(17,0,0,0))};skel.ChronoAvailabilityCollectionAction.Request request=new skel.ChronoAvailabilityCollectionAction.Request();request.items=new List<skel.ChronoAvailabilityInput>();for(Integer i=0;i<$COUNT;i++)request.items.add(item);",
+    "body": "List<skel.ChronoAvailabilityCollectionResult> rows=skel.ChronoAvailabilityCollectionAction.run(new List<skel.ChronoAvailabilityCollectionAction.Request>{request});",
+    "assert": "Assert.isTrue(rows[0].success);Assert.areEqual($COUNT,rows[0].results.size());for(skel.ChronoAvailabilityResult row:rows[0].results)Assert.areEqual(3600000L,row.milliseconds);"
+  },
+  {
+    "name": "flow-convert-interviews",
+    "description": "Twenty real autolaunched Flow interviews calling the installed conversion action; includes Flow CPU overhead.",
+    "maxCount": 20,
+    "setup": "Map<String,Object> inputs=new Map<String,Object>{'valueType'=>'Instant','value'=>'2026-09-08T09:00Z','targetType'=>'ZonedDateTime','timeZoneId'=>'Europe/London'};",
+    "body": "Flow.Interview interview;for(Integer i=0;i<$COUNT;i++){interview=Flow.Interview.createInterview('ChronoConvertHarness',inputs);interview.start();Assert.areEqual(true,interview.getVariableValue('success'));}",
+    "assert": "Assert.areEqual('2026-09-08T10:00:00.000+01:00[Europe/London]',interview.getVariableValue('valueResult'));"
+  },
+  {
+    "name": "stress-availability-distinct",
+    "description": "200 distinct two-day windows across four schedule zones, ten weekly slots and 64 holidays.",
+    "freshTransactionPerSample": true,
+    "setup": "List<String> zoneIds=new List<String>{'UTC','Europe/London','America/New_York','Australia/Sydney'};List<OperatingHours> schedules=new List<OperatingHours>();for(String zoneId:zoneIds)schedules.add(new OperatingHours(TimeZone=zoneId));List<TimeSlot> slots=new List<TimeSlot>();for(String weekday:new List<String>{'Monday','Tuesday','Wednesday','Thursday','Friday'}){slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(12,0,0,0)));slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(13,0,0,0),EndTime=Time.newInstance(17,0,0,0)));}List<Holiday> holidays=new List<Holiday>();Set<Date> closedDates=new Set<Date>();Date anchor=Date.newInstance(2026,1,1);for(Integer h=0;h<64;h++){Date day=anchor.addDays(h*3);holidays.add(new Holiday(ActivityDate=day,IsAllDay=true));closedDates.add(day);}List<skel.ChronoAvailabilityAction.Request> requests=new List<skel.ChronoAvailabilityAction.Request>();for(Integer i=0;i<$COUNT;i++){skel.ChronoAvailabilityAction.Request item=new skel.ChronoAvailabilityAction.Request();item.operation='windows';item.valueType='Instant';item.instantValue=Datetime.newInstanceGmt(anchor.addDays(i),Time.newInstance(0,0,0,0));item.endInstant=item.instantValue.addDays(2);item.timeZoneId=zoneIds[Math.mod(i,4)];item.operatingHours=schedules[Math.mod(i,4)];item.timeSlots=slots;item.holidays=holidays;requests.add(item);}List<List<Long>> expectedStarts=new List<List<Long>>();List<List<Long>> expectedEnds=new List<List<Long>>();for(Integer i=0;i<requests.size();i++){List<Long> starts=new List<Long>();List<Long> ends=new List<Long>();Datetime first=requests[i].instantValue;Datetime last=requests[i].endInstant;TimeZone zone=TimeZone.getTimeZone(zoneIds[Math.mod(i,4)]);for(Date day=first.dateGmt().addDays(-1);day<=last.dateGmt().addDays(1);day=day.addDays(1)){Integer weekday=Math.mod(Date.newInstance(2000,1,3).daysBetween(day),7);if(weekday>=5||closedDates.contains(day))continue;for(Integer slot=0;slot<2;slot++){Datetime wallStart=Datetime.newInstanceGmt(day,Time.newInstance(slot == 0 ? 9 : 13,0,0,0));Datetime wallEnd=Datetime.newInstanceGmt(day,Time.newInstance(slot == 0 ? 12 : 17,0,0,0));Long start=Math.max(first.getTime(),wallStart.getTime()-zone.getOffset(wallStart));Long finish=Math.min(last.getTime(),wallEnd.getTime()-zone.getOffset(wallEnd));if(finish>start){starts.add(start);ends.add(finish);}}}expectedStarts.add(starts);expectedEnds.add(ends);}",
+    "body": "List<skel.ChronoAvailabilityResult> rows=skel.ChronoAvailabilityAction.run(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size());for(Integer i=0;i<rows.size();i++){skel.ChronoAvailabilityResult row=rows[i];Assert.isTrue(row.success,row.errorMessage==null?'Availability success':row.errorMessage);Assert.areEqual(zoneIds[Math.mod(i,4)],row.timeZoneId);Assert.areEqual(expectedStarts[i].size(),row.openingValues.size(),'Expected window count');Long total=0;for(Integer j=0;j<row.openingValues.size();j++){skel.ChronoZonedDateTime first=skel.ChronoZonedDateTimeService.parseIso(row.openingValues[j]);skel.ChronoZonedDateTime last=skel.ChronoZonedDateTimeService.parseIso(row.closingValues[j]);Assert.isFalse(closedDates.contains(skel.ChronoZonedDateTimeService.toDate(first)));Assert.isTrue(last.instant>first.instant);Assert.areEqual(expectedStarts[i][j],first.instant.getTime(),'Expected window start');Assert.areEqual(expectedEnds[i][j],last.instant.getTime(),'Expected window end');Assert.isTrue(first.instant>=requests[i].instantValue);Assert.isTrue(last.instant<=requests[i].endInstant);total+=last.instant.getTime()-first.instant.getTime();}Assert.areEqual(total,row.milliseconds);}"
+  },
+  {
+    "name": "stress-recurrence-distinct",
+    "description": "200 distinct ten-day daily rules across four schedule zones, ten weekly slots and 64 holidays; exact expected dates.",
+    "freshTransactionPerSample": true,
+    "setup": "List<String> zoneIds=new List<String>{'UTC','Europe/London','America/New_York','Australia/Sydney'};List<OperatingHours> schedules=new List<OperatingHours>();for(String zoneId:zoneIds)schedules.add(new OperatingHours(TimeZone=zoneId));List<TimeSlot> slots=new List<TimeSlot>();for(String weekday:new List<String>{'Monday','Tuesday','Wednesday','Thursday','Friday'}){slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(12,0,0,0)));slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(13,0,0,0),EndTime=Time.newInstance(17,0,0,0)));}List<Holiday> holidays=new List<Holiday>();Set<Date> closedDates=new Set<Date>();Date anchor=Date.newInstance(2026,1,1);for(Integer h=0;h<64;h++){Date day=anchor.addDays(h*3);holidays.add(new Holiday(ActivityDate=day,IsAllDay=true));closedDates.add(day);}List<skel.ChronoRecurrenceAction.Request> requests=new List<skel.ChronoRecurrenceAction.Request>();List<List<Date>> expected=new List<List<Date>>();for(Integer i=0;i<$COUNT;i++){Date start=anchor.addDays(i);skel.ChronoRecurrenceAction.Request item=new skel.ChronoRecurrenceAction.Request();item.operation='rrule';item.valueType='PlainDate';item.dateValue=start;item.rule='FREQ=DAILY;COUNT=10';item.untilDate=start.addDays(20);item.closedPolicy='skip';item.operatingHours=schedules[Math.mod(i,4)];item.timeSlots=slots;item.holidays=holidays;requests.add(item);List<Date> openDays=new List<Date>();for(Integer d=0;d<10;d++){Date day=start.addDays(d);Integer weekday=Math.mod(Date.newInstance(2000,1,3).daysBetween(day),7);if(weekday<5&&!closedDates.contains(day))openDays.add(day);}expected.add(openDays);}",
+    "body": "List<skel.ChronoRecurrenceResult> rows=skel.ChronoRecurrenceAction.run(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size());for(Integer i=0;i<rows.size();i++){Assert.isTrue(rows[i].success,rows[i].errorMessage==null?'Recurrence success':rows[i].errorMessage);Assert.areEqual(expected[i],rows[i].dates,'Ordered open dates for interview '+i);}"
+  },
+  {
+    "name": "time-allocation-distinct",
+    "description": "200 distinct four-hour requests across four block zones with 64 holidays and four named blocks; exact block totals asserted.",
+    "freshTransactionPerSample": true,
+    "setup": "List<String> zones=new List<String>{'UTC','Europe/London','America/New_York','Australia/Sydney'};\nList<Holiday> holidays=new List<Holiday>();Set<Date> holidayDates=new Set<Date>();Date anchor=Date.newInstance(2026,1,1);\nfor(Integer i=0;i<64;i++){Date day=anchor.addDays(i*3);holidayDates.add(day);holidays.add(new Holiday(ActivityDate=day,IsAllDay=true));}\nList<skel.ChronoTimeAllocationAction.Request> requests=new List<skel.ChronoTimeAllocationAction.Request>();\nfor(Integer i=0;i<$COUNT;i++){skel.ChronoTimeAllocationAction.Request request=new skel.ChronoTimeAllocationAction.Request();request.valueType='Instant';request.timeZoneId=zones[Math.mod(i,4)];Datetime local=Datetime.newInstanceGmt(anchor.addDays(i),Time.newInstance(8,0,0,0));request.instantValue=Datetime.newInstance(local.getTime()-TimeZone.getTimeZone(request.timeZoneId).getOffset(local));request.endInstant=request.instantValue.addHours(4);request.holidays=holidays;request.blocksText='[{\"key\":\"one\",\"startTime\":\"08:00\",\"endTime\":\"10:00\"},{\"key\":\"two\",\"startTime\":\"10:00\",\"endTime\":\"11:00\"},{\"key\":\"three\",\"startTime\":\"11:00\",\"endTime\":\"15:00\"},{\"key\":\"holiday\",\"dayType\":\"holiday\",\"startTime\":\"08:00\",\"endTime\":\"12:00\"}]';requests.add(request);}",
+    "body": "List<skel.ChronoTimeAllocationResult> rows=skel.ChronoTimeAllocationAction.run(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size());for(Integer i=0;i<rows.size();i++){skel.ChronoTimeAllocationResult row=rows[i];Assert.isTrue(row.success,'Allocation failed: '+row.errorMessage);Assert.areEqual(14400000L,row.allocatedMilliseconds);Assert.areEqual(0L,row.unallocatedMilliseconds);Assert.areEqual(0L,row.roundingMilliseconds);Boolean holiday=holidayDates.contains(anchor.addDays(i));Assert.areEqual(holiday ? 14400000L : 0L,row.totals[3].allocatedMilliseconds);Assert.areEqual(holiday ? 0L : 7200000L,row.totals[0].allocatedMilliseconds);Assert.areEqual(holiday ? 0L : 3600000L,row.totals[1].allocatedMilliseconds);Assert.areEqual(holiday ? 0L : 3600000L,row.totals[2].allocatedMilliseconds);}"
+  },
+  {
+    "name": "time-allocation-with-flow",
+    "description": "200 distinct allocations plus 20 real conversion Flow interviews in one transaction; asserts all block totals and every Flow output.",
+    "freshTransactionPerSample": true,
+    "setup": "List<String> zones=new List<String>{'UTC','Europe/London','America/New_York','Australia/Sydney'};\nList<Holiday> holidays=new List<Holiday>();Set<Date> holidayDates=new Set<Date>();Date anchor=Date.newInstance(2026,1,1);\nfor(Integer i=0;i<64;i++){Date day=anchor.addDays(i*3);holidayDates.add(day);holidays.add(new Holiday(ActivityDate=day,IsAllDay=true));}\nList<skel.ChronoTimeAllocationAction.Request> requests=new List<skel.ChronoTimeAllocationAction.Request>();\nfor(Integer i=0;i<$COUNT;i++){skel.ChronoTimeAllocationAction.Request request=new skel.ChronoTimeAllocationAction.Request();request.valueType='Instant';request.timeZoneId=zones[Math.mod(i,4)];Datetime local=Datetime.newInstanceGmt(anchor.addDays(i),Time.newInstance(8,0,0,0));request.instantValue=Datetime.newInstance(local.getTime()-TimeZone.getTimeZone(request.timeZoneId).getOffset(local));request.endInstant=request.instantValue.addHours(4);request.holidays=holidays;request.blocksText='[{\"key\":\"one\",\"startTime\":\"08:00\",\"endTime\":\"10:00\"},{\"key\":\"two\",\"startTime\":\"10:00\",\"endTime\":\"11:00\"},{\"key\":\"three\",\"startTime\":\"11:00\",\"endTime\":\"15:00\"},{\"key\":\"holiday\",\"dayType\":\"holiday\",\"startTime\":\"08:00\",\"endTime\":\"12:00\"}]';requests.add(request);}",
+    "body": "List<skel.ChronoTimeAllocationResult> rows=skel.ChronoTimeAllocationAction.run(requests);\nMap<String,Object> flowInputs=new Map<String,Object>{'valueType'=>'Instant','value'=>'2026-09-08T09:00Z','targetType'=>'ZonedDateTime','timeZoneId'=>'Europe/London'};for(Integer flowIndex=0;flowIndex<20;flowIndex++){Flow.Interview interview=Flow.Interview.createInterview('ChronoConvertHarness',flowInputs);interview.start();Assert.areEqual(true,interview.getVariableValue('success'));Assert.areEqual('2026-09-08T10:00:00.000+01:00[Europe/London]',interview.getVariableValue('valueResult'));}",
+    "assert": "Assert.areEqual($COUNT,rows.size());for(Integer i=0;i<rows.size();i++){skel.ChronoTimeAllocationResult row=rows[i];Assert.isTrue(row.success,'Allocation failed: '+row.errorMessage);Assert.areEqual(14400000L,row.allocatedMilliseconds);Assert.areEqual(0L,row.unallocatedMilliseconds);Assert.areEqual(0L,row.roundingMilliseconds);Boolean holiday=holidayDates.contains(anchor.addDays(i));Assert.areEqual(holiday ? 14400000L : 0L,row.totals[3].allocatedMilliseconds);Assert.areEqual(holiday ? 0L : 7200000L,row.totals[0].allocatedMilliseconds);Assert.areEqual(holiday ? 0L : 3600000L,row.totals[1].allocatedMilliseconds);Assert.areEqual(holiday ? 0L : 3600000L,row.totals[2].allocatedMilliseconds);}"
+  },
+  {
+    "name": "apex-service-convert-200-repeated",
+    "description": "Direct Apex service: One bulk Flow action invocation; native instants are identical, exercising calculation reuse.",
+    "setup": "List<skel.ChronoConvertInput> requests=new List<skel.ChronoConvertInput>(); for(Integer index=0;index<$COUNT;index++){skel.ChronoConvertInput item=new skel.ChronoConvertInput(); item.valueType='Instant';item.targetType='ZonedDateTime';item.timeZoneId='America/New_York';item.instantValue=Datetime.newInstanceGmt(2026,9,8,9,0,0).addMinutes(0);requests.add(item);}",
+    "body": "List<skel.ChronoValueResult> rows=skel.ChronoValueService.convert(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size(),'Bulk cardinality'); for(Integer i=0;i<rows.size();i++){Assert.isTrue(rows[i].success,'Conversion must succeed');Assert.areEqual(requests[i].instantValue,rows[i].value.zonedDateTime.instant,'Instant and order');Assert.areEqual('America/New_York',rows[i].value.zonedDateTime.timeZoneId);} rows[0].value.zonedDateTime.instant=null; if(rows.size()>1) Assert.isNotNull(rows[1].value.zonedDateTime.instant,'Independent results');",
+    "freshTransactionPerSample": true
+  },
+  {
+    "name": "apex-service-convert-200-distinct",
+    "description": "Direct Apex service: One bulk Flow action invocation; native instants vary by minute.",
+    "setup": "List<skel.ChronoConvertInput> requests=new List<skel.ChronoConvertInput>(); for(Integer index=0;index<$COUNT;index++){skel.ChronoConvertInput item=new skel.ChronoConvertInput(); item.valueType='Instant';item.targetType='ZonedDateTime';item.timeZoneId='America/New_York';item.instantValue=Datetime.newInstanceGmt(2026,9,8,9,0,0).addMinutes(index);requests.add(item);}",
+    "body": "List<skel.ChronoValueResult> rows=skel.ChronoValueService.convert(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size(),'Bulk cardinality'); for(Integer i=0;i<rows.size();i++){Assert.isTrue(rows[i].success,'Conversion must succeed');Assert.areEqual(requests[i].instantValue,rows[i].value.zonedDateTime.instant,'Instant and order');Assert.areEqual('America/New_York',rows[i].value.zonedDateTime.timeZoneId);} rows[0].value.zonedDateTime.instant=null; if(rows.size()>1) Assert.isNotNull(rows[1].value.zonedDateTime.instant,'Independent results');",
+    "freshTransactionPerSample": true
+  },
+  {
+    "name": "apex-service-stress-availability-distinct",
+    "description": "Direct Apex service: 200 distinct two-day windows across four schedule zones, ten weekly slots and 64 holidays.",
+    "freshTransactionPerSample": true,
+    "setup": "List<String> zoneIds=new List<String>{'UTC','Europe/London','America/New_York','Australia/Sydney'};List<OperatingHours> schedules=new List<OperatingHours>();for(String zoneId:zoneIds)schedules.add(new OperatingHours(TimeZone=zoneId));List<TimeSlot> slots=new List<TimeSlot>();for(String weekday:new List<String>{'Monday','Tuesday','Wednesday','Thursday','Friday'}){slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(12,0,0,0)));slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(13,0,0,0),EndTime=Time.newInstance(17,0,0,0)));}List<Holiday> holidays=new List<Holiday>();Set<Date> closedDates=new Set<Date>();Date anchor=Date.newInstance(2026,1,1);for(Integer h=0;h<64;h++){Date day=anchor.addDays(h*3);holidays.add(new Holiday(ActivityDate=day,IsAllDay=true));closedDates.add(day);}List<skel.ChronoAvailabilityInput> requests=new List<skel.ChronoAvailabilityInput>();for(Integer i=0;i<$COUNT;i++){skel.ChronoAvailabilityInput item=new skel.ChronoAvailabilityInput();item.operation='windows';item.valueType='Instant';item.instantValue=Datetime.newInstanceGmt(anchor.addDays(i),Time.newInstance(0,0,0,0));item.endInstant=item.instantValue.addDays(2);item.timeZoneId=zoneIds[Math.mod(i,4)];item.operatingHours=schedules[Math.mod(i,4)];item.timeSlots=slots;item.holidays=holidays;requests.add(item);}List<List<Long>> expectedStarts=new List<List<Long>>();List<List<Long>> expectedEnds=new List<List<Long>>();for(Integer i=0;i<requests.size();i++){List<Long> starts=new List<Long>();List<Long> ends=new List<Long>();Datetime first=requests[i].instantValue;Datetime last=requests[i].endInstant;TimeZone zone=TimeZone.getTimeZone(zoneIds[Math.mod(i,4)]);for(Date day=first.dateGmt().addDays(-1);day<=last.dateGmt().addDays(1);day=day.addDays(1)){Integer weekday=Math.mod(Date.newInstance(2000,1,3).daysBetween(day),7);if(weekday>=5||closedDates.contains(day))continue;for(Integer slot=0;slot<2;slot++){Datetime wallStart=Datetime.newInstanceGmt(day,Time.newInstance(slot == 0 ? 9 : 13,0,0,0));Datetime wallEnd=Datetime.newInstanceGmt(day,Time.newInstance(slot == 0 ? 12 : 17,0,0,0));Long start=Math.max(first.getTime(),wallStart.getTime()-zone.getOffset(wallStart));Long finish=Math.min(last.getTime(),wallEnd.getTime()-zone.getOffset(wallEnd));if(finish>start){starts.add(start);ends.add(finish);}}}expectedStarts.add(starts);expectedEnds.add(ends);}",
+    "body": "List<skel.ChronoAvailabilityResult> rows=skel.ChronoAvailabilityService.evaluate(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size());for(Integer i=0;i<rows.size();i++){skel.ChronoAvailabilityResult row=rows[i];Assert.isTrue(row.success,row.errorMessage==null?'Availability success':row.errorMessage);Assert.areEqual(zoneIds[Math.mod(i,4)],row.timeZoneId);Assert.areEqual(expectedStarts[i].size(),row.openingValues.size(),'Expected window count');Long total=0;for(Integer j=0;j<row.openingValues.size();j++){skel.ChronoZonedDateTime first=skel.ChronoZonedDateTimeService.parseIso(row.openingValues[j]);skel.ChronoZonedDateTime last=skel.ChronoZonedDateTimeService.parseIso(row.closingValues[j]);Assert.isFalse(closedDates.contains(skel.ChronoZonedDateTimeService.toDate(first)));Assert.isTrue(last.instant>first.instant);Assert.areEqual(expectedStarts[i][j],first.instant.getTime(),'Expected window start');Assert.areEqual(expectedEnds[i][j],last.instant.getTime(),'Expected window end');Assert.isTrue(first.instant>=requests[i].instantValue);Assert.isTrue(last.instant<=requests[i].endInstant);total+=last.instant.getTime()-first.instant.getTime();}Assert.areEqual(total,row.milliseconds);}"
+  },
+  {
+    "name": "apex-service-stress-recurrence-distinct",
+    "description": "Direct Apex service: 200 distinct ten-day daily rules across four schedule zones, ten weekly slots and 64 holidays; exact expected dates.",
+    "freshTransactionPerSample": true,
+    "setup": "List<String> zoneIds=new List<String>{'UTC','Europe/London','America/New_York','Australia/Sydney'};List<OperatingHours> schedules=new List<OperatingHours>();for(String zoneId:zoneIds)schedules.add(new OperatingHours(TimeZone=zoneId));List<TimeSlot> slots=new List<TimeSlot>();for(String weekday:new List<String>{'Monday','Tuesday','Wednesday','Thursday','Friday'}){slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(9,0,0,0),EndTime=Time.newInstance(12,0,0,0)));slots.add(new TimeSlot(DayOfWeek=weekday,StartTime=Time.newInstance(13,0,0,0),EndTime=Time.newInstance(17,0,0,0)));}List<Holiday> holidays=new List<Holiday>();Set<Date> closedDates=new Set<Date>();Date anchor=Date.newInstance(2026,1,1);for(Integer h=0;h<64;h++){Date day=anchor.addDays(h*3);holidays.add(new Holiday(ActivityDate=day,IsAllDay=true));closedDates.add(day);}List<skel.ChronoRecurrenceInput> requests=new List<skel.ChronoRecurrenceInput>();List<List<Date>> expected=new List<List<Date>>();for(Integer i=0;i<$COUNT;i++){Date start=anchor.addDays(i);skel.ChronoRecurrenceInput item=new skel.ChronoRecurrenceInput();item.operation='rrule';item.valueType='PlainDate';item.dateValue=start;item.rule='FREQ=DAILY;COUNT=10';item.untilDate=start.addDays(20);item.closedPolicy='skip';item.operatingHours=schedules[Math.mod(i,4)];item.timeSlots=slots;item.holidays=holidays;requests.add(item);List<Date> openDays=new List<Date>();for(Integer d=0;d<10;d++){Date day=start.addDays(d);Integer weekday=Math.mod(Date.newInstance(2000,1,3).daysBetween(day),7);if(weekday<5&&!closedDates.contains(day))openDays.add(day);}expected.add(openDays);}",
+    "body": "List<skel.ChronoRecurrenceResult> rows=skel.ChronoRecurrenceService.generate(requests);",
+    "assert": "Assert.areEqual($COUNT,rows.size());for(Integer i=0;i<rows.size();i++){Assert.isTrue(rows[i].success,rows[i].errorMessage==null?'Recurrence success':rows[i].errorMessage);Assert.areEqual(expected[i],rows[i].dates,'Ordered open dates for interview '+i);}"
+  }
+]

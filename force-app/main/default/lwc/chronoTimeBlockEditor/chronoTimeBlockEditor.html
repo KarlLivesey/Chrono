@@ -1,0 +1,121 @@
+<template>
+  <p class="slds-text-body_small slds-m-bottom_small">
+    First block has highest priority. Holiday blocks replace normal blocks
+    during the supplied holidays.
+  </p>
+  <template lwc:if={error}
+    ><p role="alert" class="slds-text-color_error">{error}</p></template
+  >
+  <template lwc:if={empty}
+    ><p class="slds-text-color_weak slds-m-bottom_small">
+      Add the time bands you want to total separately.
+    </p></template
+  >
+  <template for:each={blocks} for:item="block">
+    <fieldset key={block.uid} class="block">
+      <legend class="slds-text-title_bold">{block.heading}</legend>
+      <div class="row-actions">
+        <lightning-button-icon
+          data-index={block.index}
+          data-step="-1"
+          icon-name="utility:up"
+          alternative-text="Increase priority"
+          disabled={block.first}
+          onclick={reorder}
+        ></lightning-button-icon>
+        <lightning-button-icon
+          data-index={block.index}
+          data-step="1"
+          icon-name="utility:down"
+          alternative-text="Decrease priority"
+          disabled={block.last}
+          onclick={reorder}
+        ></lightning-button-icon>
+        <lightning-button-icon
+          data-index={block.index}
+          icon-name="utility:delete"
+          alternative-text="Remove block"
+          onclick={remove}
+        ></lightning-button-icon>
+      </div>
+      <div class="pair">
+        <lightning-input
+          data-index={block.index}
+          data-field="label"
+          label="Name"
+          value={block.label}
+          onchange={change}
+        ></lightning-input>
+        <lightning-input
+          data-index={block.index}
+          data-field="key"
+          label="Key"
+          field-level-help="Stable identifier returned with totals and segments."
+          value={block.key}
+          onchange={change}
+        ></lightning-input>
+      </div>
+      <lightning-combobox
+        data-index={block.index}
+        data-field="dayType"
+        label="Applies on"
+        value={block.dayType}
+        options={dayTypes}
+        onchange={change}
+      ></lightning-combobox>
+      <div class="slds-form-element slds-m-top_x-small">
+        <span class="slds-form-element__label">Block starts on</span>
+        <div class="weekdays" role="group" aria-label="Block start weekdays">
+          <template for:each={block.weekdays} for:item="day">
+            <lightning-button-stateful
+              key={day.value}
+              data-index={block.index}
+              data-day={day.value}
+              label-when-off={day.label}
+              label-when-on={day.label}
+              selected={day.selected}
+              onclick={toggleDay}
+            ></lightning-button-stateful>
+          </template>
+        </div>
+      </div>
+      <div class="pair">
+        <lightning-input
+          data-index={block.index}
+          data-field="startTime"
+          label="Start"
+          type="time"
+          value={block.startTime}
+          onchange={change}
+        ></lightning-input>
+        <lightning-input
+          data-index={block.index}
+          data-field="endTime"
+          label="End"
+          type="time"
+          value={block.displayedEnd}
+          disabled={block.midnight}
+          onchange={change}
+        ></lightning-input>
+      </div>
+      <lightning-input
+        class="slds-m-top_x-small"
+        data-index={block.index}
+        label="End of day (24:00)"
+        type="checkbox"
+        checked={block.midnight}
+        onchange={midnight}
+      ></lightning-input>
+    </fieldset>
+  </template>
+  <lightning-button
+    label="Add block"
+    icon-name="utility:add"
+    disabled={cannotAdd}
+    onclick={add}
+  ></lightning-button>
+  <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+    An end before the start continues into the next day. At least one start
+    weekday must remain selected.
+  </p>
+</template>

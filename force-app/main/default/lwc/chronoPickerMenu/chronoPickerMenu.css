@@ -1,0 +1,21 @@
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.25rem;
+  width: 100%;
+  text-align: start;
+  color: inherit;
+}
+.choice:hover,
+.choice:focus-visible {
+  background: var(--slds-g-color-surface-container-2, #f3f3f3);
+}
+.name {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.detail {
+  font-size: 0.75rem;
+  text-align: end;
+}

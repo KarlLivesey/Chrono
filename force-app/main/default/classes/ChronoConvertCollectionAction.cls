@@ -26,11 +26,12 @@ global with sharing class ChronoConvertCollectionAction {
   @InvocableMethod(
     label='Chrono: Convert date/time (collection)'
     description='Convert or normalise all eight Chrono value types. Handles collections and batched interviews.'
-    category='Chrono'
+    configurationEditor='skel-chrono-convert-collection-editor'
+    category='Chrono: Values'
     iconName='slds:standard:event'
   )
   global static List<ChronoFlowCollectionResult> run(List<Request> requests) {
-    List<Object> flat = new List<Object>();
+    List<ChronoConvertInput> inputs = new List<ChronoConvertInput>();
     List<Integer> sizes = new List<Integer>();
     if (requests != null) {
       for (Request request : requests) {
@@ -39,14 +40,13 @@ global with sharing class ChronoConvertCollectionAction {
           continue;
         }
         sizes.add(request.items.size());
-        for (ChronoConvertInput item : request.items) {
-          flat.add(item);
-        }
+        inputs.addAll(request.items);
       }
     }
-    return ChronoFlowBatch.regroup(
-      new ChronoFlowBatch('Convert').run(flat),
-      sizes
-    );
+    List<ChronoFlowResult> results = new List<ChronoFlowResult>();
+    for (ChronoValueResult item : ChronoValueService.convert(inputs)) {
+      results.add(ChronoFlowServiceResults.value(item));
+    }
+    return ChronoFlowBatch.regroup(results, sizes);
   }
 }

@@ -26,11 +26,12 @@ global with sharing class ChronoAdjustCollectionAction {
   @InvocableMethod(
     label='Chrono: Add or subtract time (collection)'
     description='Add calendar or elapsed units to a Chrono value. Handles collections and batched interviews.'
-    category='Chrono'
+    configurationEditor='skel-chrono-adjust-collection-editor'
+    category='Chrono: Calculations'
     iconName='slds:standard:event'
   )
   global static List<ChronoFlowCollectionResult> run(List<Request> requests) {
-    List<Object> flat = new List<Object>();
+    List<ChronoAdjustInput> inputs = new List<ChronoAdjustInput>();
     List<Integer> sizes = new List<Integer>();
     if (requests != null) {
       for (Request request : requests) {
@@ -39,14 +40,13 @@ global with sharing class ChronoAdjustCollectionAction {
           continue;
         }
         sizes.add(request.items.size());
-        for (ChronoAdjustInput item : request.items) {
-          flat.add(item);
-        }
+        inputs.addAll(request.items);
       }
     }
-    return ChronoFlowBatch.regroup(
-      new ChronoFlowBatch('Adjust').run(flat),
-      sizes
-    );
+    List<ChronoFlowResult> results = new List<ChronoFlowResult>();
+    for (ChronoValueResult item : ChronoCalculationService.adjust(inputs)) {
+      results.add(ChronoFlowServiceResults.value(item));
+    }
+    return ChronoFlowBatch.regroup(results, sizes);
   }
 }

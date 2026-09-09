@@ -7,7 +7,7 @@ public with sharing class ChronoFlowConvert {
     this.input = input;
     source = ChronoFlowValue.read(input);
   }
-  public ChronoFlowResult execute() {
+  public ChronoOperationResult execute() {
     String target = String.isBlank(input.targetType)
       ? source.valueType
       : input.targetType;
@@ -24,25 +24,29 @@ public with sharing class ChronoFlowConvert {
   private Object convert(String target) {
     switch on target {
       when 'Instant' {
-        return zoned().toInstant();
+        return ChronoZonedDateTimeService.toInstant(zoned());
       }
       when 'ZonedDateTime' {
         return zoned();
       }
       when 'PlainDateTime' {
-        return new ChronoPlainDateTime(localDate(), localTime());
+        return ChronoPlainDateTimeService.create(localDate(), localTime());
       }
       when 'PlainDate' {
-        return new ChronoPlainDate(localDate());
+        return ChronoPlainDateService.create(localDate());
       }
       when 'PlainTime' {
-        return new ChronoPlainTime(localTime());
+        return ChronoPlainTimeService.create(localTime());
       }
       when 'PlainYearMonth' {
-        return new ChronoPlainDate(localDate()).toPlainYearMonth();
+        return ChronoPlainDateService.toPlainYearMonth(
+          ChronoPlainDateService.create(localDate())
+        );
       }
       when 'PlainMonthDay' {
-        return new ChronoPlainDate(localDate()).toPlainMonthDay();
+        return ChronoPlainDateService.toPlainMonthDay(
+          ChronoPlainDateService.create(localDate())
+        );
       }
       when else {
         throw new ChronoException(
@@ -60,37 +64,51 @@ public with sharing class ChronoFlowConvert {
       ChronoZonedDateTime value = (ChronoZonedDateTime) source.value;
       return String.isBlank(input.timeZoneId)
         ? value
-        : value.withTimeZone(input.timeZoneId);
+        : ChronoZonedDateTimeService.withTimeZone(value, input.timeZoneId);
     }
     if (source.valueType == 'Instant') {
-      return ((ChronoInstant) source.value).toZonedDateTime(input.timeZoneId);
+      return ChronoInstantService.toZonedDateTime(
+        ((ChronoInstant) source.value),
+        input.timeZoneId
+      );
     }
-    return new ChronoPlainDateTime(localDate(), localTime())
-      .toZonedDateTime(input.timeZoneId, policy(input.disambiguation));
+    return ChronoPlainDateTimeService.toZonedDateTime(
+      ChronoPlainDateTimeService.create(localDate(), localTime()),
+      input.timeZoneId,
+      policy(input.disambiguation)
+    );
   }
   private Date localDate() {
     switch on source.valueType {
       when 'Instant', 'ZonedDateTime' {
-        return zoned().toDate();
+        return ChronoZonedDateTimeService.toDate(zoned());
       }
       when 'PlainDateTime' {
-        return ((ChronoPlainDateTime) source.value).toDate();
+        return ChronoPlainDateTimeService.toDate(
+          ((ChronoPlainDateTime) source.value)
+        );
       }
       when 'PlainDate' {
-        return ((ChronoPlainDate) source.value).toDate();
+        return ChronoPlainDateService.toDate(((ChronoPlainDate) source.value));
       }
       when 'PlainTime' {
         return referenceDate();
       }
       when 'PlainYearMonth' {
-        return ((ChronoPlainYearMonth) source.value)
-          .toPlainDate(referenceDate().day())
-          .toDate();
+        return ChronoPlainDateService.toDate(
+          ChronoPlainYearMonthService.toPlainDate(
+            ((ChronoPlainYearMonth) source.value),
+            referenceDate().day()
+          )
+        );
       }
       when 'PlainMonthDay' {
-        return ((ChronoPlainMonthDay) source.value)
-          .toPlainDate(referenceDate().year())
-          .toDate();
+        return ChronoPlainDateService.toDate(
+          ChronoPlainMonthDayService.toPlainDate(
+            ((ChronoPlainMonthDay) source.value),
+            referenceDate().year()
+          )
+        );
       }
       when else {
         throw new ChronoException('A duration is not a date or instant.');
@@ -100,13 +118,15 @@ public with sharing class ChronoFlowConvert {
   private Time localTime() {
     switch on source.valueType {
       when 'Instant', 'ZonedDateTime' {
-        return zoned().toTime();
+        return ChronoZonedDateTimeService.toTime(zoned());
       }
       when 'PlainDateTime' {
-        return ((ChronoPlainDateTime) source.value).toTime();
+        return ChronoPlainDateTimeService.toTime(
+          ((ChronoPlainDateTime) source.value)
+        );
       }
       when 'PlainTime' {
-        return ((ChronoPlainTime) source.value).toTime();
+        return ChronoPlainTimeService.toTime(((ChronoPlainTime) source.value));
       }
       when else {
         return ChronoIso.parseTime(input.referenceTime);

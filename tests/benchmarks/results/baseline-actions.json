@@ -1,0 +1,144 @@
+{
+  "createdAt": "2026-09-08T01:48:21.886623+00:00",
+  "targetOrg": "chrono-subscriber",
+  "operationsPerSample": 200,
+  "measuredSamples": 3,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "calendar-difference-bulk",
+      "description": "200 identical zoned calendar differences across spring DST, through the bulk action.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 18564,
+          "heapAfterBytes": 31725,
+          "cpuMs": 35,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 31893,
+          "cpuMs": 28,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 31893,
+          "cpuMs": 27,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 31893,
+          "cpuMs": 28,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 27,
+        "median": 28,
+        "max": 28
+      },
+      "medianCpuMsPerOperation": 0.14
+    },
+    {
+      "name": "recurrence-weekly-dst",
+      "description": "Bulk repeated three-occurrence rules, skipping the missing London clock time.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 56384,
+          "heapAfterBytes": 81539,
+          "cpuMs": 61,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 81575,
+          "cpuMs": 54,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 81575,
+          "cpuMs": 58,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 81575,
+          "cpuMs": 59,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 54,
+        "median": 58,
+        "max": 59
+      },
+      "medianCpuMsPerOperation": 0.29
+    },
+    {
+      "name": "availability-collection",
+      "description": "One collection interview with 200 requests sharing an unsaved schedule; copied window results.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 63537,
+          "heapAfterBytes": 65725,
+          "cpuMs": 73,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 65993,
+          "cpuMs": 71,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 65993,
+          "cpuMs": 65,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 65993,
+          "cpuMs": 65,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 65,
+        "median": 65,
+        "max": 71
+      },
+      "medianCpuMsPerOperation": 0.325
+    }
+  ]
+}

@@ -35,7 +35,7 @@ public with sharing class ChronoZoneIntervals {
         localEnd.getTime() - segment.offset
       );
       if (startTime < endTime) {
-        result.add(new ChronoScheduleDay.Span(startTime, endTime));
+        result.add(ChronoScheduleDay.span(startTime, endTime));
       }
     }
     return result;

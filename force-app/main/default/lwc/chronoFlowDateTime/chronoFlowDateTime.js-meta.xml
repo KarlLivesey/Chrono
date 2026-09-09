@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+  <apiVersion>67.0</apiVersion><isExposed>true</isExposed>
+  <masterLabel>Chrono: Date and time</masterLabel>
+  <description
+  >Date or zoned date/time picker with explicit clock-change choices.</description>
+  <targets><target>lightning__FlowScreen</target></targets>
+  <targetConfigs><targetConfig
+      targets="lightning__FlowScreen"
+      configurationEditor="skel-chrono-flow-date-time-editor"
+    >
+    <property
+        name="allowOffsetOverride"
+        type="Boolean"
+        label="Allow supplied-offset overrides"
+        role="inputOnly"
+        default="false"
+        description="Allow entering an explicit UTC offset independently of the selected timezone's rules."
+      />
+    <property
+        name="initialChronoValue"
+        type="String"
+        role="inputOnly"
+        label="Initial ISO date or datetime"
+        description="A Chrono ISO date, local datetime, instant or zoned datetime. Use a Text resource or another Chrono action output."
+      />
+    <property
+        name="chronoDateValue"
+        type="String"
+        role="outputOnly"
+        label="Chrono plain date (ISO text)"
+      />
+    <property
+        name="chronoPlainDateTimeValue"
+        type="String"
+        role="outputOnly"
+        label="Chrono plain date/time (ISO text)"
+      />
+    <property
+        name="chronoTimeValue"
+        type="String"
+        role="outputOnly"
+        label="Chrono plain time (ISO text)"
+      />
+    <property
+        name="chronoInstantValue"
+        type="String"
+        role="outputOnly"
+        label="Chrono instant (ISO text)"
+      />
+    <property
+        name="chronoZonedDateTimeValue"
+        type="String"
+        role="outputOnly"
+        label="Chrono zoned date/time (ISO text)"
+      />
+    <property
+        name="offsetOverride"
+        type="String"
+        label="Supplied UTC offset"
+        description="Optional +01:00 or -05:00 override. Used with the entered wall time to derive the instant. Returned when changed; empty restores automatic zone rules."
+      />
+    <property
+        name="offsetMode"
+        type="String"
+        label="Offset selection mode"
+        role="outputOnly"
+        description="auto, selected, or override."
+      />
+    <property
+        name="lockOperatingHoursSelection"
+        type="Boolean"
+        label="Lock operating-hours selection"
+        role="inputOnly"
+        default="false"
+        description="For collection or search sources, lock the supplied selected ID. Single-record and dynamic schedules are always fixed."
+      />
+    <property
+        name="mode"
+        type="String"
+        label="Input mode"
+        default="datetime"
+        role="inputOnly"
+        description="Use date for a calendar date, or datetime for a date and time in a time zone."
+      />
+    <property
+        name="dateStyle"
+        type="String"
+        label="Date display style"
+        default="medium"
+        role="inputOnly"
+        description="Locale-aware short (numeric), medium (abbreviated month), or long (full month) display."
+      />
+    <property
+        name="timeZoneSelectionMode"
+        type="String"
+        label="Timezone selection scope"
+        role="inputOnly"
+        default="all"
+        description="all preserves unrestricted selection; list restricts selection to supplied IDs. An empty list never enables all timezones."
+      />
+    <property
+        name="timeZoneIds"
+        type="String[]"
+        label="Allowed timezones from Flow"
+        role="inputOnly"
+        description="Text collection of timezone IDs. Combined with the fixed allowed timezones."
+      />
+    <property
+        name="timeZoneIdsText"
+        type="String"
+        label="Fixed allowed timezones"
+        role="inputOnly"
+        description="Timezone IDs maintained by the inline list editor."
+      />
+    <property
+        name="label"
+        type="String"
+        label="Label"
+        default="Date and time"
+        role="inputOnly"
+      />
+    <property
+        name="helpText"
+        type="String"
+        label="Help text"
+        role="inputOnly"
+      />
+    <property
+        name="required"
+        type="Boolean"
+        label="Require a value"
+        default="false"
+        role="inputOnly"
+      />
+    <property
+        name="disabled"
+        type="Boolean"
+        label="Disable editing"
+        default="false"
+        role="inputOnly"
+      />
+    <property
+        name="allowTimeZoneSelection"
+        type="Boolean"
+        label="Allow the user to change time zone"
+        default="false"
+        role="inputOnly"
+      />
+    <property
+        name="timeZoneId"
+        type="String"
+        label="Time-zone ID"
+        description="For example Europe/London. Defaults to the running user's zone. Returned when the user changes it. Ignored in date mode."
+      />
+    <property
+        name="dateValue"
+        type="Date"
+        label="Date value"
+        description="Calendar date in date mode; selected local date in datetime mode. No timezone conversion in date mode."
+      />
+    <property
+        name="dateTimeValue"
+        type="DateTime"
+        label="Datetime value"
+        description="Exact UTC instant in datetime mode. An existing value is displayed in the configured zone. Cleared while an edited time is unresolved."
+      />
+  <property
+        name="operatingHoursMode"
+        type="String"
+        label="Operating-hours source"
+        role="inputOnly"
+      /><property
+        name="operatingHoursId"
+        type="String"
+        label="OperatingHours ID"
+      /><property
+        name="operatingHoursIds"
+        type="String[]"
+        label="Allowed OperatingHours IDs"
+        role="inputOnly"
+      /><property
+        name="operatingHoursFilter"
+        type="String"
+        label="OperatingHours filter"
+        role="inputOnly"
+      /><property
+        name="operatingHoursRecord"
+        type="@salesforce/schema/OperatingHours"
+        label="OperatingHours record"
+        role="inputOnly"
+      /><property
+        name="operatingHoursRecords"
+        type="@salesforce/schema/OperatingHours[]"
+        label="OperatingHours records"
+        role="inputOnly"
+      /><property
+        name="timeSlots"
+        type="@salesforce/schema/TimeSlot[]"
+        label="Supplied time slots"
+        role="inputOnly"
+      /><property
+        name="holidays"
+        type="@salesforce/schema/Holiday[]"
+        label="Supplied holidays"
+        role="inputOnly"
+      /><property
+        name="fixedHours"
+        type="String"
+        label="Fixed hours configuration"
+        role="inputOnly"
+      /><property
+        name="operatingHoursIdsText"
+        type="String"
+        label="Fixed allowed OperatingHours IDs"
+        role="inputOnly"
+        description="Comma-separated IDs, combined with any supplied ID collection."
+      /></targetConfig></targetConfigs>
+</LightningComponentBundle>

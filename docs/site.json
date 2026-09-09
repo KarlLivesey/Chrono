@@ -1,0 +1,61 @@
+{
+  "title": "Chrono",
+  "version": "0.1.0.19",
+  "packageVersionId": "04tgK000000KFNtQAO",
+  "url": "https://karllivesey.github.io/Chrono",
+  "navigation": [
+    {
+      "label": "Start here",
+      "items": [
+        ["Overview", "index.md"],
+        ["Install Chrono", "handbook/installation.md"],
+        ["Your first Flow", "handbook/first-flow.md"],
+        ["Apex quick start", "handbook/apex.md"],
+        ["Example library", "handbook/examples.md"]
+      ]
+    },
+    {
+      "label": "Work with time",
+      "items": [
+        ["Values & ISO formats", "handbook/types.md"],
+        ["ISO transport", "handbook/iso-formats.md"],
+        ["Timezones & clock changes", "handbook/timezones.md"],
+        ["Arithmetic", "handbook/arithmetic.md"],
+        ["Operating hours", "handbook/operating-hours.md"],
+        ["Availability", "handbook/availability.md"],
+        ["Time allocation", "handbook/allocation.md"],
+        ["Ranges & recurrence", "handbook/ranges-recurrence.md"],
+        ["Formatting & locale", "handbook/formatting.md"]
+      ]
+    },
+    {
+      "label": "Build experiences",
+      "items": [
+        ["Action configuration", "handbook/flow-configuration.md"],
+        ["Bulk & collections", "handbook/collections.md"],
+        ["Flow screens", "handbook/screen-configuration.md"],
+        ["LWC composition", "handbook/components.md"],
+        ["Record pages", "handbook/record-pages.md"]
+      ]
+    },
+    {
+      "label": "Reference",
+      "items": [
+        ["54 Flow actions", "reference/actions/index.md"],
+        ["Global Apex API", "reference/apex/index.md"],
+        ["Components", "reference/components/index.md"],
+        ["Bulk Apex (0.2 development)", "bulk-apex-services.md"]
+      ]
+    },
+    {
+      "label": "Keep it reliable",
+      "items": [
+        ["Permissions", "handbook/security.md"],
+        ["Troubleshooting", "handbook/troubleshooting.md"],
+        ["Limits & performance", "handbook/limits.md"],
+        ["Release notes", "handbook/releases.md"],
+        ["Service audit", "service-audit-2026-09.md"]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+<template>
+  <fieldset class="slds-m-bottom_small">
+    <legend class="slds-form-element__legend slds-form-element__label">
+      <span>{label}</span>
+      <template lwc:if={helpText}>
+        <lightning-helptext content={helpText}></lightning-helptext>
+      </template>
+    </legend>
+    <div class="value-row">
+      <template lwc:if={referenceOnly}></template>
+      <template lwc:else>
+        <lightning-button-menu
+          icon-name={sourceIcon}
+          alternative-text={sourceLabel}
+          title={sourceLabel}
+          variant="border"
+          menu-alignment="auto"
+          onselect={changeSource}
+        >
+          <lightning-menu-item
+            label="Search Resources"
+            value="reference"
+            icon-name="utility:collection"
+            checked={isReference}
+          ></lightning-menu-item>
+          <lightning-menu-item
+            label={literalLabel}
+            value="literal"
+            icon-name={literalIcon}
+            checked={isLiteral}
+          ></lightning-menu-item>
+        </lightning-button-menu>
+      </template>
+      <div class="value-control">
+        <template lwc:if={isReference}>
+          <c-chrono-flow-resource-picker
+            label={label}
+            value={value}
+            value-type={valueType}
+            accepted-types={acceptedTypes}
+            object-type={objectType}
+            builder-context={builderContext}
+            automatic-output-variables={automaticOutputVariables}
+            onchoose={chooseResource}
+          ></c-chrono-flow-resource-picker>
+        </template>
+        <template lwc:elseif={isTimeBlocks}>
+          <c-chrono-time-block-editor
+            value={value}
+            onchange={changeValue}
+          ></c-chrono-time-block-editor>
+        </template>
+        <template lwc:elseif={searchable}>
+          <c-chrono-choice-lookup
+            label={label}
+            value={value}
+            options={options}
+            message={lookupMessage}
+            placeholder="Search timezones…"
+            onchoose={chooseLiteral}
+          >
+          </c-chrono-choice-lookup>
+        </template>
+        <template lwc:elseif={isBoolean}
+          ><lightning-input
+            type="checkbox"
+            label={label}
+            variant="label-hidden"
+            checked={value}
+            onchange={changeValue}
+          ></lightning-input
+        ></template>
+        <template lwc:elseif={hasOptions}
+          ><lightning-combobox
+            label={label}
+            variant="label-hidden"
+            value={value}
+            options={options}
+            onchange={changeValue}
+          ></lightning-combobox
+        ></template>
+        <template lwc:elseif={isMultiline}>
+          <lightning-textarea
+            label={label}
+            variant="label-hidden"
+            value={value}
+            onchange={changeValue}
+          ></lightning-textarea>
+        </template>
+        <template lwc:else
+          ><lightning-input
+            type={literalInputType}
+            label={label}
+            variant="label-hidden"
+            value={value}
+            onchange={changeValue}
+          ></lightning-input
+        ></template>
+      </div>
+    </div>
+  </fieldset>
+</template>

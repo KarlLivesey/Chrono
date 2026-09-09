@@ -1,0 +1,20 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.units {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  gap: 0.5rem;
+}
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}

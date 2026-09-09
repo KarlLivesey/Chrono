@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <InvocableActionExtension xmlns="http://soap.sforce.com/2006/04/metadata">
   <targets>
     <targetType>ActionParameter</targetType>
@@ -112,6 +112,96 @@
       <key>Group</key>
       <dataType>String</dataType>
       <value>Working schedule</value>
+    </attributes>
+  </targets>
+  <targets>
+    <targetType>ActionParameter</targetType>
+    <targetName>ChronoWorkingTimeAction.Request.startDate</targetName>
+    <attributes>
+      <key>Order</key>
+      <dataType>Integer</dataType>
+      <value>27</value>
+    </attributes>
+    <attributes>
+      <key>Group</key>
+      <dataType>String</dataType>
+      <value>Source value</value>
+    </attributes>
+  </targets>
+  <targets>
+    <targetType>ActionParameter</targetType>
+    <targetName>ChronoWorkingTimeAction.Request.startTime</targetName>
+    <attributes>
+      <key>Order</key>
+      <dataType>Integer</dataType>
+      <value>28</value>
+    </attributes>
+    <attributes>
+      <key>Group</key>
+      <dataType>String</dataType>
+      <value>Source value</value>
+    </attributes>
+  </targets>
+  <targets>
+    <targetType>ActionParameter</targetType>
+    <targetName>ChronoWorkingTimeAction.Request.disambiguation</targetName>
+    <attributes>
+      <key>Order</key>
+      <dataType>Integer</dataType>
+      <value>29</value>
+    </attributes>
+    <attributes>
+      <key>Group</key>
+      <dataType>String</dataType>
+      <value>Source value</value>
+    </attributes>
+    <attributes>
+      <key>ProvidedValuesList</key>
+      <dataType>String</dataType>
+      <value
+      >reject|Require an unambiguous time,earlier|First occurrence,later|Second occurrence</value>
+    </attributes>
+  </targets>
+  <targets>
+    <targetType>ActionParameter</targetType>
+    <targetName>ChronoWorkingTimeAction.Request.operatingHours</targetName>
+    <attributes>
+      <key>Order</key>
+      <dataType>Integer</dataType>
+      <value>30</value>
+    </attributes>
+    <attributes>
+      <key>Group</key>
+      <dataType>String</dataType>
+      <value>Working hours</value>
+    </attributes>
+  </targets>
+  <targets>
+    <targetType>ActionParameter</targetType>
+    <targetName>ChronoWorkingTimeAction.Request.timeSlots</targetName>
+    <attributes>
+      <key>Order</key>
+      <dataType>Integer</dataType>
+      <value>31</value>
+    </attributes>
+    <attributes>
+      <key>Group</key>
+      <dataType>String</dataType>
+      <value>Working hours</value>
+    </attributes>
+  </targets>
+  <targets>
+    <targetType>ActionParameter</targetType>
+    <targetName>ChronoWorkingTimeAction.Request.holidays</targetName>
+    <attributes>
+      <key>Order</key>
+      <dataType>Integer</dataType>
+      <value>32</value>
+    </attributes>
+    <attributes>
+      <key>Group</key>
+      <dataType>String</dataType>
+      <value>Working hours</value>
     </attributes>
   </targets>
 </InvocableActionExtension>

@@ -1,0 +1,46 @@
+<template
+  ><fieldset>
+    <legend class="slds-form-element__label">{label}</legend>
+    <div class="fields">
+      <lightning-combobox
+        data-field="month"
+        label="Month"
+        value={month}
+        options={months}
+        required={required}
+        disabled={disabled}
+        onchange={change}
+      ></lightning-combobox
+      ><template lwc:if={yearMonth}
+        ><lightning-input
+          data-field="year"
+          type="number"
+          label="Year"
+          min="1"
+          max="9999"
+          step="1"
+          value={year}
+          required={required}
+          disabled={disabled}
+          onchange={change}
+        ></lightning-input></template
+      ><template lwc:else
+        ><lightning-input
+          data-field="day"
+          type="number"
+          label="Day"
+          min="1"
+          max="31"
+          step="1"
+          value={day}
+          required={required}
+          disabled={disabled}
+          onchange={change}
+        ></lightning-input
+      ></template>
+    </div>
+    <template lwc:if={error}
+      ><div class="slds-text-color_error" role="alert">{error}</div></template
+    >
+  </fieldset></template
+>

@@ -226,7 +226,104 @@ private class ChronoFlowConsumerTest {
       results[1].instantValue,
       'Scalar and collection agree'
     );
+    assertWorkingDifferences(
+      hours.Id,
+      item.startValue,
+      (String) scalar.getVariableValue('valueResult')
+    );
     Test.stopTest();
+  }
+  private static void assertWorkingDifferences(
+    Id hoursId,
+    String startValue,
+    String endValue
+  ) {
+    Map<String, Object> differenceInputs = new Map<String, Object>{
+      'startValue' => startValue,
+      'endValue' => endValue,
+      'operatingHoursId' => String.valueOf(hoursId)
+    };
+    Flow.Interview difference = start(
+      'ChronoDifferenceHarness',
+      differenceInputs
+    );
+    assertSuccess(difference);
+    Assert.areEqual(
+      3600000,
+      difference.getVariableValue('milliseconds'),
+      'Real Flow passes optional OperatingHours ID'
+    );
+    skel.ChronoDifferenceInput pair = new skel.ChronoDifferenceInput();
+    pair.startValue = (String) differenceInputs.get('endValue');
+    pair.endValue = startValue;
+    pair.operatingHoursId = hoursId;
+    Flow.Interview differenceCollection = start(
+      'ChronoDifferenceCollectionHarness',
+      new Map<String, Object>{
+        'items' => new List<skel.ChronoDifferenceInput>{ pair, pair }
+      }
+    );
+    assertSuccess(differenceCollection);
+    List<skel.ChronoFlowResult> differences = (List<skel.ChronoFlowResult>) differenceCollection.getVariableValue(
+      'results'
+    );
+    Assert.areEqual(
+      2,
+      differences.size(),
+      'Real collection Flow preserves items'
+    );
+    Assert.areEqual(
+      -3600000L,
+      differences[1].milliseconds,
+      'Real collection Flow passes schedule field'
+    );
+    assertBatchedWorkingDifferences(differenceInputs);
+  }
+  private static void assertBatchedWorkingDifferences(
+    Map<String, Object> differenceInputs
+  ) {
+    String orgNamespace = [SELECT NamespacePrefix FROM Organization LIMIT 1]
+    .NamespacePrefix;
+    Invocable.Action action = Invocable.Action.createCustomAction(
+      'flow',
+      orgNamespace,
+      'ChronoDifferenceHarness'
+    );
+    List<Map<String, Object>> interviews = new List<Map<String, Object>>();
+    for (Integer i = 0; i < 200; i++) {
+      interviews.add(differenceInputs);
+    }
+    action.setInvocations(interviews);
+    Integer beforeQueries = Limits.getQueries();
+    List<Invocable.Action.Result> batched = action.invoke();
+    Assert.areEqual(200, batched.size(), 'Real Flow batches 200 interviews');
+    for (Invocable.Action.Result result : batched) {
+      Assert.isTrue(result.isSuccess(), 'Flow invocation succeeds');
+      Assert.areEqual(
+        true,
+        result.getOutputParameters().get('success'),
+        'Working difference succeeds'
+      );
+      Assert.areEqual(
+        3600000,
+        result.getOutputParameters().get('milliseconds'),
+        'Every Flow interview returns one working hour'
+      );
+    }
+    // The subscriber caller's counter does not expose skel's queries. The
+    // package tests assert the exact three-query load inside that namespace.
+    if (orgNamespace == 'skel') {
+      Assert.areEqual(
+        3,
+        Limits.getQueries() - beforeQueries,
+        'Platform batches all difference schedule queries'
+      );
+    } else {
+      Assert.isTrue(
+        Limits.getQueries() - beforeQueries <= 3,
+        'Batch does not add per-interview subscriber queries'
+      );
+    }
   }
   @IsTest
   static void flowRuntimeBatchesTwoHundredInterviews() {

@@ -1,0 +1,148 @@
+<template>
+  <div
+    class={containerClass}
+    onkeydown={keydown}
+    onpointerdown={pointerdown}
+    onfocusout={focusout}
+    onfocusin={focusin}
+  >
+    <div
+      class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+      role="none"
+    >
+      <input
+        lwc:ref="input"
+        class="slds-input"
+        type="text"
+        role="combobox"
+        aria-label={label}
+        aria-expanded={expanded}
+        aria-controls="resources"
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
+        autocomplete="off"
+        placeholder="Search resources…"
+        value={inputValue}
+        onclick={open}
+        oninput={search}
+      />
+      <template lwc:if={value}>
+        <button
+          class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+          title="Clear resource"
+          onclick={clear}
+        >
+          <lightning-icon
+            icon-name="utility:close"
+            size="xx-small"
+            alternative-text="Clear resource"
+          ></lightning-icon>
+        </button>
+      </template>
+      <template lwc:else>
+        <lightning-icon
+          class="slds-input__icon slds-input__icon_right search-icon"
+          icon-name="utility:search"
+          size="x-small"
+          alternative-text="Search"
+        ></lightning-icon>
+      </template>
+    </div>
+    <template lwc:if={opened}>
+      <div class="slds-dropdown slds-dropdown_fluid dropdown">
+        <div class="heading slds-p-horizontal_small slds-p-vertical_x-small">
+          <template lwc:if={nested}
+            ><button
+              class="slds-button slds-button_icon"
+              title="Back"
+              onclick={back}
+            >
+              <lightning-icon
+                icon-name="utility:chevronleft"
+                size="xx-small"
+                alternative-text="Back"
+              ></lightning-icon></button
+          ></template>
+          <span class="slds-truncate">{title}</span>
+        </div>
+        <div id="resources" role="listbox" aria-label={label} class="results">
+          <template for:each={groups} for:item="group">
+            <div key={group.label} role="group" aria-label={group.label}>
+              <div
+                class="slds-text-title_bold slds-p-horizontal_small slds-p-top_x-small"
+                role="presentation"
+              >
+                {group.label}
+              </div>
+              <template for:each={group.rows} for:item="row">
+                <div key={row.value} role="presentation" class="resource-row">
+                  <button
+                    class="slds-button slds-button_reset resource"
+                    role="option"
+                    aria-selected={row.selected}
+                    tabindex="-1"
+                    data-option="true"
+                    data-value={row.value}
+                    onclick={choose}
+                    title={row.detail}
+                  >
+                    <lightning-icon
+                      icon-name={row.icon}
+                      size="x-small"
+                      alternative-text=""
+                    ></lightning-icon>
+                    <span class="slds-truncate"
+                      >{row.label}<small class="slds-truncate"
+                        >{row.detail}</small
+                      ></span
+                    >
+                    <template lwc:if={row.containerOnly}
+                      ><lightning-icon
+                        class="chevron"
+                        icon-name="utility:chevronright"
+                        size="xx-small"
+                        alternative-text="Browse"
+                      ></lightning-icon
+                    ></template>
+                  </button>
+                  <template lwc:if={row.selectable}
+                    ><template lwc:if={row.navigable}>
+                      <button
+                        class="slds-button slds-button_icon"
+                        tabindex="-1"
+                        data-option="true"
+                        data-value={row.value}
+                        onclick={browse}
+                        title={row.browseLabel}
+                      >
+                        <lightning-icon
+                          icon-name="utility:chevronright"
+                          size="xx-small"
+                          alternative-text={row.browseLabel}
+                        ></lightning-icon>
+                      </button> </template
+                  ></template>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+        <template lwc:if={pending}
+          ><p class="slds-p-around_small" role="status">
+            Finding compatible resources…
+          </p></template
+        >
+        <template lwc:if={empty}
+          ><p class="slds-p-around_small" role="status">
+            No compatible resources found.
+          </p></template
+        >
+        <template lwc:if={error}
+          ><p class="slds-p-around_small slds-text-color_error" role="alert">
+            {error}
+          </p></template
+        >
+      </div>
+    </template>
+  </div>
+</template>

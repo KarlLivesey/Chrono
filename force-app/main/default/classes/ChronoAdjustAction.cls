@@ -71,20 +71,6 @@ global with sharing class ChronoAdjustAction {
     @SuppressWarnings('PMD.EmptyStatementBlock')
     global Request() {
     }
-    private ChronoAdjustInput toInput() {
-      ChronoAdjustInput item = new ChronoAdjustInput();
-      item.valueType = this.valueType;
-      item.value = this.value;
-      item.instantValue = this.instantValue;
-      item.dateValue = this.dateValue;
-      item.timeValue = this.timeValue;
-      item.timeZoneId = this.timeZoneId;
-      item.disambiguation = this.disambiguation;
-      item.duration = this.duration;
-      item.amount = this.amount;
-      item.unit = this.unit;
-      return item;
-    }
   }
 
   /** @description Add calendar or elapsed units to a Chrono value. Bulkified across Flow interviews.
@@ -94,16 +80,38 @@ global with sharing class ChronoAdjustAction {
   @InvocableMethod(
     label='Chrono: Add or subtract time'
     description='Add calendar or elapsed units to a Chrono value.'
-    category='Chrono'
+    configurationEditor='skel-chrono-adjust-editor'
+    category='Chrono: Calculations'
     iconName='slds:standard:event'
   )
   global static List<ChronoFlowResult> run(List<Request> requests) {
-    List<Object> items = new List<Object>();
+    List<ChronoFlowResult> results = new List<ChronoFlowResult>();
+    List<ChronoAdjustInput> inputs = new List<ChronoAdjustInput>();
     if (requests != null) {
       for (Request request : requests) {
-        items.add(request == null ? null : request.toInput());
+        inputs.add(copyInput(request));
       }
     }
-    return new ChronoFlowBatch('Adjust').run(items);
+    for (ChronoValueResult item : ChronoCalculationService.adjust(inputs)) {
+      results.add(ChronoFlowServiceResults.value(item));
+    }
+    return results;
+  }
+  private static ChronoAdjustInput copyInput(Request request) {
+    if (request == null) {
+      return null;
+    }
+    ChronoAdjustInput item = new ChronoAdjustInput();
+    item.valueType = request.valueType;
+    item.value = request.value;
+    item.instantValue = request.instantValue;
+    item.dateValue = request.dateValue;
+    item.timeValue = request.timeValue;
+    item.timeZoneId = request.timeZoneId;
+    item.disambiguation = request.disambiguation;
+    item.duration = request.duration;
+    item.amount = request.amount;
+    item.unit = request.unit;
+    return item;
   }
 }

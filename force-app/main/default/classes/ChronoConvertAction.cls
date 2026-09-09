@@ -71,20 +71,6 @@ global with sharing class ChronoConvertAction {
     @SuppressWarnings('PMD.EmptyStatementBlock')
     global Request() {
     }
-    private ChronoConvertInput toInput() {
-      ChronoConvertInput item = new ChronoConvertInput();
-      item.valueType = this.valueType;
-      item.value = this.value;
-      item.instantValue = this.instantValue;
-      item.dateValue = this.dateValue;
-      item.timeValue = this.timeValue;
-      item.targetType = this.targetType;
-      item.timeZoneId = this.timeZoneId;
-      item.disambiguation = this.disambiguation;
-      item.referenceDate = this.referenceDate;
-      item.referenceTime = this.referenceTime;
-      return item;
-    }
   }
 
   /** @description Convert or normalise all eight Chrono value types. Bulkified across Flow interviews.
@@ -94,16 +80,38 @@ global with sharing class ChronoConvertAction {
   @InvocableMethod(
     label='Chrono: Convert date/time'
     description='Convert or normalise all eight Chrono value types.'
-    category='Chrono'
+    configurationEditor='skel-chrono-convert-editor'
+    category='Chrono: Values'
     iconName='slds:standard:event'
   )
   global static List<ChronoFlowResult> run(List<Request> requests) {
-    List<Object> items = new List<Object>();
+    List<ChronoFlowResult> results = new List<ChronoFlowResult>();
+    List<ChronoConvertInput> inputs = new List<ChronoConvertInput>();
     if (requests != null) {
       for (Request request : requests) {
-        items.add(request == null ? null : request.toInput());
+        inputs.add(copyInput(request));
       }
     }
-    return new ChronoFlowBatch('Convert').run(items);
+    for (ChronoValueResult item : ChronoValueService.convert(inputs)) {
+      results.add(ChronoFlowServiceResults.value(item));
+    }
+    return results;
+  }
+  private static ChronoConvertInput copyInput(Request request) {
+    if (request == null) {
+      return null;
+    }
+    ChronoConvertInput item = new ChronoConvertInput();
+    item.valueType = request.valueType;
+    item.value = request.value;
+    item.instantValue = request.instantValue;
+    item.dateValue = request.dateValue;
+    item.timeValue = request.timeValue;
+    item.targetType = request.targetType;
+    item.timeZoneId = request.timeZoneId;
+    item.disambiguation = request.disambiguation;
+    item.referenceDate = request.referenceDate;
+    item.referenceTime = request.referenceTime;
+    return item;
   }
 }

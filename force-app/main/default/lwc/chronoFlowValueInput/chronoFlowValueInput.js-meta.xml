@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningComponentBundle
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+><apiVersion>67.0</apiVersion><isExposed>true</isExposed><masterLabel
+  >Chrono: Duration, time or partial date</masterLabel><description
+  >Compact ISO value input with native calendar and clock controls.</description><targets
+  ><target>lightning__FlowScreen</target></targets><targetConfigs><targetConfig
+      targets="lightning__FlowScreen"
+    ><property
+        name="kind"
+        type="String"
+        label="Value type"
+        default="duration"
+        datasource="duration,time,yearmonth,monthday"
+        role="inputOnly"
+      /><property
+        name="label"
+        type="String"
+        label="Label"
+        default="Value"
+        role="inputOnly"
+      /><property
+        name="required"
+        type="Boolean"
+        label="Required"
+        default="false"
+        role="inputOnly"
+      /><property
+        name="disabled"
+        type="Boolean"
+        label="Read only"
+        default="false"
+        role="inputOnly"
+      /><property
+        name="value"
+        type="String"
+        label="ISO value"
+        description="Initial and selected ISO duration, time, year/month or month/day."
+      /></targetConfig></targetConfigs></LightningComponentBundle>

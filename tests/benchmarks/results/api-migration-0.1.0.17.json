@@ -1,0 +1,126 @@
+{
+  "createdAt": "2026-09-08T13:32:21.004014+00:00",
+  "targetOrg": "chrono-subscriber",
+  "label": "0.1.0.17",
+  "operationsPerSample": 200,
+  "measuredSamples": 3,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "parse-format-Duration",
+      "description": "Parse and serialise Duration through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 84,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 635,
+          "heapAfterBytes": 1690,
+          "cpuMs": 83,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 166,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1978,
+          "cpuMs": 82,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 249,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1978,
+          "cpuMs": 83,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 335,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1978,
+          "cpuMs": 86,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perCase",
+      "cpuMs": {
+        "min": 82,
+        "median": 83,
+        "max": 86
+      },
+      "medianCpuMsPerOperation": 0.415
+    },
+    {
+      "name": "time-allocation-distinct",
+      "description": "200 distinct four-hour requests across four block zones with 64 holidays and four named blocks; exact block totals asserted.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 5222,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 175530,
+          "heapAfterBytes": 217926,
+          "cpuMs": 5188,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 5582,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 175346,
+          "heapAfterBytes": 217742,
+          "cpuMs": 5550,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4846,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 175530,
+          "heapAfterBytes": 217926,
+          "cpuMs": 4820,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4843,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 175530,
+          "heapAfterBytes": 217926,
+          "cpuMs": 4816,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 4816,
+        "median": 4820,
+        "max": 5550
+      },
+      "medianCpuMsPerOperation": 24.1
+    }
+  ]
+}

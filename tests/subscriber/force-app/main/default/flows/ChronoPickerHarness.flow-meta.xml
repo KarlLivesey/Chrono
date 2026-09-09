@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata"><apiVersion
+  >67.0</apiVersion><interviewLabel>Chrono picker harness</interviewLabel><label
+  >Chrono picker harness</label><processType>Flow</processType><screens><name
+    >Picker</name><label>Chrono picker contract</label><locationX
+    >0</locationX><locationY>0</locationY><allowBack
+    >true</allowBack><allowFinish>true</allowFinish><allowPause
+    >false</allowPause>
+<fields><name>DateOnly</name><extensionName
+      >skel:chronoFlowDateTime</extensionName><fieldType
+      >ComponentInstance</fieldType><inputParameters><name>mode</name><value
+        ><stringValue
+          >date</stringValue></value></inputParameters><inputsOnNextNavToAssocScrn
+      >UseStoredValues</inputsOnNextNavToAssocScrn><isRequired
+      >true</isRequired><storeOutputAutomatically
+      >true</storeOutputAutomatically></fields><fields><name
+      >SuppliedRecords</name><extensionName
+      >skel:chronoFlowDateTime</extensionName><fieldType
+      >ComponentInstance</fieldType><inputParameters><name>mode</name><value
+        ><stringValue
+          >datetime</stringValue></value></inputParameters><inputParameters
+      ><name>operatingHoursMode</name><value><stringValue
+          >supplied</stringValue></value></inputParameters><inputParameters
+      ><name>operatingHoursRecord</name><value><elementReference
+          >Hours</elementReference></value></inputParameters><inputParameters
+      ><name>timeSlots</name><value><elementReference
+          >Slots</elementReference></value></inputParameters><inputParameters
+      ><name>holidays</name><value><elementReference
+          >Holidays</elementReference></value></inputParameters><inputsOnNextNavToAssocScrn
+      >UseStoredValues</inputsOnNextNavToAssocScrn><isRequired
+      >true</isRequired><storeOutputAutomatically
+      >true</storeOutputAutomatically></fields><fields><name
+      >ApexDefined</name><extensionName
+      >skel:chronoFlowDateTime</extensionName><fieldType
+      >ComponentInstance</fieldType><inputParameters><name>mode</name><value
+        ><stringValue
+          >datetime</stringValue></value></inputParameters><inputParameters
+      ><name>operatingHoursMode</name><value><stringValue
+          >apex</stringValue></value></inputParameters><inputsOnNextNavToAssocScrn
+      >UseStoredValues</inputsOnNextNavToAssocScrn><isRequired
+      >true</isRequired><storeOutputAutomatically
+      >true</storeOutputAutomatically></fields></screens><start><locationX
+    >0</locationX><locationY>0</locationY><connector><targetReference
+      >Picker</targetReference></connector></start><status
+  >Active</status><variables><name>Hours</name><dataType
+    >SObject</dataType><isCollection>false</isCollection><isInput
+    >true</isInput><isOutput>false</isOutput><objectType
+    >OperatingHours</objectType></variables><variables><name
+    >Slots</name><dataType>SObject</dataType><isCollection
+    >true</isCollection><isInput>true</isInput><isOutput
+    >false</isOutput><objectType>TimeSlot</objectType></variables><variables
+  ><name>Holidays</name><dataType>SObject</dataType><isCollection
+    >true</isCollection><isInput>true</isInput><isOutput
+    >false</isOutput><objectType>Holiday</objectType></variables></Flow>

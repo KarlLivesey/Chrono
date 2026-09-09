@@ -16,6 +16,59 @@ private class ChronoFlowConvertTest {
     return runConvert(new List<ChronoConvertInput>{ item })[0];
   }
   @IsTest
+  static void fractionalSecondsTruncateWithoutRounding() {
+    List<String> kinds = new List<String>{
+      'ZonedDateTime',
+      'Instant',
+      'Duration',
+      'PlainTime',
+      'PlainDateTime',
+      'Duration',
+      'Instant'
+    };
+    List<String> supplied = new List<String>{
+      '1995-12-07T03:24:30.0000035-08:00[America/Los_Angeles]',
+      '2021-01-13T20:57:01.500944804Z',
+      'P1Y2M3W4DT5H6M7.987654321S',
+      '23:59:59.999999999',
+      '2026-12-31T23:59:59.999999999',
+      '-PT0.0009S',
+      '1969-12-31T23:59:59.999999999Z'
+    };
+    List<String> expected = new List<String>{
+      '1995-12-07T03:24:30.000-08:00[America/Los_Angeles]',
+      '2021-01-13T20:57:01.500Z',
+      'P14M25DT18367.987S',
+      '23:59:59.999',
+      '2026-12-31T23:59:59.999',
+      'PT0S',
+      '1969-12-31T23:59:59.999Z'
+    };
+    List<ChronoConvertInput> items = new List<ChronoConvertInput>();
+    for (Integer i = 0; i < kinds.size(); i++) {
+      items.add(input(kinds[i], supplied[i], null));
+    }
+    List<ChronoFlowResult> results = runConvert(items);
+    for (Integer i = 0; i < results.size(); i++) {
+      Assert.isTrue(
+        results[i].success,
+        'Conversion failed: ' + results[i].errorMessage
+      );
+      Assert.areEqual(
+        expected[i],
+        results[i].value,
+        'Fractional seconds truncate: ' + supplied[i]
+      );
+    }
+    Assert.areEqual(
+      -1987L,
+      ChronoDurationService.getMilliseconds(
+        ChronoDurationService.parseIso('-PT1.987654321S')
+      ),
+      'Negative durations truncate towards zero'
+    );
+  }
+  @IsTest
   static void allEightTypesNormalise() {
     List<String> types = new List<String>{
       'Instant',

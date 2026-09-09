@@ -1,0 +1,92 @@
+<template
+  ><fieldset>
+    <legend class="slds-form-element__label">{label}</legend>
+    <c-chrono-date-time-control
+      label="Starts at"
+      initial-chrono-value={initialValue}
+      time-zone-id={timeZoneId}
+      allow-time-zone-selection={allowTimeZoneSelection}
+      disabled={disabled}
+      required
+      onvaluechange={startChanged}
+    ></c-chrono-date-time-control>
+    <div class="fields">
+      <lightning-combobox
+        label="Repeat"
+        data-field="frequency"
+        value={frequency}
+        options={frequencies}
+        disabled={disabled}
+        onchange={change}
+      ></lightning-combobox
+      ><lightning-input
+        label="Every"
+        data-field="interval"
+        type="number"
+        min="1"
+        step="1"
+        value={interval}
+        disabled={disabled}
+        onchange={change}
+      ></lightning-input
+      ><lightning-input
+        label="Occurrences"
+        data-field="count"
+        type="number"
+        min="1"
+        max={maximumResults}
+        step="1"
+        value={count}
+        disabled={disabled}
+        onchange={change}
+      ></lightning-input>
+    </div>
+    <template lwc:if={weekly}
+      ><lightning-checkbox-group
+        label="Weekdays (blank uses the starting weekday)"
+        data-field="weekdays"
+        options={weekdayOptions}
+        value={weekdays}
+        disabled={disabled}
+        onchange={change}
+      ></lightning-checkbox-group></template
+    ><lightning-input
+      type="date"
+      date-style="short"
+      label="Search through"
+      data-field="untilDate"
+      value={untilDate}
+      required
+      disabled={disabled}
+      onchange={change}
+    ></lightning-input
+    ><template lwc:if={schedule}
+      ><lightning-combobox
+        label="Outside operating hours"
+        data-field="closedPolicy"
+        options={closedOptions}
+        value={closedPolicy}
+        disabled={disabled}
+        onchange={change}
+      ></lightning-combobox
+    ></template>
+    <p class="slds-text-body_small slds-m-vertical_x-small">
+      Missing local times are skipped; repeated times use the first occurrence.
+    </p>
+    <lightning-button
+      label="Preview occurrences"
+      disabled={previewDisabled}
+      onclick={preview}
+    ></lightning-button
+    ><template lwc:if={pending}
+      ><span role="status"> Loading preview…</span></template
+    ><template lwc:if={error}
+      ><div class="slds-text-color_error" role="alert">{error}</div></template
+    >
+    <ol class="preview slds-list_ordered">
+      <template for:each={rows} for:item="row"
+        ><li key={row.key}>{row.label}</li></template
+      >
+    </ol>
+  </fieldset></template
+>

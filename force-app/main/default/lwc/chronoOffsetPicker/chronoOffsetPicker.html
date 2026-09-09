@@ -1,0 +1,43 @@
+<template>
+  <c-chrono-picker-popover
+    lwc:ref="popover"
+    label={label}
+    heading={heading}
+    warning={warning}
+    disabled={unavailable}
+    compact
+    onopen={opened}
+  >
+    <p class="slds-text-title_bold">{heading}</p>
+    <template lwc:if={hasChoices}
+      ><c-chrono-picker-menu
+        label="Occurrences or corrections"
+        options={choices}
+        value={selected}
+        onchoose={choose}
+      ></c-chrono-picker-menu
+    ></template>
+    <lightning-button
+      variant="base"
+      label="Return to automatic"
+      onclick={automatic}
+    ></lightning-button>
+    <template lwc:if={allowOverride}>
+      <div class="override slds-border_top">
+        <div class="override-row">
+          <lightning-input
+            label="UTC offset"
+            field-level-help="Keeps the entered clock time, even when this offset differs from the timezone's rules."
+            value={draft}
+            placeholder="+01:00"
+            onchange={editOffset}
+          ></lightning-input>
+          <lightning-button label="Apply" onclick={apply}></lightning-button>
+        </div>
+        <template lwc:if={error}
+          ><p class="slds-text-color_error" role="alert">{error}</p></template
+        >
+      </div>
+    </template>
+  </c-chrono-picker-popover>
+</template>

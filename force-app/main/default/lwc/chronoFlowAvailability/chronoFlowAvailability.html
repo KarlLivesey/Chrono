@@ -1,0 +1,16 @@
+<template
+  ><c-chrono-availability-picker
+    lwc:ref="control"
+    input={input}
+    value={rangeValue}
+    label={label}
+    required={required}
+    disabled={disabled}
+    onvaluechange={change}
+  ></c-chrono-availability-picker
+  ><template lwc:if={externalError}
+    ><lightning-formatted-rich-text
+      class="slds-text-color_error"
+      value={externalError}
+    ></lightning-formatted-rich-text></template
+></template>

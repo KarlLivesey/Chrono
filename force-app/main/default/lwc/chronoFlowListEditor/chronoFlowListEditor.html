@@ -1,0 +1,49 @@
+<template>
+  <div class="slds-form-element">
+    <span class="slds-form-element__label">{label}</span>
+    <template for:each={items} for:item="item"
+      ><div class="item" key={item.value}>
+        <span>{item.label}</span
+        ><lightning-button-icon
+          icon-name="utility:close"
+          alternative-text="Remove value"
+          data-value={item.value}
+          onclick={remove}
+        ></lightning-button-icon></div
+    ></template>
+    <lightning-button
+      variant="base"
+      label={addLabel}
+      icon-name="utility:add"
+      onclick={open}
+    ></lightning-button>
+    <template lwc:if={opened}
+      ><div class="choices">
+        <lightning-input
+          type="search"
+          label={addLabel}
+          placeholder="Search…"
+          onchange={search}
+        ></lightning-input>
+        <template for:each={available} for:item="option"
+          ><button
+            key={option.value}
+            class="slds-button slds-button_reset choice"
+            data-value={option.value}
+            onclick={add}
+          >
+            <span>{option.label}</span><span>{option.detail}</span
+            ><span>＋</span>
+          </button></template
+        >
+        <template lwc:if={pending}
+          ><p role="status">Loading choices…</p></template
+        ><template lwc:if={empty}
+          ><p>No matching choices. Try another search.</p></template
+        >
+      </div></template
+    ><template lwc:if={error}
+      ><p class="slds-text-color_error" role="alert">{error}</p></template
+    >
+  </div>
+</template>

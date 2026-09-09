@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   quality:
-    name: Formatting and Apex lint
+    name: Formatting, component tests and Apex lint
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -31,11 +31,13 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
-      - name: Install formatting dependencies
+      - name: Install development dependencies
         run: npm ci
       - name: Install Salesforce analysis tools
         run: |
           npm install --global @salesforce/cli@2.150.6
           sf plugins install @salesforce/plugin-code-analyzer@5.14.0
-      - name: Check formatting and Apex
+      - name: Check formatting, components, Temporal and Apex
         run: npm run check
+      - name: Build and verify documentation
+        run: npm run docs:build && npm run test:docs

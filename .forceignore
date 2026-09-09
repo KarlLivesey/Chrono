@@ -1,3 +1,7 @@
 **/.gitkeep
 **/.DS_Store
 **/README.md
+
+**/__tests__/**
+**/jsconfig.json
+**/.eslintrc*

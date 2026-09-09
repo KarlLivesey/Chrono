@@ -1,0 +1,82 @@
+<template>
+  <div
+    class="lookup"
+    onkeydown={keydown}
+    onpointerdown={pointerdown}
+    onfocusin={focusin}
+    onfocusout={focusout}
+  >
+    <div class="slds-input-has-icon slds-input-has-icon_right">
+      <input
+        class="slds-input"
+        lwc:ref="input"
+        type="text"
+        role="combobox"
+        aria-label={label}
+        aria-expanded={expanded}
+        aria-controls="choices"
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
+        autocomplete="off"
+        placeholder={placeholder}
+        value={text}
+        onclick={open}
+        oninput={search}
+      />
+      <template lwc:if={value}
+        ><button
+          class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+          title="Clear selection"
+          onclick={clear}
+        >
+          <lightning-icon
+            icon-name="utility:close"
+            alternative-text="Clear selection"
+            size="xx-small"
+          ></lightning-icon></button
+      ></template>
+      <template lwc:else
+        ><lightning-icon
+          class="slds-input__icon slds-input__icon_right search"
+          icon-name="utility:search"
+          alternative-text="Search"
+          size="x-small"
+        ></lightning-icon
+      ></template>
+    </div>
+    <template lwc:if={opened}>
+      <div class="slds-dropdown slds-dropdown_fluid dropdown">
+        <ul
+          class="slds-listbox slds-listbox_vertical results"
+          role="listbox"
+          id="choices"
+          aria-label={label}
+        >
+          <template for:each={rows} for:item="row"
+            ><li key={row.value} role="presentation">
+              <button
+                class="slds-button slds-button_reset choice slds-truncate"
+                role="option"
+                tabindex="-1"
+                aria-selected={row.selected}
+                data-value={row.value}
+                onclick={choose}
+                title={row.value}
+              >
+                {row.label}
+              </button>
+            </li></template
+          >
+        </ul>
+        <template lwc:if={empty}
+          ><p class="slds-p-around_small" role="status">
+            No matching choices.
+          </p></template
+        >
+      </div>
+    </template>
+    <template lwc:if={message}
+      ><p class="slds-text-color_error" role="alert">{message}</p></template
+    >
+  </div>
+</template>

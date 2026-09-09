@@ -1,0 +1,184 @@
+{
+  "createdAt": "2026-09-08T09:40:26.003873+00:00",
+  "targetOrg": "chrono-subscriber",
+  "label": "Chrono-0.1.0.12",
+  "operationsPerSample": 200,
+  "measuredSamples": 3,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "parse-format-Duration",
+      "description": "Parse and serialise Duration through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 90,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 606,
+          "heapAfterBytes": 1661,
+          "cpuMs": 89,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 178,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1949,
+          "cpuMs": 88,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 256,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1949,
+          "cpuMs": 77,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 338,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1949,
+          "cpuMs": 80,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perCase",
+      "cpuMs": {
+        "min": 77,
+        "median": 80,
+        "max": 88
+      },
+      "medianCpuMsPerOperation": 0.4
+    },
+    {
+      "name": "stress-availability-distinct",
+      "description": "200 distinct two-day windows across four schedule zones, ten weekly slots and 64 holidays.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4370,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 101897,
+          "heapAfterBytes": 170836,
+          "cpuMs": 3519,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 3884,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 101897,
+          "heapAfterBytes": 170836,
+          "cpuMs": 3129,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4285,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 101665,
+          "heapAfterBytes": 170604,
+          "cpuMs": 3466,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4027,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 101897,
+          "heapAfterBytes": 170836,
+          "cpuMs": 3239,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 3129,
+        "median": 3239,
+        "max": 3466
+      },
+      "medianCpuMsPerOperation": 16.195
+    },
+    {
+      "name": "stress-recurrence-distinct",
+      "description": "200 distinct ten-day daily rules across four schedule zones, ten weekly slots and 64 holidays; exact expected dates.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 5394,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37034,
+          "heapAfterBytes": 76477,
+          "cpuMs": 5349,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4936,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37034,
+          "heapAfterBytes": 76477,
+          "cpuMs": 4888,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4970,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37034,
+          "heapAfterBytes": 76477,
+          "cpuMs": 4919,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 6135,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37034,
+          "heapAfterBytes": 76477,
+          "cpuMs": 6089,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 4888,
+        "median": 4919,
+        "max": 6089
+      },
+      "medianCpuMsPerOperation": 24.595
+    }
+  ]
+}

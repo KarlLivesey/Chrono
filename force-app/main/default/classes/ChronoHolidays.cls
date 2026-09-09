@@ -24,6 +24,33 @@ public with sharing class ChronoHolidays {
     32,
     64
   };
+  /** @description Validates supplied native holiday dates, recurrence and partial-day bounds. */
+  public static void validate(List<Holiday> holidays) {
+    ChronoSupport.requireValue(holidays, 'Holidays');
+    for (Holiday holiday : holidays) {
+      ChronoSupport.requireValue(holiday, 'Holiday');
+      Date day = holiday.IsRecurrence == true
+        ? holiday.RecurrenceStartDate
+        : holiday.ActivityDate;
+      ChronoSupport.requireValue(day, 'Holiday date or recurrence start');
+      validateTimes(holiday);
+      occurs(holiday, day);
+    }
+  }
+  private static void validateTimes(Holiday holiday) {
+    if (
+      holiday.IsAllDay != true &&
+      (holiday.StartTimeInMinutes == null ||
+      holiday.EndTimeInMinutes == null ||
+      holiday.StartTimeInMinutes < 0 ||
+      holiday.EndTimeInMinutes > 1440 ||
+      holiday.StartTimeInMinutes >= holiday.EndTimeInMinutes)
+    ) {
+      throw new ChronoException(
+        'Holiday times must be ordered minute values within a day.'
+      );
+    }
+  }
   public static Integer weekday(Date day) {
     return Math.mod(
       Math.mod(Date.newInstance(1900, 1, 7).daysBetween(day), 7) + 7,
@@ -31,7 +58,7 @@ public with sharing class ChronoHolidays {
     );
   }
   public static Boolean occurs(Holiday holiday, Date day) {
-    if (!holiday.IsRecurrence) {
+    if (holiday.IsRecurrence != true) {
       return holiday.ActivityDate == day;
     }
     Date start = holiday.RecurrenceStartDate;

@@ -1,5 +1,5 @@
 // Copyright (c) 2026, Karl. SPDX-License-Identifier: BSD-3-Clause
-/** @description Calculate signed elapsed time between two instants. Collection inputs are also bulkified across Flow interviews. */
+/** @description Calculate signed elapsed time between two instants, optionally counting only OperatingHours. Collection inputs are also bulkified across Flow interviews. */
 @SuppressWarnings(
   'PMD.AvoidGlobalModifier'
 ) // Subscriber Flow action and invocable wrapper.
@@ -19,18 +19,19 @@ global with sharing class ChronoDifferenceCollectionAction {
     global Request() {
     }
   }
-  /** @description Calculate signed elapsed time between two instants. Flattens all interviews into one invocation-local batch.
+  /** @description Calculate signed elapsed time between two instants, optionally counting only OperatingHours. Flattens all interviews into one invocation-local batch.
    * @param requests One collection wrapper per interview.
    * @return One response per interview, with one result per item.
    */
   @InvocableMethod(
     label='Chrono: Elapsed difference (collection)'
-    description='Calculate signed elapsed time between two instants. Handles collections and batched interviews.'
-    category='Chrono'
+    description='Calculate signed elapsed time between two instants, optionally counting only OperatingHours. Handles collections and batched interviews.'
+    configurationEditor='skel-chrono-difference-collection-editor'
+    category='Chrono: Calculations'
     iconName='slds:standard:event'
   )
   global static List<ChronoFlowCollectionResult> run(List<Request> requests) {
-    List<Object> flat = new List<Object>();
+    List<ChronoDifferenceInput> inputs = new List<ChronoDifferenceInput>();
     List<Integer> sizes = new List<Integer>();
     if (requests != null) {
       for (Request request : requests) {
@@ -39,14 +40,17 @@ global with sharing class ChronoDifferenceCollectionAction {
           continue;
         }
         sizes.add(request.items.size());
-        for (ChronoDifferenceInput item : request.items) {
-          flat.add(item);
-        }
+        inputs.addAll(request.items);
       }
     }
-    return ChronoFlowBatch.regroup(
-      new ChronoFlowBatch('Difference').run(flat),
-      sizes
-    );
+    List<ChronoFlowResult> results = new List<ChronoFlowResult>();
+    for (
+      ChronoDurationCalculationResult item : ChronoCalculationService.difference(
+        inputs
+      )
+    ) {
+      results.add(ChronoFlowServiceResults.duration(item));
+    }
+    return ChronoFlowBatch.regroup(results, sizes);
   }
 }

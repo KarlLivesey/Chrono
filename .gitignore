@@ -8,3 +8,7 @@
 node_modules/
 coverage/
 *.log
+.docs-site/
+
+__pycache__/
+*.pyc

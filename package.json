@@ -12,10 +12,17 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "sf code-analyzer run --workspace force-app --workspace tests/subscriber/force-app --rule-selector pmd:Recommended --rule-selector pmd:AppExchange --severity-threshold 3 --view table",
-    "check": "npm run format:check && npm run lint"
+    "check": "npm run format:check && npm run test:contracts && npm run test:lwc && npm run test:temporal && npm run lint",
+    "test:contracts": "python3 scripts/check-service-boundaries.py && python3 scripts/check-global-api.py && python3 scripts/check-component-api.py && python3 -m unittest discover -s tests/contracts -p \"test_*.py\"",
+    "test:lwc": "sfdx-lwc-jest -- --runInBand",
+    "test:temporal": "node --harmony-temporal --test tests/javascript/*.test.mjs",
+    "docs:build": "python3 scripts/docs/generate.py && prettier --write docs/reference && node scripts/docs/build.mjs && python3 scripts/docs/package-examples.py && python3 scripts/docs/check.py",
+    "test:docs": "node --test tests/documentation/*.test.mjs"
   },
   "devDependencies": {
     "@prettier/plugin-xml": "3.4.2",
+    "@salesforce/sfdx-lwc-jest": "7.9.0",
+    "marked": "18.0.12",
     "prettier": "3.9.6",
     "prettier-plugin-apex": "2.3.0"
   }

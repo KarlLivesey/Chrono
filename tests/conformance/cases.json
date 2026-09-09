@@ -1,0 +1,327 @@
+[
+  {
+    "id": "london-winter",
+    "operation": "resolve",
+    "date": "2026-01-15",
+    "time": "10:00",
+    "zone": "Europe/London",
+    "expected": [
+      {
+        "choice": "exact",
+        "value": "2026-01-15T10:00:00.000+00:00[Europe/London]"
+      }
+    ]
+  },
+  {
+    "id": "london-summer",
+    "operation": "resolve",
+    "date": "2026-07-15",
+    "time": "10:00",
+    "zone": "Europe/London",
+    "expected": [
+      {
+        "choice": "exact",
+        "value": "2026-07-15T10:00:00.000+01:00[Europe/London]"
+      }
+    ]
+  },
+  {
+    "id": "different-dst-weeks",
+    "operation": "resolve",
+    "date": "2026-03-15",
+    "time": "10:00",
+    "zone": "America/New_York",
+    "expected": [
+      {
+        "choice": "exact",
+        "value": "2026-03-15T10:00:00.000-04:00[America/New_York]"
+      }
+    ]
+  },
+  {
+    "id": "quarter-hour-offset",
+    "operation": "resolve",
+    "date": "2026-09-06",
+    "time": "12:34:56.7899999",
+    "zone": "Asia/Kathmandu",
+    "expected": [
+      {
+        "choice": "exact",
+        "value": "2026-09-06T12:34:56.789+05:45[Asia/Kathmandu]"
+      }
+    ]
+  },
+  {
+    "id": "london-overlap",
+    "operation": "resolve",
+    "date": "2026-10-25",
+    "time": "01:30",
+    "zone": "Europe/London",
+    "expected": [
+      {
+        "choice": "earlier",
+        "value": "2026-10-25T01:30:00.000+01:00[Europe/London]"
+      },
+      {
+        "choice": "later",
+        "value": "2026-10-25T01:30:00.000+00:00[Europe/London]"
+      }
+    ]
+  },
+  {
+    "id": "half-hour-overlap",
+    "operation": "resolve",
+    "date": "2026-04-05",
+    "time": "01:45",
+    "zone": "Australia/Lord_Howe",
+    "expected": [
+      {
+        "choice": "earlier",
+        "value": "2026-04-05T01:45:00.000+11:00[Australia/Lord_Howe]"
+      },
+      {
+        "choice": "later",
+        "value": "2026-04-05T01:45:00.000+10:30[Australia/Lord_Howe]"
+      }
+    ]
+  },
+  {
+    "id": "london-gap",
+    "operation": "resolve",
+    "date": "2026-03-29",
+    "time": "01:30",
+    "zone": "Europe/London",
+    "expected": [
+      {
+        "choice": "backward",
+        "value": "2026-03-29T00:59:59.999+00:00[Europe/London]"
+      },
+      {
+        "choice": "forward",
+        "value": "2026-03-29T02:00:00.000+01:00[Europe/London]"
+      }
+    ]
+  },
+  {
+    "id": "half-hour-gap",
+    "operation": "resolve",
+    "date": "2026-10-04",
+    "time": "02:15",
+    "zone": "Australia/Lord_Howe",
+    "expected": [
+      {
+        "choice": "backward",
+        "value": "2026-10-04T01:59:59.999+10:30[Australia/Lord_Howe]"
+      },
+      {
+        "choice": "forward",
+        "value": "2026-10-04T02:30:00.000+11:00[Australia/Lord_Howe]"
+      }
+    ]
+  },
+  {
+    "id": "skipped-day",
+    "operation": "resolve",
+    "date": "2011-12-30",
+    "time": "12:00",
+    "zone": "Pacific/Apia",
+    "expected": [
+      {
+        "choice": "backward",
+        "value": "2011-12-29T23:59:59.999-10:00[Pacific/Apia]"
+      },
+      {
+        "choice": "forward",
+        "value": "2011-12-31T00:00:00.000+14:00[Pacific/Apia]"
+      }
+    ]
+  },
+  {
+    "id": "year-end-truncation",
+    "operation": "resolve",
+    "date": "2026-12-31",
+    "time": "23:59:59.999999999",
+    "zone": "UTC",
+    "expected": [
+      {
+        "choice": "exact",
+        "value": "2026-12-31T23:59:59.999+00:00[UTC]"
+      }
+    ]
+  },
+  {
+    "id": "instant-truncation",
+    "operation": "project",
+    "value": "2021-01-13T20:57:01.500944804Z",
+    "zone": "UTC",
+    "expected": [
+      {
+        "choice": "exact",
+        "value": "2021-01-13T20:57:01.500+00:00[UTC]"
+      }
+    ]
+  },
+  {
+    "id": "before-epoch",
+    "operation": "project",
+    "value": "1969-12-31T23:59:59.999999999Z",
+    "zone": "UTC",
+    "expected": [
+      {
+        "choice": "exact",
+        "value": "1969-12-31T23:59:59.999+00:00[UTC]"
+      }
+    ]
+  },
+  {
+    "id": "offset-input",
+    "operation": "project",
+    "value": "1995-12-07T03:24:30.0000035-08:00",
+    "zone": "America/Los_Angeles",
+    "expected": [
+      {
+        "choice": "exact",
+        "value": "1995-12-07T03:24:30.000-08:00[America/Los_Angeles]"
+      }
+    ]
+  },
+  {
+    "id": "duration-units",
+    "operation": "duration",
+    "value": "P1Y2M3W4DT5H6M7.987654321S",
+    "expected": "P14M25DT18367.987S"
+  },
+  {
+    "id": "negative-duration",
+    "operation": "duration",
+    "value": "-P1Y2M3W4DT5H6M7.987654321S",
+    "expected": "-P14M25DT18367.987S"
+  },
+  {
+    "id": "negative-submillisecond",
+    "operation": "duration",
+    "value": "-PT0.0009S",
+    "expected": "PT0S"
+  },
+  {
+    "id": "negative-millisecond",
+    "operation": "duration",
+    "value": "-PT0.0019S",
+    "expected": "-PT0.001S"
+  },
+  {
+    "id": "duration-year",
+    "operation": "duration",
+    "value": "P1Y",
+    "expected": "P12M"
+  },
+  {
+    "id": "duration-weeks",
+    "operation": "duration",
+    "value": "P3W",
+    "expected": "P21D"
+  },
+  {
+    "id": "invalid-date",
+    "operation": "resolve",
+    "date": "2026-02-29",
+    "time": "10:00",
+    "zone": "UTC",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "invalid-clock",
+    "operation": "resolve",
+    "date": "2026-01-01",
+    "time": "24:00",
+    "zone": "UTC",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "leap-second",
+    "operation": "resolve",
+    "date": "2026-01-01",
+    "time": "23:59:60",
+    "zone": "UTC",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "invalid-zone",
+    "operation": "resolve",
+    "date": "2026-01-01",
+    "time": "10:00",
+    "zone": "Invalid/Zone",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "incomplete-duration",
+    "operation": "duration",
+    "value": "PT",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "missing-instant-offset",
+    "operation": "project",
+    "value": "2026-01-01T10:00",
+    "zone": "UTC",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "instant-leap-second",
+    "operation": "project",
+    "value": "2026-01-01T23:59:60Z",
+    "zone": "UTC",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "instant-year-zero",
+    "operation": "project",
+    "value": "0000-01-01T00:00:00Z",
+    "zone": "UTC",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "projection-beyond-iso-range",
+    "operation": "project",
+    "value": "9999-12-31T23:00:00Z",
+    "zone": "Asia/Tokyo",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "projection-before-iso-range",
+    "operation": "project",
+    "value": "0001-01-01T00:00:00Z",
+    "zone": "America/New_York",
+    "expected": {
+      "error": true
+    }
+  },
+  {
+    "id": "resolution-before-iso-range",
+    "operation": "resolve",
+    "date": "0001-01-01",
+    "time": "00:00",
+    "zone": "Asia/Tokyo",
+    "expected": {
+      "error": true
+    }
+  }
+]

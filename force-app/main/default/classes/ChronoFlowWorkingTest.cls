@@ -68,25 +68,19 @@ private class ChronoFlowWorkingTest {
   @IsTest
   static void bulkSchedulesAndDuplicateWork() {
     List<OperatingHours> hours = schedules();
-    List<Object> items = new List<Object>();
+    List<ChronoWorkingTimeInput> items = new List<ChronoWorkingTimeInput>();
     for (Integer i = 0; i < 200; i++) {
       items.add(input(hours[Math.mod(i, 2)].Id));
     }
-    ChronoFlowBatch batch = new ChronoFlowBatch('WorkingTime');
     Test.startTest();
     Integer beforeQueries = Limits.getQueries();
-    List<ChronoFlowResult> results = batch.run(items);
+    List<ChronoFlowResult> results = runWorkingTime(items);
     Integer queries = Limits.getQueries() - beforeQueries;
     Test.stopTest();
     Assert.areEqual(
       3,
       queries,
       'Three queries across all schedules and interviews'
-    );
-    Assert.areEqual(
-      2,
-      batch.computationCount,
-      'One computation per complete distinct input'
     );
     Assert.areEqual(
       '2026-09-01T09:30:00.000+01:00[Europe/London]',
@@ -105,6 +99,91 @@ private class ChronoFlowWorkingTest {
       results[2].value,
       'Independent result copies'
     );
+  }
+  @IsTest
+  static void bulkServiceReturnsIndependentTypedValues() {
+    List<OperatingHours> hours = schedules();
+    List<ChronoWorkingTimeInput> requests = new List<ChronoWorkingTimeInput>();
+    for (Integer i = 0; i < 200; i++) {
+      requests.add(input(hours[Math.mod(i, 2)].Id));
+    }
+    String original = JSON.serialize(requests);
+    Test.startTest();
+    Integer beforeQueries = Limits.getQueries();
+    List<ChronoWorkingTimeResult> results = ChronoWorkingTimeService.add(
+      requests
+    );
+    Assert.areEqual(3, Limits.getQueries() - beforeQueries);
+    Test.stopTest();
+    Assert.areEqual(200, results.size());
+    for (Integer i = 0; i < 200; i++) {
+      Assert.isTrue(
+        results[i].success,
+        'Item ' + i + ': ' + results[i].errorMessage
+      );
+      Assert.isNull(results[i].errorMessage);
+      Assert.areEqual(
+        Math.mod(i, 2) == 0
+          ? '2026-09-01T09:30:00.000+01:00[Europe/London]'
+          : '2026-08-28T17:30:00.000+01:00[Europe/London]',
+        ChronoZonedDateTimeService.toIsoString(results[i].value)
+      );
+    }
+    Assert.areEqual(
+      original,
+      JSON.serialize(requests),
+      'Requests remain unchanged'
+    );
+    Datetime expected = results[2].value.instant;
+    results[0].value.instant = expected.addDays(1);
+    results[0].value.timeZoneId = 'America/New_York';
+    results[0].success = false;
+    Assert.areEqual(
+      expected,
+      results[2].value.instant,
+      'Nested values are independent'
+    );
+    Assert.areEqual('Europe/London', results[2].value.timeZoneId);
+    Assert.isTrue(results[2].success);
+  }
+  @IsTest
+  static void serviceErrorsEmptyInputsAndLaterInvocation() {
+    List<OperatingHours> hours = schedules();
+    ChronoWorkingTimeInput invalid = input(hours[0].Id);
+    invalid.startInstant = Datetime.now();
+    ChronoWorkingTimeInput badZone = input(hours[0].Id);
+    badZone.timeZoneId = 'Not/AZone';
+    ChronoWorkingTimeInput valid = input(hours[0].Id);
+    Test.startTest();
+    Integer beforeQueries = Limits.getQueries();
+    Assert.areEqual(0, ChronoWorkingTimeService.add(null).size());
+    Assert.areEqual(
+      0,
+      ChronoWorkingTimeService.add(new List<ChronoWorkingTimeInput>()).size()
+    );
+    Assert.areEqual(beforeQueries, Limits.getQueries());
+    List<ChronoWorkingTimeResult> results = ChronoWorkingTimeService.add(
+      new List<ChronoWorkingTimeInput>{ null, invalid, badZone, valid }
+    );
+    for (Integer i = 0; i < 3; i++) {
+      Assert.isFalse(results[i].success);
+      Assert.isNotNull(results[i].errorMessage);
+      Assert.isNull(results[i].value);
+    }
+    Assert.isTrue(results[3].success);
+    valid.amount = 2;
+    List<ChronoWorkingTimeResult> later = ChronoWorkingTimeService.add(
+      new List<ChronoWorkingTimeInput>{ valid }
+    );
+    Assert.areEqual(
+      '2026-09-01T10:30:00.000+01:00[Europe/London]',
+      ChronoZonedDateTimeService.toIsoString(later[0].value)
+    );
+    Assert.areEqual(
+      '2026-09-01T09:30:00.000+01:00[Europe/London]',
+      ChronoZonedDateTimeService.toIsoString(results[3].value)
+    );
+    Test.stopTest();
   }
   @IsTest
   static void workingCollectionsAndNegativeMinutes() {
@@ -221,6 +300,153 @@ private class ChronoFlowWorkingTest {
       expected,
       results[1].instantValue,
       'Native holiday and working-time service'
+    );
+  }
+  private static ChronoDifferenceInput difference(Id scheduleId) {
+    ChronoDifferenceInput item = new ChronoDifferenceInput();
+    item.operatingHoursId = scheduleId;
+    item.startValue = '2026-08-28T16:30+01:00[Europe/London]';
+    item.endValue = '2026-09-01T09:30+01:00[Europe/London]';
+    return item;
+  }
+  @IsTest
+  static void differenceSharesSchedulesAndCalculations() {
+    List<OperatingHours> hours = schedules();
+    List<Object> items = new List<Object>();
+    for (Integer i = 0; i < 200; i++) {
+      items.add(difference(hours[Math.mod(i, 2)].Id));
+    }
+    ChronoFlowBatch batch = new ChronoFlowBatch('Difference');
+    Test.startTest();
+    Integer beforeQueries = Limits.getQueries();
+    List<ChronoFlowResult> results = batch.run(items);
+    Assert.areEqual(
+      3,
+      Limits.getQueries() - beforeQueries,
+      'Schedules loaded once'
+    );
+    Test.stopTest();
+    Assert.areEqual(2, batch.computationCount, 'Identical calculations reused');
+    Assert.areEqual(200, results.size(), 'Interview order retained');
+    Assert.areEqual(
+      3600000L,
+      results[0].milliseconds,
+      'One open hour excluding weekend and bank holiday'
+    );
+    Assert.areEqual(
+      5400000L,
+      results[1].milliseconds,
+      'UTC schedule has 90 open minutes on Friday'
+    );
+    Assert.areEqual('PT3600.000S', results[0].value, 'ISO duration output');
+    results[0].milliseconds = 0;
+    Assert.areEqual(
+      3600000L,
+      results[2].milliseconds,
+      'Cached results are independent'
+    );
+  }
+  @IsTest
+  static void differenceScalarAndCollectionContracts() {
+    List<OperatingHours> hours = schedules();
+    ChronoDifferenceInput forward = difference(hours[0].Id);
+    ChronoDifferenceInput reverse = difference(hours[0].Id);
+    reverse.startValue = forward.endValue;
+    reverse.endValue = forward.startValue;
+    ChronoDifferenceCollectionAction.Request row = new ChronoDifferenceCollectionAction.Request();
+    row.items = new List<ChronoDifferenceInput>{ forward, reverse };
+    List<ChronoDifferenceCollectionAction.Request> requests = new List<ChronoDifferenceCollectionAction.Request>();
+    for (Integer i = 0; i < 200; i++) {
+      requests.add(row);
+    }
+    Test.startTest();
+    Integer beforeQueries = Limits.getQueries();
+    List<ChronoFlowCollectionResult> results = ChronoDifferenceCollectionAction.run(
+      requests
+    );
+    Assert.areEqual(
+      3,
+      Limits.getQueries() - beforeQueries,
+      'Collections share schedule queries'
+    );
+    Test.stopTest();
+    Assert.areEqual(200, results.size(), 'Outer interview count');
+    Assert.areEqual(
+      -3600000L,
+      results[199].results[1].milliseconds,
+      'Inner order and negative difference'
+    );
+    results[0].results[0].value = 'changed';
+    Assert.areEqual(
+      'PT3600.000S',
+      results[1].results[0].value,
+      'Independent collection values'
+    );
+    ChronoDifferenceAction.Request scalar = new ChronoDifferenceAction.Request();
+    scalar.startInstant = ChronoZonedDateTimeService.toDatetime(
+      ChronoZonedDateTimeService.parseIso(forward.startValue)
+    );
+    scalar.endInstant = ChronoZonedDateTimeService.toDatetime(
+      ChronoZonedDateTimeService.parseIso(forward.endValue)
+    );
+    scalar.operatingHoursId = hours[0].Id;
+    Assert.areEqual(
+      3600000L,
+      ChronoDifferenceAction.run(
+          new List<ChronoDifferenceAction.Request>{ scalar }
+        )[0]
+        .milliseconds,
+      'Scalar native input forwards schedule ID'
+    );
+  }
+  @IsTest
+  static void differenceFailuresAndDefaultElapsedAreIndependent() {
+    List<OperatingHours> hours = schedules();
+    OperatingHours empty = new OperatingHours(Name = 'Empty', TimeZone = 'GMT');
+    insert empty;
+    ChronoDifferenceInput bad = difference(hours[0].Id);
+    bad.operatingHoursId = 'bad-id';
+    ChronoDifferenceInput wrong = difference(UserInfo.getUserId());
+    ChronoDifferenceInput raw = difference(null);
+    Test.startTest();
+    Integer beforeQueries = Limits.getQueries();
+    ChronoFlowResult elapsed = new ChronoFlowBatch('Difference')
+      .run(new List<Object>{ raw })[0];
+    Assert.areEqual(
+      0,
+      Limits.getQueries() - beforeQueries,
+      'No queries without a schedule'
+    );
+    List<ChronoFlowResult> results = new ChronoFlowBatch('Difference')
+      .run(
+        new List<Object>{
+          bad,
+          wrong,
+          difference(empty.Id),
+          null,
+          raw,
+          difference(hours[0].Id)
+        }
+      );
+    Test.stopTest();
+    Assert.areEqual(
+      320400000L,
+      elapsed.milliseconds,
+      'Unrestricted difference remains 89 hours'
+    );
+    for (Integer i = 0; i < 4; i++) {
+      Assert.isFalse(results[i].success, 'Bad item ' + i);
+      Assert.isNotNull(results[i].errorMessage, 'Useful item error');
+    }
+    Assert.areEqual(
+      elapsed.milliseconds,
+      results[4].milliseconds,
+      'Invalid schedules cannot affect raw difference'
+    );
+    Assert.areEqual(
+      3600000L,
+      results[5].milliseconds,
+      'Valid schedule survives bad items'
     );
   }
   private static List<ChronoFlowResult> runWorkingTime(

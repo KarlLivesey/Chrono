@@ -1,0 +1,12 @@
+<template
+  ><c-chrono-recurrence-builder
+    lwc:ref="control"
+    lwc:spread={config}
+    onvaluechange={changed}
+  ></c-chrono-recurrence-builder
+  ><template lwc:if={externalError}
+    ><lightning-formatted-rich-text
+      class="slds-text-color_error"
+      value={externalError}
+    ></lightning-formatted-rich-text></template
+></template>

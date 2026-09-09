@@ -1,0 +1,44 @@
+<template>
+  <div
+    class="anchor"
+    onkeydown={handleKey}
+    onfocusout={handleFocusOut}
+    onfocusin={handleFocusIn}
+    onpointerdown={handlePointerDown}
+  >
+    <button
+      lwc:ref="trigger"
+      type="button"
+      class={triggerClass}
+      disabled={disabled}
+      aria-expanded={opened}
+      aria-controls="content"
+      aria-label={triggerLabel}
+      onclick={toggle}
+    >
+      <template lwc:if={warning}
+        ><lightning-icon
+          icon-name="utility:warning"
+          size="xx-small"
+          alternative-text="Needs attention"
+        ></lightning-icon
+      ></template>
+      <span class="slds-truncate">{label}</span>
+      <lightning-icon
+        icon-name="utility:chevrondown"
+        size="xx-small"
+        alternative-text=""
+      ></lightning-icon>
+    </button>
+    <template lwc:if={opened}>
+      <section
+        id="content"
+        class={panelClass}
+        style={panelStyle}
+        aria-label={heading}
+      >
+        <div class="slds-popover__body"><slot></slot></div>
+      </section>
+    </template>
+  </div>
+</template>

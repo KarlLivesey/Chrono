@@ -40,19 +40,23 @@ private class ChronoZoneResolverTest {
     String earlier,
     String later
   ) {
-    ChronoPlainDateTime local = ChronoPlainDateTime.parse(localText);
+    ChronoPlainDateTime local = ChronoPlainDateTimeService.parseIso(localText);
     Assert.areEqual(
-      ChronoInstant.parse(earlier).toDatetime(),
-      local.toZonedDateTime(zoneId, 'earlier').toDatetime(),
+      ChronoInstantService.toDatetime(ChronoInstantService.parseIso(earlier)),
+      ChronoZonedDateTimeService.toDatetime(
+        ChronoPlainDateTimeService.toZonedDateTime(local, zoneId, 'earlier')
+      ),
       'Earlier occurrence'
     );
     Assert.areEqual(
-      ChronoInstant.parse(later).toDatetime(),
-      local.toZonedDateTime(zoneId, 'later').toDatetime(),
+      ChronoInstantService.toDatetime(ChronoInstantService.parseIso(later)),
+      ChronoZonedDateTimeService.toDatetime(
+        ChronoPlainDateTimeService.toZonedDateTime(local, zoneId, 'later')
+      ),
       'Later occurrence'
     );
     try {
-      local.toZonedDateTime(zoneId);
+      ChronoPlainDateTimeService.toZonedDateTime(local, zoneId);
       Assert.fail('Overlap must reject by default');
     } catch (ChronoException expected) {
       Assert.isTrue(
@@ -72,8 +76,11 @@ private class ChronoZoneResolverTest {
     for (String zoneId : gaps.keySet()) {
       for (String policy : new List<String>{ 'reject', 'earlier', 'later' }) {
         try {
-          ChronoPlainDateTime.parse(gaps.get(zoneId))
-            .toZonedDateTime(zoneId, policy);
+          ChronoPlainDateTimeService.toZonedDateTime(
+            ChronoPlainDateTimeService.parseIso(gaps.get(zoneId)),
+            zoneId,
+            policy
+          );
           Assert.fail('Gap must reject');
         } catch (ChronoException expected) {
           Assert.isTrue(
@@ -86,21 +93,32 @@ private class ChronoZoneResolverTest {
   }
   @IsTest
   static void normalOffsetsAndFractionalSeconds() {
-    ChronoPlainDateTime local = ChronoPlainDateTime.parse(
+    ChronoPlainDateTime local = ChronoPlainDateTimeService.parseIso(
       '2026-07-01T09:30:00.123'
     );
     Assert.areEqual(
       '2026-07-01T07:30:00.123Z',
-      local.toZonedDateTime('Europe/Paris').toInstant().toString(),
+      ChronoInstantService.toIsoString(
+        ChronoZonedDateTimeService.toInstant(
+          ChronoPlainDateTimeService.toZonedDateTime(local, 'Europe/Paris')
+        )
+      ),
       'Paris summer'
     );
     Assert.areEqual(
       '2026-06-30T23:00:00.123Z',
-      local.toZonedDateTime('Australia/Lord_Howe').toInstant().toString(),
+      ChronoInstantService.toIsoString(
+        ChronoZonedDateTimeService.toInstant(
+          ChronoPlainDateTimeService.toZonedDateTime(
+            local,
+            'Australia/Lord_Howe'
+          )
+        )
+      ),
       'Half-hour standard offset'
     );
     try {
-      local.toZonedDateTime('UTC', 'compatible');
+      ChronoPlainDateTimeService.toZonedDateTime(local, 'UTC', 'compatible');
       Assert.fail('Unknown policy');
     } catch (ChronoException expected) {
       Assert.isTrue(

@@ -1,0 +1,79 @@
+<template>
+  <h3 class="slds-text-title_bold slds-m-bottom_small">{title}</h3>
+  <template lwc:if={collection}>
+    <c-chrono-flow-resource-picker
+      label="Input collection"
+      value={collectionValue}
+      value-type="Apex[]"
+      object-type={collectionType}
+      builder-context={builderContext}
+      automatic-output-variables={automaticOutputVariables}
+      onchoose={chooseCollection}
+    ></c-chrono-flow-resource-picker>
+  </template>
+  <template lwc:else>
+    <template lwc:if={hasSource}
+      ><lightning-combobox
+        class="slds-m-bottom_small"
+        label="Input format"
+        value={format}
+        options={formatOptions}
+        onchange={changeFormat}
+      ></lightning-combobox
+    ></template>
+    <template lwc:if={hasEndSource}>
+      <lightning-combobox
+        class="slds-m-bottom_small"
+        label="End input format"
+        value={endFormat}
+        options={formatOptions}
+        onchange={changeEndFormat}
+      ></lightning-combobox>
+    </template>
+    <template lwc:if={hasSchedule}>
+      <lightning-combobox
+        class="slds-m-bottom_small"
+        label="Operating hours supplied as"
+        value={scheduleMode}
+        options={scheduleOptions}
+        onchange={changeScheduleMode}
+      ></lightning-combobox>
+    </template>
+    <template for:each={auxiliarySources} for:item="source">
+      <lightning-combobox
+        key={source.name}
+        class="slds-m-bottom_small"
+        data-group={source.name}
+        label={source.label}
+        value={source.value}
+        options={source.options}
+        onchange={changeAuxiliaryFormat}
+      ></lightning-combobox>
+    </template>
+    <template for:each={fields} for:item="field">
+      <c-chrono-flow-value-editor
+        key={field.name}
+        name={field.name}
+        label={field.label}
+        value={field.value}
+        value-type={field.dataType}
+        object-type={field.objectType}
+        literal-type={field.literalType}
+        reference={field.reference}
+        reference-only={field.referenceOnly}
+        options={field.options}
+        searchable={field.searchable}
+        lookup-message={field.lookupMessage}
+        help-text={field.helpText}
+        builder-context={builderContext}
+        automatic-output-variables={automaticOutputVariables}
+        onvaluechange={handleValue}
+      ></c-chrono-flow-value-editor>
+    </template>
+  </template>
+  <template for:each={errors} for:item="error"
+    ><p key={error.key} role="alert" class="slds-text-color_error">
+      {error.errorString}
+    </p></template
+  >
+</template>

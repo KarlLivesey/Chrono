@@ -9,53 +9,65 @@ private class ChronoBusinessHoursTest {
       WHERE IsDefault = TRUE
       LIMIT 1
     ];
-    ChronoZonedDateTime start = ChronoInstant.parse('2026-08-28T15:30Z')
-      .toZonedDateTime('Europe/London');
+    ChronoZonedDateTime start = ChronoInstantService.toZonedDateTime(
+      ChronoInstantService.parseIso('2026-08-28T15:30Z'),
+      'Europe/London'
+    );
     Datetime expected = System.BusinessHours.addGmt(
       schedule.Id,
-      start.toDatetime(),
+      ChronoZonedDateTimeService.toDatetime(start),
       3600000L
     );
     Assert.areEqual(
       expected,
-      start.addHours(1, schedule).toDatetime(),
+      ChronoZonedDateTimeService.toDatetime(
+        ChronoZonedDateTimeService.addHours(start, 1, schedule)
+      ),
       'Native business hours delegation'
     );
     Assert.areEqual(
       expected,
-      ChronoZonedDateTime.addHours(start, 1, schedule).toDatetime(),
+      ChronoZonedDateTimeService.toDatetime(
+        ChronoZonedDateTimeService.addHours(start, 1, schedule)
+      ),
       'Static business hours'
     );
     Assert.areEqual(
       expected,
-      ChronoZonedDateTime.addHours(
-          start.toDatetime(),
+      ChronoZonedDateTimeService.toDatetime(
+        ChronoZonedDateTimeService.addHours(
+          ChronoZonedDateTimeService.toDatetime(start),
           'Europe/London',
           1,
           schedule
         )
-        .toDatetime(),
+      ),
       'Native static business hours'
     );
     Assert.areEqual(
       expected,
-      start.addMinutes(60, schedule).toDatetime(),
+      ChronoZonedDateTimeService.toDatetime(
+        ChronoZonedDateTimeService.addMinutes(start, 60, schedule)
+      ),
       'Business minutes'
     );
     Assert.areEqual(
       expected,
-      ChronoZonedDateTime.addMinutes(start, 60, schedule).toDatetime(),
+      ChronoZonedDateTimeService.toDatetime(
+        ChronoZonedDateTimeService.addMinutes(start, 60, schedule)
+      ),
       'Static business minutes'
     );
     Assert.areEqual(
       expected,
-      ChronoZonedDateTime.addMinutes(
-          start.toDatetime(),
+      ChronoZonedDateTimeService.toDatetime(
+        ChronoZonedDateTimeService.addMinutes(
+          ChronoZonedDateTimeService.toDatetime(start),
           'Europe/London',
           60,
           schedule
         )
-        .toDatetime(),
+      ),
       'Native static business minutes'
     );
   }

@@ -5,6 +5,7 @@ public with sharing class ChronoIso {
     return String.valueOf(value).leftPad(size, '0');
   }
   public static String dateText(Date value) {
+    ChronoDates.validate(value);
     return pad(value.year(), 4) +
       '-' +
       pad(value.month(), 2) +
@@ -36,15 +37,15 @@ public with sharing class ChronoIso {
   public static Time parseTime(String value) {
     ChronoSupport.requireMatch(
       value,
-      '\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,3})?)?',
-      'ISO time (millisecond precision)'
+      '\\d{2}:\\d{2}(:\\d{2}(\\.\\d+)?)?',
+      'ISO time'
     );
     List<String> pieces = value.split(':');
     List<String> seconds = pieces.size() == 3
       ? pieces[2].split('\\.')
       : new List<String>{ '0' };
     Integer millis = seconds.size() == 2
-      ? Integer.valueOf(seconds[1].rightPad(3, '0'))
+      ? Integer.valueOf(seconds[1].rightPad(3, '0').left(3))
       : 0;
     Integer hour = Integer.valueOf(pieces[0]);
     Integer minute = Integer.valueOf(pieces[1]);

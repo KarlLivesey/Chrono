@@ -1,7 +1,7 @@
 // Copyright (c) 2026, Karl. SPDX-License-Identifier: BSD-3-Clause
 /** @description Applies supported core arithmetic with explicit calendar-versus-elapsed semantics. */
 public with sharing class ChronoFlowAdjust {
-  public static ChronoFlowResult execute(ChronoAdjustInput input) {
+  public static ChronoOperationResult execute(ChronoAdjustInput input) {
     ChronoSupport.requireValue(input, 'Input');
     ChronoConvertInput transport = new ChronoConvertInput();
     transport.valueType = input.valueType;
@@ -25,41 +25,67 @@ public with sharing class ChronoFlowAdjust {
   ) {
     switch on source.valueType {
       when 'Instant' {
-        return ((ChronoInstant) source.value)
-          .addMilliseconds(duration.toMilliseconds());
+        return ChronoInstantService.addMilliseconds(
+          ((ChronoInstant) source.value),
+          ChronoDurationService.toMilliseconds(duration)
+        );
       }
       when 'ZonedDateTime' {
-        return ((ChronoZonedDateTime) source.value).add(duration, policy);
+        return ChronoZonedDateTimeService.add(
+          ((ChronoZonedDateTime) source.value),
+          duration,
+          policy
+        );
       }
       when 'PlainDateTime' {
-        return ((ChronoPlainDateTime) source.value).add(duration);
+        return ChronoPlainDateTimeService.add(
+          ((ChronoPlainDateTime) source.value),
+          duration
+        );
       }
       when 'PlainDate' {
         requireNoClock(duration);
-        return ((ChronoPlainDate) source.value)
-          .addMonths(duration.getMonths())
-          .addDays(duration.getDays());
+        return ChronoPlainDateService.addDays(
+          ChronoPlainDateService.addMonths(
+            ((ChronoPlainDate) source.value),
+            ChronoDurationService.getMonths(duration)
+          ),
+          ChronoDurationService.getDays(duration)
+        );
       }
       when 'PlainTime' {
-        return ((ChronoPlainTime) source.value)
-          .addMilliseconds(duration.toMilliseconds());
+        return ChronoPlainTimeService.addMilliseconds(
+          ((ChronoPlainTime) source.value),
+          ChronoDurationService.toMilliseconds(duration)
+        );
       }
       when 'PlainYearMonth' {
         requireNoClock(duration);
-        if (duration.getDays() != 0) {
+        if (ChronoDurationService.getDays(duration) != 0) {
           throw new ChronoException(
             'Year-month arithmetic requires months or years.'
           );
         }
-        return ((ChronoPlainYearMonth) source.value)
-          .addMonths(duration.getMonths());
+        return ChronoPlainYearMonthService.addMonths(
+          ((ChronoPlainYearMonth) source.value),
+          ChronoDurationService.getMonths(duration)
+        );
       }
       when 'Duration' {
         ChronoDuration value = (ChronoDuration) source.value;
-        return new ChronoDuration(
-          checkedInteger((Long) value.getMonths() + duration.getMonths()),
-          checkedInteger((Long) value.getDays() + duration.getDays()),
-          sumMilliseconds(value.getMilliseconds(), duration.getMilliseconds())
+        return ChronoDurationService.create(
+          checkedInteger(
+            (Long) ChronoDurationService.getMonths(value) +
+            ChronoDurationService.getMonths(duration)
+          ),
+          checkedInteger(
+            (Long) ChronoDurationService.getDays(value) +
+            ChronoDurationService.getDays(duration)
+          ),
+          sumMilliseconds(
+            ChronoDurationService.getMilliseconds(value),
+            ChronoDurationService.getMilliseconds(duration)
+          )
         );
       }
       when else {
@@ -70,7 +96,7 @@ public with sharing class ChronoFlowAdjust {
     }
   }
   private static void requireNoClock(ChronoDuration value) {
-    if (value.getMilliseconds() != 0) {
+    if (ChronoDurationService.getMilliseconds(value) != 0) {
       throw new ChronoException(
         'This type does not contain a clock; use calendar units.'
       );
@@ -83,34 +109,34 @@ public with sharing class ChronoFlowAdjust {
           'Supply a duration or amount and unit, not both.'
         );
       }
-      return ChronoDuration.parse(input.duration);
+      return ChronoDurationService.parseIso(input.duration);
     }
     ChronoSupport.requireValue(input.amount, 'Amount');
     Long amount = input.amount;
     switch on input.unit {
       when 'years' {
-        return new ChronoDuration(checkedInteger(amount * 12), 0, 0L);
+        return ChronoDurationService.create(checkedInteger(amount * 12), 0, 0L);
       }
       when 'months' {
-        return new ChronoDuration(input.amount, 0, 0L);
+        return ChronoDurationService.create(input.amount, 0, 0L);
       }
       when 'weeks' {
-        return new ChronoDuration(0, checkedInteger(amount * 7), 0L);
+        return ChronoDurationService.create(0, checkedInteger(amount * 7), 0L);
       }
       when 'days' {
-        return new ChronoDuration(0, input.amount, 0L);
+        return ChronoDurationService.create(0, input.amount, 0L);
       }
       when 'hours' {
-        return new ChronoDuration(0, 0, amount * 3600000L);
+        return ChronoDurationService.create(0, 0, amount * 3600000L);
       }
       when 'minutes' {
-        return new ChronoDuration(0, 0, amount * 60000L);
+        return ChronoDurationService.create(0, 0, amount * 60000L);
       }
       when 'seconds' {
-        return new ChronoDuration(0, 0, amount * 1000L);
+        return ChronoDurationService.create(0, 0, amount * 1000L);
       }
       when 'milliseconds' {
-        return new ChronoDuration(0, 0, amount);
+        return ChronoDurationService.create(0, 0, amount);
       }
       when else {
         throw new ChronoException('Select a supported arithmetic unit.');
@@ -121,19 +147,9 @@ public with sharing class ChronoFlowAdjust {
     Decimal total =
       Decimal.valueOf(String.valueOf(first)) +
       Decimal.valueOf(String.valueOf(second));
-    if (total > 9223372036854775807L || total < -9223372036854775807L) {
-      throw new ChronoException(
-        'Duration exceeds the supported millisecond range.'
-      );
-    }
-    return total.longValue();
+    return ChronoNumbers.milliseconds(total);
   }
   private static Integer checkedInteger(Long value) {
-    if (value < -2147483648L || value > 2147483647L) {
-      throw new ChronoException(
-        'Calendar amount exceeds the supported integer range.'
-      );
-    }
-    return value.intValue();
+    return ChronoNumbers.calendar(value);
   }
 }

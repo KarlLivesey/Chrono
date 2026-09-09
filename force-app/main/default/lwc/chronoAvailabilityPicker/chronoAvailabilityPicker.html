@@ -1,0 +1,30 @@
+<template
+  ><template lwc:if={pending}
+    ><span role="status">Finding appointments…</span></template
+  ><template lwc:if={showChoices}
+    ><c-chrono-choice-lookup
+      label={label}
+      value={selected}
+      display-value={selectedLabel}
+      options={options}
+      placeholder="Search available appointments…"
+      onchoose={choose}
+    ></c-chrono-choice-lookup></template
+  ><template lwc:if={disabled}
+    ><lightning-formatted-text
+      value={selectedLabel}
+    ></lightning-formatted-text></template
+  ><template lwc:if={empty}
+    ><p>No appointments fit these dates and booking limits.</p></template
+  ><template lwc:if={displayedError}
+    ><div class="slds-text-color_error" role="alert">
+      {displayedError}
+    </div></template
+  ><lightning-button
+    class="slds-m-top_x-small"
+    variant="base"
+    label="Refresh availability"
+    disabled={pending}
+    onclick={load}
+  ></lightning-button
+></template>

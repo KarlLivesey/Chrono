@@ -38,6 +38,7 @@ public with sharing class ChronoWorkingTime {
       throw new ChronoException('OperatingHours has no normal time slots.');
     }
     for (TimeSlot slot : slots) {
+      validateSlot(slot);
       if (slot.RecordsetFilterCriteriaId != null) {
         throw new ChronoException(
           'Conditional operating-hour slots require appointment context and cannot be used for generic working-time arithmetic.'
@@ -46,6 +47,30 @@ public with sharing class ChronoWorkingTime {
     }
   }
 
+  private static void validateSlot(TimeSlot slot) {
+    ChronoSupport.requireValue(slot, 'Time slot');
+    ChronoSupport.requireValue(slot.StartTime, 'Slot start time');
+    ChronoSupport.requireValue(slot.EndTime, 'Slot end time');
+    Set<String> weekdays = new Set<String>{
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    };
+    if (
+      !weekdays.contains(slot.DayOfWeek) ||
+      slot.StartTime >= slot.EndTime ||
+      (slot.Type != null &&
+      slot.Type != 'Normal')
+    ) {
+      throw new ChronoException(
+        'Provide normal same-day slots with a weekday and start time before end time.'
+      );
+    }
+  }
   public Datetime addMilliseconds(Datetime instant, Long amount) {
     ChronoSupport.requireValue(instant, 'Datetime');
     ChronoSupport.requireValue(amount, 'Working milliseconds');
@@ -66,6 +91,45 @@ public with sharing class ChronoWorkingTime {
       'Working-time calculation exceeded the 3660-day search limit.'
     );
   }
+  /** @description Signed elapsed milliseconds spent inside open schedule intervals, excluding the end instant. Ranges exceeding 3660 UTC dates are rejected.
+   * @param start Starting instant.
+   * @param finish Ending instant.
+   * @return Signed elapsed open milliseconds; zero for equal instants or closed intervals.
+   */
+  public Long differenceMilliseconds(Datetime start, Datetime finish) {
+    ChronoSupport.requireValue(start, 'Start datetime');
+    ChronoSupport.requireValue(finish, 'End datetime');
+    if (start == finish) {
+      return 0L;
+    }
+    Long lower = Math.min(start.getTime(), finish.getTime());
+    Long upper = Math.max(start.getTime(), finish.getTime());
+    Date firstUtcDay = Datetime.newInstance(lower).dateGmt();
+    Date lastUtcDay = Datetime.newInstance(upper - 1).dateGmt();
+    Integer dayCount = firstUtcDay.daysBetween(lastUtcDay) + 1;
+    if (dayCount > MAX_SEARCH_DAYS) {
+      throw new ChronoException(
+        'Working-time calculation exceeded the 3660-day search limit.'
+      );
+    }
+    // Include neighbouring local dates: a midnight rollback can visit a date
+    // absent from both endpoint wall dates. Actual UTC intersections clip padding.
+    Date firstDay = firstUtcDay.addDays(-1);
+    dayCount += 2;
+    ChronoScheduleDay schedule = new ChronoScheduleDay(zoneId, slots, holidays);
+    Long total = 0L;
+    for (Integer index = 0; index < dayCount; index++) {
+      for (
+        ChronoScheduleDay.Span span : schedule.spansFor(firstDay.addDays(index))
+      ) {
+        total += Math.max(
+          0L,
+          Math.min(upper, span.endTime) - Math.max(lower, span.startTime)
+        );
+      }
+    }
+    return finish > start ? total : -total;
+  }
   private class Progress {
     private final Long initialTime;
     private final Integer direction;
@@ -73,7 +137,7 @@ public with sharing class ChronoWorkingTime {
     private Progress(Datetime instant, Long amount) {
       initialTime = instant.getTime();
       direction = amount > 0 ? 1 : -1;
-      remaining = Math.abs(amount);
+      remaining = ChronoNumbers.milliseconds(((Decimal) amount).abs());
     }
     private Datetime consume(List<ChronoScheduleDay.Span> spans) {
       for (Integer index = 0; index < spans.size(); index++) {

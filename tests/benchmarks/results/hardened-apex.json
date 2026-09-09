@@ -1,0 +1,730 @@
+{
+  "createdAt": "2026-09-08T02:05:45.014530+00:00",
+  "targetOrg": "chrono-subscriber",
+  "label": "Chrono-0.1.0.11",
+  "operationsPerSample": 200,
+  "measuredSamples": 3,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "parse-format-PlainDate",
+      "description": "Parse and serialise PlainDate through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 276,
+          "heapAfterBytes": 1325,
+          "cpuMs": 50,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1613,
+          "cpuMs": 45,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1613,
+          "cpuMs": 48,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1613,
+          "cpuMs": 44,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 44,
+        "median": 45,
+        "max": 48
+      },
+      "medianCpuMsPerOperation": 0.225
+    },
+    {
+      "name": "parse-format-PlainTime",
+      "description": "Parse and serialise PlainTime through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 265,
+          "heapAfterBytes": 1314,
+          "cpuMs": 38,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1602,
+          "cpuMs": 37,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1602,
+          "cpuMs": 36,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1602,
+          "cpuMs": 35,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 35,
+        "median": 36,
+        "max": 37
+      },
+      "medianCpuMsPerOperation": 0.18
+    },
+    {
+      "name": "parse-format-PlainDateTime",
+      "description": "Parse and serialise PlainDateTime through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 302,
+          "heapAfterBytes": 1351,
+          "cpuMs": 85,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1639,
+          "cpuMs": 76,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1639,
+          "cpuMs": 77,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1639,
+          "cpuMs": 79,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 76,
+        "median": 77,
+        "max": 79
+      },
+      "medianCpuMsPerOperation": 0.385
+    },
+    {
+      "name": "parse-format-Instant",
+      "description": "Parse and serialise Instant through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 298,
+          "heapAfterBytes": 1347,
+          "cpuMs": 95,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1635,
+          "cpuMs": 105,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1635,
+          "cpuMs": 87,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1635,
+          "cpuMs": 87,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 87,
+        "median": 87,
+        "max": 105
+      },
+      "medianCpuMsPerOperation": 0.435
+    },
+    {
+      "name": "parse-format-ZonedDateTime",
+      "description": "Parse and serialise ZonedDateTime through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 721,
+          "heapAfterBytes": 1770,
+          "cpuMs": 203,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2058,
+          "cpuMs": 204,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2058,
+          "cpuMs": 201,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2058,
+          "cpuMs": 204,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 201,
+        "median": 204,
+        "max": 204
+      },
+      "medianCpuMsPerOperation": 1.02
+    },
+    {
+      "name": "parse-format-PlainYearMonth",
+      "description": "Parse and serialise PlainYearMonth through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 244,
+          "heapAfterBytes": 1293,
+          "cpuMs": 38,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1581,
+          "cpuMs": 36,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1581,
+          "cpuMs": 44,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1581,
+          "cpuMs": 32,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 32,
+        "median": 36,
+        "max": 44
+      },
+      "medianCpuMsPerOperation": 0.18
+    },
+    {
+      "name": "parse-format-PlainMonthDay",
+      "description": "Parse and serialise PlainMonthDay through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 228,
+          "heapAfterBytes": 1277,
+          "cpuMs": 26,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1565,
+          "cpuMs": 23,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1565,
+          "cpuMs": 24,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1565,
+          "cpuMs": 22,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 22,
+        "median": 23,
+        "max": 24
+      },
+      "medianCpuMsPerOperation": 0.115
+    },
+    {
+      "name": "parse-format-Duration",
+      "description": "Parse and serialise Duration through the global service.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 433,
+          "heapAfterBytes": 1482,
+          "cpuMs": 115,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1770,
+          "cpuMs": 116,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1770,
+          "cpuMs": 83,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 1770,
+          "cpuMs": 103,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 83,
+        "median": 103,
+        "max": 116
+      },
+      "medianCpuMsPerOperation": 0.515
+    },
+    {
+      "name": "calendar-dst-arithmetic",
+      "description": "Calendar-day arithmetic crossing the London DST boundary.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 180,
+          "heapAfterBytes": 1654,
+          "cpuMs": 239,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2172,
+          "cpuMs": 169,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2172,
+          "cpuMs": 157,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2172,
+          "cpuMs": 140,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 140,
+        "median": 157,
+        "max": 169
+      },
+      "medianCpuMsPerOperation": 0.785
+    },
+    {
+      "name": "convert-200-repeated",
+      "description": "One bulk Flow action invocation; native instants are identical, exercising calculation reuse.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 18451,
+          "heapAfterBytes": 40358,
+          "cpuMs": 18,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 40426,
+          "cpuMs": 15,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 40426,
+          "cpuMs": 16,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 40426,
+          "cpuMs": 15,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 15,
+        "median": 15,
+        "max": 16
+      },
+      "medianCpuMsPerOperation": 0.075
+    },
+    {
+      "name": "convert-200-distinct",
+      "description": "One bulk Flow action invocation; native instants vary by minute.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 31983,
+          "heapAfterBytes": 53890,
+          "cpuMs": 319,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 54158,
+          "cpuMs": 313,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 54158,
+          "cpuMs": 309,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 54158,
+          "cpuMs": 313,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 309,
+        "median": 313,
+        "max": 313
+      },
+      "medianCpuMsPerOperation": 1.565
+    },
+    {
+      "name": "working-hours-native-records",
+      "description": "One working hour over a weekend and Monday holiday, with unsaved native schedule records.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 971,
+          "heapAfterBytes": 2827,
+          "cpuMs": 866,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 3176,
+          "cpuMs": 881,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 3176,
+          "cpuMs": 811,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 3176,
+          "cpuMs": 1035,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 811,
+        "median": 881,
+        "max": 1035
+      },
+      "medianCpuMsPerOperation": 4.405
+    },
+    {
+      "name": "calendar-difference-bulk",
+      "description": "200 identical zoned calendar differences across spring DST, through the bulk action.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 18577,
+          "heapAfterBytes": 31738,
+          "cpuMs": 36,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 31950,
+          "cpuMs": 30,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 31950,
+          "cpuMs": 30,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 31950,
+          "cpuMs": 27,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 27,
+        "median": 30,
+        "max": 30
+      },
+      "medianCpuMsPerOperation": 0.15
+    },
+    {
+      "name": "recurrence-weekly-dst",
+      "description": "Bulk repeated three-occurrence rules, skipping the missing London clock time.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 56393,
+          "heapAfterBytes": 81548,
+          "cpuMs": 134,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 81700,
+          "cpuMs": 101,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 81700,
+          "cpuMs": 61,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 81700,
+          "cpuMs": 57,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 57,
+        "median": 61,
+        "max": 101
+      },
+      "medianCpuMsPerOperation": 0.305
+    },
+    {
+      "name": "availability-collection",
+      "description": "One collection interview with 200 requests sharing an unsaved schedule; copied window results.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 63546,
+          "heapAfterBytes": 65734,
+          "cpuMs": 68,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 66002,
+          "cpuMs": 70,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 66002,
+          "cpuMs": 61,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 66002,
+          "cpuMs": 62,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 61,
+        "median": 62,
+        "max": 70
+      },
+      "medianCpuMsPerOperation": 0.31
+    },
+    {
+      "name": "flow-convert-interviews",
+      "description": "Twenty real autolaunched Flow interviews calling the installed conversion action; includes Flow CPU overhead.",
+      "operationsPerSample": 20,
+      "samples": [
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 1293,
+          "heapAfterBytes": 2464,
+          "cpuMs": 2409,
+          "sample": -1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2677,
+          "cpuMs": 2099,
+          "sample": 0
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2677,
+          "cpuMs": 2009,
+          "sample": 1
+        },
+        {
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 0,
+          "heapAfterBytes": 2677,
+          "cpuMs": 1847,
+          "sample": 2
+        }
+      ],
+      "cpuMs": {
+        "min": 1847,
+        "median": 2009,
+        "max": 2099
+      },
+      "medianCpuMsPerOperation": 100.45
+    }
+  ]
+}

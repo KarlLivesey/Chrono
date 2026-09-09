@@ -1,0 +1,16 @@
+.override {
+  margin-top: 0.25rem;
+  padding-top: 0.25rem;
+}
+.override-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.override-row lightning-input {
+  flex: 1;
+  min-width: 0;
+}
+.override-row lightning-button {
+  flex-shrink: 0;
+}

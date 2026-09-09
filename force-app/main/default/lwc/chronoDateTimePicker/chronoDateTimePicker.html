@@ -1,0 +1,151 @@
+<template>
+  <div
+    class="picker slds-form-element"
+    role="group"
+    aria-label={label}
+    aria-busy={pending}
+  >
+    <div class="heading">
+      <span class="slds-form-element__label label"
+        ><template lwc:if={required}
+          ><abbr class="slds-required" title="required">*</abbr></template
+        >{label}</span
+      >
+      <template lwc:if={helpText}
+        ><lightning-helptext content={helpText}></lightning-helptext
+      ></template>
+      <div class="controls">
+        <template lwc:if={isDateTime}>
+          <template lwc:if={allowTimeZoneSelection}>
+            <c-chrono-picker-popover
+              lwc:ref="zone"
+              label={zoneLabel}
+              heading="Choose timezone"
+              disabled={disabled}
+              onopen={openZones}
+            >
+              <c-chrono-picker-menu
+                label="Search timezones"
+                searchable
+                options={timeZoneOptions}
+                value={timeZoneId}
+                pending={zonePending}
+                message={zoneMessage}
+                disabled={disabled}
+                onsearch={searchZones}
+                onchoose={handleZone}
+              ></c-chrono-picker-menu>
+            </c-chrono-picker-popover>
+          </template>
+          <template lwc:else
+            ><span class="locked" title={timeZoneId}
+              >{zoneLabel}<lightning-icon
+                icon-name="utility:lock"
+                size="xx-small"
+                alternative-text="Timezone fixed"
+              ></lightning-icon></span
+          ></template>
+        </template>
+        <template lwc:if={scheduleVisible}>
+          <template lwc:if={showScheduleSelection}>
+            <c-chrono-picker-popover
+              lwc:ref="hours"
+              label="Hours"
+              heading="Choose operating hours"
+              disabled={disabled}
+            >
+              <c-chrono-picker-menu
+                label="Search operating hours"
+                searchable={showScheduleSearch}
+                options={operatingHoursOptions}
+                value={operatingHoursId}
+                message={scheduleMessage}
+                disabled={disabled}
+                onsearch={searchHours}
+                onchoose={handleSchedule}
+              ></c-chrono-picker-menu>
+            </c-chrono-picker-popover>
+          </template>
+          <template lwc:else
+            ><span class="locked" title={scheduleMessage}
+              >Hours<lightning-icon
+                icon-name="utility:lock"
+                size="xx-small"
+                alternative-text="Operating hours fixed"
+              ></lightning-icon
+              ><lightning-helptext
+                content={scheduleMessage}
+              ></lightning-helptext></span
+          ></template>
+        </template>
+      </div>
+    </div>
+    <div class={fieldsClass}>
+      <lightning-input
+        type="date"
+        date-style={dateStyle}
+        label="Date"
+        variant="label-hidden"
+        data-field="dateValue"
+        value={dateValue}
+        required={required}
+        disabled={disabled}
+        onchange={handleEdit}
+      ></lightning-input>
+      <template lwc:if={isDateTime}
+        ><lightning-input
+          type="time"
+          label="Time"
+          variant="label-hidden"
+          data-field="timeValue"
+          value={timeValue}
+          required={required}
+          disabled={disabled}
+          onchange={handleEdit}
+        ></lightning-input
+      ></template>
+    </div>
+    <div class="status-line">
+      <template lwc:if={isDateTime}
+        ><c-chrono-offset-picker
+          candidates={candidates}
+          candidate={activeCandidate}
+          time-zone-id={timeZoneId}
+          selection-mode={selectionMode}
+          allow-override={allowOffsetOverride}
+          disabled={offsetDisabled}
+          onresolvechoice={handleChoice}
+          onoffsetchange={handleOffset}
+        ></c-chrono-offset-picker
+      ></template>
+      <template lwc:if={hasScheduleChoices}
+        ><c-chrono-picker-popover
+          lwc:ref="openTimes"
+          label="Closed · Choose open time"
+          heading="Choose an open time"
+          warning
+          disabled={offsetDisabled}
+        >
+          <p class="slds-text-body_small">{scheduleMessage}</p>
+          <c-chrono-picker-menu
+            label="Open alternatives"
+            options={scheduleChoices}
+            onchoose={handleOpenChoice}
+          ></c-chrono-picker-menu> </c-chrono-picker-popover
+      ></template>
+      <template lwc:if={pending}
+        ><span class="slds-text-body_small" role="status"
+          >Checking…</span
+        ></template
+      >
+      <template lwc:if={notice}
+        ><lightning-helptext content={notice}></lightning-helptext
+      ></template>
+    </div>
+    <template lwc:if={errorMessage}
+      ><div class="slds-form-element__help" role="alert">
+        {errorMessage}
+      </div></template
+    >
+  </div>
+</template>

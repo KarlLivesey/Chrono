@@ -26,11 +26,12 @@ global with sharing class ChronoWorkingTimeCollectionAction {
   @InvocableMethod(
     label='Chrono: Add or subtract working time (collection)'
     description='Add time inside Salesforce OperatingHours or BusinessHours, skipping closures and holidays. Handles collections and batched interviews.'
-    category='Chrono'
+    configurationEditor='skel-chrono-working-time-collection-editor'
+    category='Chrono: Working Hours'
     iconName='slds:standard:event'
   )
   global static List<ChronoFlowCollectionResult> run(List<Request> requests) {
-    List<Object> flat = new List<Object>();
+    List<ChronoWorkingTimeInput> flat = new List<ChronoWorkingTimeInput>();
     List<Integer> sizes = new List<Integer>();
     if (requests != null) {
       for (Request request : requests) {
@@ -44,9 +45,6 @@ global with sharing class ChronoWorkingTimeCollectionAction {
         }
       }
     }
-    return ChronoFlowBatch.regroup(
-      new ChronoFlowBatch('WorkingTime').run(flat),
-      sizes
-    );
+    return ChronoFlowBatch.regroup(ChronoFlowWorking.add(flat), sizes);
   }
 }

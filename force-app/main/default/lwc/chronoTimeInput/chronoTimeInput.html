@@ -1,0 +1,13 @@
+<template
+  ><lightning-input
+    type="time"
+    label={label}
+    value={value}
+    required={required}
+    disabled={disabled}
+    onchange={change}
+  ></lightning-input
+  ><template lwc:if={error}
+    ><div role="alert" class="slds-text-color_error">{error}</div></template
+  ></template
+>

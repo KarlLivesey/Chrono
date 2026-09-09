@@ -1,0 +1,47 @@
+<template>
+  <c-chrono-date-time-picker
+    mode={mode}
+    label={label}
+    help-text={helpText}
+    required={required}
+    disabled={disabled}
+    date-value={localDate}
+    date-style={dateStyle}
+    time-value={localTime}
+    time-zone-id={timeZoneId}
+    allow-time-zone-selection={allowTimeZoneSelection}
+    time-zone-options={timeZoneOptions}
+    zone-pending={zonePending}
+    zone-message={zoneMessage}
+    candidates={candidates}
+    candidate={candidate}
+    selection-mode={offsetMode}
+    allow-offset-override={allowOffsetOverride}
+    selected-instant={selectedInstant}
+    pending={pending}
+    error-message={displayedError}
+    notice={notice}
+    show-schedule-selection={showScheduleSelection}
+    has-schedule={hasSchedule}
+    show-schedule-search={showScheduleSearch}
+    operating-hours-id={selectedHoursId}
+    operating-hours-options={scheduleOptions}
+    schedule-message={scheduleMessage}
+    schedule-choices={scheduleChoices}
+    onschedulechange={handleSchedule}
+    onschedulesearch={handleScheduleSearch}
+    onopenchoice={handleOpenChoice}
+    onedit={handleEdit}
+    onresolvechoice={handleChoice}
+    onoffsetchange={handleOffset}
+    onzonesearch={handleZoneSearch}
+  >
+  </c-chrono-date-time-picker>
+  <template lwc:if={externalError}>
+    <div class="slds-text-color_error slds-m-top_small" role="alert">
+      <lightning-formatted-rich-text
+        value={externalError}
+      ></lightning-formatted-rich-text>
+    </div>
+  </template>
+</template>

@@ -1,0 +1,12 @@
+<template
+  ><c-chrono-range-picker
+    lwc:ref="control"
+    lwc:spread={config}
+    onvaluechange={change}
+  ></c-chrono-range-picker
+  ><template lwc:if={externalError}
+    ><lightning-formatted-rich-text
+      class="slds-text-color_error"
+      value={externalError}
+    ></lightning-formatted-rich-text></template
+></template>

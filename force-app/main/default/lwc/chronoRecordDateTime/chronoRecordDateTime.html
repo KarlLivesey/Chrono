@@ -1,0 +1,32 @@
+<template
+  ><template lwc:if={canRender}
+    ><c-chrono-date-time-control
+      lwc:ref="control"
+      label={label}
+      mode={mode}
+      date-value={initialDate}
+      date-time-value={initialInstant}
+      time-zone-id={zone}
+      operating-hours-id={hours}
+      operating-hours-mode={scheduleMode}
+      lock-operating-hours-selection
+      allow-time-zone-selection={canSelectZone}
+      date-style={dateStyle}
+      disabled={readOnly}
+      onvaluechange={changed}
+    ></c-chrono-date-time-control>
+    <div class="slds-m-top_small">
+      <lightning-button
+        label="Save"
+        variant="brand"
+        disabled={saveDisabled}
+        onclick={save}
+      ></lightning-button
+      ><span class="slds-m-left_small" role="status">{notice}</span>
+    </div></template
+  ><template lwc:if={displayedError}
+    ><div class="slds-text-color_error slds-m-top_x-small" role="alert">
+      {displayedError}
+    </div></template
+  ></template
+>

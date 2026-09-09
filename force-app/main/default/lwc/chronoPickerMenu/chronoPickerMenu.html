@@ -1,0 +1,46 @@
+<template>
+  <template lwc:if={searchable}
+    ><lightning-input
+      type="search"
+      label={label}
+      variant="label-hidden"
+      placeholder={label}
+      onchange={search}
+      disabled={disabled}
+    ></lightning-input
+  ></template>
+  <ul class="slds-list_vertical" aria-label={label}>
+    <template for:each={rows} for:item="row"
+      ><li key={row.value}>
+        <button
+          type="button"
+          class="slds-button slds-button_reset choice"
+          data-value={row.value}
+          onclick={choose}
+          disabled={disabled}
+          aria-pressed={row.selected}
+        >
+          <span class="name">{row.label}</span
+          ><span class="detail">{row.detail}</span>
+          <template lwc:if={row.selected}
+            ><lightning-icon
+              icon-name="utility:check"
+              size="xx-small"
+              alternative-text="Selected"
+            ></lightning-icon
+          ></template>
+        </button></li
+    ></template>
+  </ul>
+  <template lwc:if={pending}
+    ><p class="slds-text-body_small" role="status">
+      Checking offsets…
+    </p></template
+  >
+  <template lwc:if={empty}
+    ><p class="slds-text-body_small">No matching options.</p></template
+  >
+  <template lwc:if={message}
+    ><p class="slds-text-body_small">{message}</p></template
+  >
+</template>

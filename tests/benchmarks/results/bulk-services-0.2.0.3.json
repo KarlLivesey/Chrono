@@ -1,0 +1,242 @@
+{
+  "createdAt": "2026-09-09T08:42:00.240723+00:00",
+  "targetOrg": "chrono-subscriber",
+  "label": "0.2.0.3-audit",
+  "operationsPerSample": 200,
+  "measuredSamples": 3,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "apex-service-convert-200-repeated",
+      "description": "Direct Apex service: One bulk Flow action invocation; native instants are identical, exercising calculation reuse.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 178,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 30946,
+          "heapAfterBytes": 52859,
+          "cpuMs": 171,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 206,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 31046,
+          "heapAfterBytes": 52959,
+          "cpuMs": 196,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 222,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 31046,
+          "heapAfterBytes": 52959,
+          "cpuMs": 212,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 206,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 30846,
+          "heapAfterBytes": 52759,
+          "cpuMs": 197,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 196,
+        "median": 197,
+        "max": 212
+      },
+      "medianCpuMsPerOperation": 0.985
+    },
+    {
+      "name": "apex-service-convert-200-distinct",
+      "description": "Direct Apex service: One bulk Flow action invocation; native instants vary by minute.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 539,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 31841,
+          "heapAfterBytes": 53754,
+          "cpuMs": 530,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 590,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 32041,
+          "heapAfterBytes": 53954,
+          "cpuMs": 579,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 464,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 32041,
+          "heapAfterBytes": 53954,
+          "cpuMs": 456,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 516,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 32041,
+          "heapAfterBytes": 53954,
+          "cpuMs": 507,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 456,
+        "median": 507,
+        "max": 579
+      },
+      "medianCpuMsPerOperation": 2.535
+    },
+    {
+      "name": "apex-service-stress-availability-distinct",
+      "description": "Direct Apex service: 200 distinct two-day windows across four schedule zones, ten weekly slots and 64 holidays.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4214,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 101892,
+          "heapAfterBytes": 170831,
+          "cpuMs": 3175,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 3663,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 101892,
+          "heapAfterBytes": 170831,
+          "cpuMs": 2771,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 3610,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 102124,
+          "heapAfterBytes": 171063,
+          "cpuMs": 2817,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4734,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 102124,
+          "heapAfterBytes": 171063,
+          "cpuMs": 3713,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 2771,
+        "median": 2817,
+        "max": 3713
+      },
+      "medianCpuMsPerOperation": 14.085
+    },
+    {
+      "name": "apex-service-stress-recurrence-distinct",
+      "description": "Direct Apex service: 200 distinct ten-day daily rules across four schedule zones, ten weekly slots and 64 holidays; exact expected dates.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 5025,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37107,
+          "heapAfterBytes": 76550,
+          "cpuMs": 4972,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 5456,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37107,
+          "heapAfterBytes": 76550,
+          "cpuMs": 5392,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4620,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37107,
+          "heapAfterBytes": 76550,
+          "cpuMs": 4569,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4730,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37107,
+          "heapAfterBytes": 76550,
+          "cpuMs": 4681,
+          "sample": 2
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 4569,
+        "median": 4681,
+        "max": 5392
+      },
+      "medianCpuMsPerOperation": 23.405
+    }
+  ]
+}

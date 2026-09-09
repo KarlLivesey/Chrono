@@ -2,13 +2,14 @@
   "name": "Chrono",
   "packageDirectories": [
     {
-      "versionName": "Initial development",
-      "versionNumber": "0.1.0.NEXT",
+      "versionName": "Bulk Apex services",
+      "versionNumber": "0.2.0.NEXT",
       "path": "force-app",
       "default": true,
       "package": "Chrono",
       "definitionFile": "config/project-scratch-def.json",
-      "versionDescription": "Salesforce-native date and time utilities with zoned datetime and Business Hours support."
+      "versionDescription": "Bulk Apex services with local-date inputs and supplied native OperatingHours schedules.",
+      "ancestorId": "04tgK000000KFNtQAO"
     }
   ],
   "namespace": "skel",
@@ -18,6 +19,25 @@
     "Chrono": "0HogK0000004dxFSAQ",
     "Chrono@0.1.0-1": "04tgK000000JnEjQAK",
     "Chrono@0.1.0-2": "04tgK000000JnGLQA0",
-    "Chrono@0.1.0-3": "04tgK000000JnHxQAK"
+    "Chrono@0.1.0-3": "04tgK000000JnHxQAK",
+    "Chrono@0.1.0-4": "04tgK000000JnJZQA0",
+    "Chrono@0.1.0-5": "04tgK000000Jp5FQAS",
+    "Chrono@0.1.0-6": "04tgK000000Jp8TQAS",
+    "Chrono@0.1.0-7": "04tgK000000JvCHQA0",
+    "Chrono@0.1.0-8": "04tgK000000KA01QAG",
+    "Chrono@0.1.0-9": "04tgK000000KBovQAG",
+    "Chrono@0.1.0-10": "04tgK000000KC0DQAW",
+    "Chrono@0.1.0-11": "04tgK000000KCBVQA4",
+    "Chrono@0.1.0-12": "04tgK000000KCxtQAG",
+    "Chrono@0.1.0-13": "04tgK000000KDCPQA4",
+    "Chrono@0.1.0-14": "04tgK000000KDE1QAO",
+    "Chrono@0.1.0-15": "04tgK000000KDHFQA4",
+    "Chrono@0.1.0-16": "04tgK000000KDNhQAO",
+    "Chrono@0.1.0-17": "04tgK000000KDynQAG",
+    "Chrono@0.1.0-18": "04tgK000000KEd7QAG",
+    "Chrono@0.1.0-19": "04tgK000000KFNtQAO",
+    "Chrono@0.2.0-1": "04tgK000000KHXlQAO",
+    "Chrono@0.2.0-2": "04tgK000000KHsjQAG",
+    "Chrono@0.2.0-3": "04tgK000000KIYfQAO"
   }
 }

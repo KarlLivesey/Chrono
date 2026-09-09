@@ -1,0 +1,414 @@
+<template>
+  <lightning-accordion
+    allow-multiple-sections-open
+    active-section-name="general"
+  >
+    <lightning-accordion-section name="general" label="Field settings"
+      ><template for:each={generalFields} for:item="field"
+        ><c-chrono-flow-value-editor
+          key={field.name}
+          name={field.name}
+          label={field.label}
+          value={field.value}
+          value-type={field.dataType}
+          reference={field.reference}
+          reference-only={field.referenceOnly}
+          options={field.options}
+          object-type={field.objectType}
+          builder-context={builderContext}
+          automatic-output-variables={automaticOutputVariables}
+          help-text={field.helpText}
+          onvaluechange={handleValue}
+        ></c-chrono-flow-value-editor
+      ></template>
+      <c-chrono-flow-value-editor
+        label="Initial value"
+        name={initialField.name}
+        value={initialField.value}
+        value-type={initialField.dataType}
+        reference={initialField.reference}
+        accepted-types={initialTypes}
+        builder-context={builderContext}
+        automatic-output-variables={automaticOutputVariables}
+        help-text="Choose a Date, Date/Time or Text resource containing a Chrono ISO value. Dates start at local midnight; exact instants display in the configured timezone."
+        onvaluechange={handleInitialValue}
+      ></c-chrono-flow-value-editor>
+    </lightning-accordion-section>
+    <lightning-accordion-section name="timezone" label="Timezones">
+      <template lwc:if={isDateTime}>
+        <lightning-combobox
+          label="User selection"
+          value={zonePolicy}
+          options={zonePolicyOptions}
+          onchange={changeZonePolicy}
+        ></lightning-combobox>
+        <template lwc:if={showZoneSource}
+          ><lightning-combobox
+            label="Values supplied by"
+            value={zoneSource}
+            options={sourceOptions}
+            onchange={changeZoneSource}
+          ></lightning-combobox
+        ></template>
+        <template lwc:if={showZoneList}
+          ><c-chrono-flow-list-editor
+            label={zoneListLabel}
+            items={selectedZoneItems}
+            options={zoneChoices}
+            add-label="Add timezone"
+            error={zoneError}
+            onsearch={searchZones}
+            onadd={addZone}
+            onremove={removeZone}
+          ></c-chrono-flow-list-editor
+        ></template>
+        <template for:each={timezoneFields} for:item="field"
+          ><c-chrono-flow-value-editor
+            key={field.name}
+            name={field.name}
+            label={field.label}
+            value={field.value}
+            value-type={field.dataType}
+            reference={field.reference}
+            reference-only={field.referenceOnly}
+            options={field.options}
+            searchable={field.searchable}
+            lookup-message={field.lookupMessage}
+            object-type={field.objectType}
+            builder-context={builderContext}
+            automatic-output-variables={automaticOutputVariables}
+            help-text={field.helpText}
+            onvaluechange={handleValue}
+          ></c-chrono-flow-value-editor
+        ></template>
+        <p class="slds-text-body_small slds-m-top_small">
+          Lists keep the user within the permitted timezones. For dynamic
+          choices, bind a Flow text collection of timezone IDs.
+        </p> </template
+      ><template lwc:else><p>Not needed for a date-only field.</p></template>
+    </lightning-accordion-section>
+    <lightning-accordion-section name="hours" label="Operating hours">
+      <template lwc:if={dynamicHours}
+        ><p class="slds-text-body_small">
+          The Flow controls the schedule source. Existing resource bindings are
+          preserved below.
+        </p></template
+      >
+      <template lwc:else
+        ><lightning-combobox
+          label="User selection"
+          value={hoursPolicy}
+          options={hoursPolicyOptions}
+          data-part="policy"
+          onchange={changeHoursSetup}
+        ></lightning-combobox
+      ></template>
+      <template lwc:if={showHoursSource}
+        ><lightning-combobox
+          label="Values supplied by"
+          value={hoursSource}
+          options={hoursSourceOptions}
+          data-part="source"
+          onchange={changeHoursSetup}
+        ></lightning-combobox
+      ></template>
+      <template lwc:if={showHoursData}
+        ><lightning-combobox
+          label="Resource contains"
+          value={hoursData}
+          options={hoursDataOptions}
+          data-part="data"
+          onchange={changeHoursSetup}
+        ></lightning-combobox
+      ></template>
+      <template lwc:if={showSavedList}
+        ><c-chrono-flow-list-editor
+          label={savedListLabel}
+          items={selectedSavedItems}
+          options={savedChoices}
+          add-label="Add operating hours"
+          pending={savedPending}
+          error={savedError}
+          onsearch={searchSaved}
+          onadd={addSaved}
+          onremove={removeSaved}
+        ></c-chrono-flow-list-editor
+      ></template>
+      <template for:each={hoursFields} for:item="field"
+        ><c-chrono-flow-value-editor
+          key={field.name}
+          name={field.name}
+          label={field.label}
+          value={field.value}
+          value-type={field.dataType}
+          reference={field.reference}
+          reference-only={field.referenceOnly}
+          options={field.options}
+          object-type={field.objectType}
+          builder-context={builderContext}
+          automatic-output-variables={automaticOutputVariables}
+          help-text={field.helpText}
+          onvaluechange={handleValue}
+        ></c-chrono-flow-value-editor
+      ></template>
+      <p class="slds-text-body_small slds-m-vertical_small">
+        Hours and holidays always use the schedule's timezone, independently of
+        the display timezone.
+      </p>
+      <template lwc:if={showFilter}>
+        <h3 class="slds-text-heading_small">Match all criteria</h3>
+        <template for:each={criteria} for:item="row"
+          ><div key={row.key} class="slds-m-vertical_medium">
+            <lightning-combobox
+              label="Field"
+              value={row.fieldPath}
+              options={filterFields}
+              data-index={row.index}
+              data-field="fieldPath"
+              onchange={editCriterion}
+            ></lightning-combobox>
+            <lightning-combobox
+              label="Condition"
+              value={row.operator}
+              options={filterOperators}
+              data-index={row.index}
+              data-field="operator"
+              onchange={editCriterion}
+            ></lightning-combobox>
+            <lightning-input
+              label="Value"
+              value={row.value}
+              data-index={row.index}
+              data-field="value"
+              onchange={editCriterion}
+            ></lightning-input>
+            <lightning-button
+              label="Remove criterion"
+              data-index={row.index}
+              onclick={removeCriterion}
+            ></lightning-button></div
+        ></template>
+        <lightning-button
+          label="Add criterion"
+          onclick={addCriterion}
+        ></lightning-button>
+      </template>
+      <template lwc:if={showFixed}>
+        <div class="fixed-schedule">
+          <lightning-input
+            label="Schedule name"
+            value={fixedName}
+            data-field="name"
+            onchange={editDefinition}
+          ></lightning-input>
+          <div class="slds-form-element schedule-zone">
+            <div class="slds-form-element__label">
+              <abbr class="slds-required" title="required">*</abbr>Schedule
+              timezone
+              <lightning-helptext
+                content="Hours and holidays use this timezone, which can differ from the picker’s timezone."
+              ></lightning-helptext>
+            </div>
+            <c-chrono-choice-lookup
+              label="Schedule timezone (required)"
+              value={fixedZone}
+              options={scheduleZoneOptions}
+              message={zoneError}
+              placeholder="Search timezones…"
+              onchoose={chooseScheduleZone}
+            ></c-chrono-choice-lookup>
+          </div>
+          <div class="schedule-heading">
+            <h3 class="slds-text-title_bold">Weekly hours</h3>
+            <lightning-button
+              variant="base"
+              icon-name="utility:add"
+              label="Add hours"
+              onclick={addSlot}
+            ></lightning-button>
+          </div>
+          <template lwc:if={noSlots}
+            ><p class="slds-text-body_small slds-text-color_weak">
+              No weekly hours added.
+            </p></template
+          >
+          <template for:each={slots} for:item="row">
+            <div key={row.key} class="schedule-row">
+              <div class="schedule-row-heading">
+                <lightning-combobox
+                  label="Weekday"
+                  value={row.dayOfWeek}
+                  options={weekdays}
+                  data-group="slots"
+                  data-index={row.index}
+                  data-field="dayOfWeek"
+                  onchange={editRow}
+                ></lightning-combobox>
+                <lightning-button-icon
+                  icon-name="utility:delete"
+                  variant="bare"
+                  alternative-text={row.removeLabel}
+                  title={row.removeLabel}
+                  data-group="slots"
+                  data-index={row.index}
+                  onclick={removeRow}
+                ></lightning-button-icon>
+              </div>
+              <div class="schedule-times">
+                <lightning-input
+                  type="time"
+                  label="Opens"
+                  value={row.startTime}
+                  data-group="slots"
+                  data-index={row.index}
+                  data-field="startTime"
+                  onchange={editRow}
+                ></lightning-input>
+                <lightning-input
+                  type="time"
+                  label="Closes"
+                  value={row.endTime}
+                  data-group="slots"
+                  data-index={row.index}
+                  data-field="endTime"
+                  onchange={editRow}
+                ></lightning-input>
+              </div>
+            </div>
+          </template>
+          <lightning-button
+            class="schedule-preset"
+            variant="base"
+            label="Use Mon–Fri, 09:00–17:00"
+            onclick={addWeekdays}
+          ></lightning-button>
+          <div class="schedule-heading">
+            <div class="schedule-title">
+              <h3 class="slds-text-title_bold">Holidays</h3>
+              <lightning-helptext
+                content="Add full-day or partial-day closures here. For recurring closures, supply Salesforce Holiday records."
+              ></lightning-helptext>
+            </div>
+            <lightning-button
+              variant="base"
+              icon-name="utility:add"
+              label="Add holiday"
+              onclick={addHoliday}
+            ></lightning-button>
+          </div>
+          <template lwc:if={noHolidays}
+            ><p class="slds-text-body_small slds-text-color_weak">
+              No holiday closures added.
+            </p></template
+          >
+          <template for:each={holidays} for:item="row">
+            <div key={row.key} class="schedule-row">
+              <div class="schedule-row-heading">
+                <lightning-input
+                  type="date"
+                  label="Holiday date"
+                  value={row.dateValue}
+                  data-group="holidays"
+                  data-index={row.index}
+                  data-field="dateValue"
+                  onchange={editRow}
+                ></lightning-input>
+                <lightning-button-icon
+                  icon-name="utility:delete"
+                  variant="bare"
+                  alternative-text={row.removeLabel}
+                  title={row.removeLabel}
+                  data-group="holidays"
+                  data-index={row.index}
+                  onclick={removeRow}
+                ></lightning-button-icon>
+              </div>
+              <lightning-input
+                class="holiday-all-day"
+                type="checkbox"
+                label="Closed all day"
+                checked={row.allDay}
+                data-group="holidays"
+                data-index={row.index}
+                data-field="allDay"
+                onchange={editRow}
+              ></lightning-input>
+              <template lwc:if={row.partial}>
+                <div class="schedule-times">
+                  <lightning-input
+                    type="time"
+                    label="Closed from"
+                    value={row.startTime}
+                    data-group="holidays"
+                    data-index={row.index}
+                    data-field="startTimeInMinutes"
+                    onchange={editRow}
+                  ></lightning-input>
+                  <lightning-input
+                    type="time"
+                    label="Closed until"
+                    field-level-help="Midnight means the end of this day."
+                    value={row.endTime}
+                    data-group="holidays"
+                    data-index={row.index}
+                    data-field="endTimeInMinutes"
+                    onchange={editRow}
+                  ></lightning-input>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+    </lightning-accordion-section>
+    <lightning-accordion-section name="interaction" label="User interaction">
+      <template for:each={interactionFields} for:item="field"
+        ><c-chrono-flow-value-editor
+          key={field.name}
+          name={field.name}
+          label={field.label}
+          value={field.value}
+          value-type={field.dataType}
+          reference={field.reference}
+          reference-only={field.referenceOnly}
+          options={field.options}
+          object-type={field.objectType}
+          builder-context={builderContext}
+          automatic-output-variables={automaticOutputVariables}
+          help-text={field.helpText}
+          onvaluechange={handleValue}
+        ></c-chrono-flow-value-editor
+      ></template>
+      <p class="slds-text-body_small">
+        Repeated times require a choice. Missing times offer the nearest valid
+        boundaries. Closed hours offer the previous or next open time.
+      </p>
+    </lightning-accordion-section>
+    <lightning-accordion-section name="outputs" label="Use the outputs">
+      <p>Choose this component in a later Flow resource picker:</p>
+      <ul class="slds-list_dotted slds-m-vertical_small">
+        <li>Date: {outputPrefix}.dateValue</li>
+        <li>ISO plain date: {outputPrefix}.chronoDateValue</li>
+        <template lwc:if={isDateTime}
+          ><li>UTC date/time: {outputPrefix}.dateTimeValue</li>
+          <li>ISO plain date/time: {outputPrefix}.chronoPlainDateTimeValue</li>
+          <li>ISO plain time: {outputPrefix}.chronoTimeValue</li>
+          <li>ISO instant: {outputPrefix}.chronoInstantValue</li>
+          <li>ISO zoned date/time: {outputPrefix}.chronoZonedDateTimeValue</li>
+          <li>Timezone: {outputPrefix}.timeZoneId</li>
+          <li>Offset choice: {outputPrefix}.offsetMode</li>
+          <li>Supplied offset: {outputPrefix}.offsetOverride</li></template
+        >
+        <li>Saved hours ID: {outputPrefix}.operatingHoursId</li>
+      </ul>
+      <p class="slds-text-body_small">
+        The component does not save records. Use an Assignment, Action or Update
+        Records element. Unsaved schedules have no record ID: reuse their
+        supplied values in later working-time actions.
+      </p>
+    </lightning-accordion-section>
+  </lightning-accordion>
+  <template lwc:if={errorMessage}
+    ><p class="slds-text-color_error" role="alert">{errorMessage}</p></template
+  >
+</template>

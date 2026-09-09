@@ -1,5 +1,5 @@
 // Copyright (c) 2026, Karl. SPDX-License-Identifier: BSD-3-Clause
-/** @description Internal native-backed value adapter for Flow transport; no core object is exposed to Flow. */
+/** @description Internal adapter for the existing Flow action result contract. */
 public with sharing class ChronoFlowValue {
   public final String valueType;
   public final Object value;
@@ -30,28 +30,28 @@ public with sharing class ChronoFlowValue {
   private static Object parseIsoValue(String valueType, String text) {
     switch on valueType {
       when 'Instant' {
-        return ChronoInstant.parse(text);
+        return ChronoInstantService.parseIso(text);
       }
       when 'ZonedDateTime' {
-        return ChronoZonedDateTime.parse(text);
+        return ChronoZonedDateTimeService.parseIso(text);
       }
       when 'PlainDateTime' {
-        return ChronoPlainDateTime.parse(text);
+        return ChronoPlainDateTimeService.parseIso(text);
       }
       when 'PlainDate' {
-        return ChronoPlainDate.parse(text);
+        return ChronoPlainDateService.parseIso(text);
       }
       when 'PlainTime' {
-        return ChronoPlainTime.parse(text);
+        return ChronoPlainTimeService.parseIso(text);
       }
       when 'PlainYearMonth' {
-        return ChronoPlainYearMonth.parse(text);
+        return ChronoPlainYearMonthService.parseIso(text);
       }
       when 'PlainMonthDay' {
-        return ChronoPlainMonthDay.parse(text);
+        return ChronoPlainMonthDayService.parseIso(text);
       }
       when 'Duration' {
-        return ChronoDuration.parse(text);
+        return ChronoDurationService.parseIso(text);
       }
       when else {
         throw new ChronoException('Unknown Chrono value type: ' + valueType);
@@ -86,28 +86,37 @@ public with sharing class ChronoFlowValue {
   private static Object fromNative(ChronoConvertInput input) {
     switch on input.valueType {
       when 'Instant' {
-        return new ChronoInstant(input.instantValue);
+        return ChronoInstantService.create(input.instantValue);
       }
       when 'ZonedDateTime' {
-        return new ChronoZonedDateTime(input.instantValue, input.timeZoneId);
+        return ChronoZonedDateTimeService.create(
+          input.instantValue,
+          input.timeZoneId
+        );
       }
       when 'PlainDateTime' {
-        return new ChronoPlainDateTime(
+        return ChronoPlainDateTimeService.create(
           input.dateValue,
           ChronoIso.parseTime(input.timeValue)
         );
       }
       when 'PlainDate' {
-        return new ChronoPlainDate(input.dateValue);
+        return ChronoPlainDateService.create(input.dateValue);
       }
       when 'PlainTime' {
-        return new ChronoPlainTime(ChronoIso.parseTime(input.timeValue));
+        return ChronoPlainTimeService.create(
+          ChronoIso.parseTime(input.timeValue)
+        );
       }
       when 'PlainYearMonth' {
-        return new ChronoPlainDate(input.dateValue).toPlainYearMonth();
+        return ChronoPlainDateService.toPlainYearMonth(
+          ChronoPlainDateService.create(input.dateValue)
+        );
       }
       when 'PlainMonthDay' {
-        return new ChronoPlainDate(input.dateValue).toPlainMonthDay();
+        return ChronoPlainDateService.toPlainMonthDay(
+          ChronoPlainDateService.create(input.dateValue)
+        );
       }
       when else {
         throw new ChronoException(
@@ -116,59 +125,96 @@ public with sharing class ChronoFlowValue {
       }
     }
   }
-  public ChronoFlowResult result() {
-    ChronoFlowResult result = new ChronoFlowResult();
+  public ChronoOperationResult result() {
+    ChronoOperationResult result = new ChronoOperationResult();
     result.success = true;
     result.valueType = valueType;
-    result.value = String.valueOf(value);
+    result.value = isoText(valueType, value);
     fillNative(result);
     return result;
   }
-  private void fillNative(ChronoFlowResult result) {
+  /** @description Serialises concrete core data through its validating service. */
+  public static String isoText(String valueType, Object value) {
     switch on valueType {
       when 'Instant' {
-        result.instantValue = ((ChronoInstant) value).toDatetime();
+        return ChronoInstantService.toIsoString((ChronoInstant) value);
+      }
+      when 'ZonedDateTime' {
+        return ChronoZonedDateTimeService.toIsoString(
+          (ChronoZonedDateTime) value
+        );
+      }
+      when 'PlainDateTime' {
+        return ChronoPlainDateTimeService.toIsoString(
+          (ChronoPlainDateTime) value
+        );
+      }
+      when 'PlainDate' {
+        return ChronoPlainDateService.toIsoString((ChronoPlainDate) value);
+      }
+      when 'PlainTime' {
+        return ChronoPlainTimeService.toIsoString((ChronoPlainTime) value);
+      }
+      when 'PlainYearMonth' {
+        return ChronoPlainYearMonthService.toIsoString(
+          (ChronoPlainYearMonth) value
+        );
+      }
+      when 'PlainMonthDay' {
+        return ChronoPlainMonthDayService.toIsoString(
+          (ChronoPlainMonthDay) value
+        );
+      }
+      when 'Duration' {
+        return ChronoDurationService.toIsoString((ChronoDuration) value);
+      }
+      when else {
+        throw new ChronoException('Unknown Chrono value type: ' + valueType);
+      }
+    }
+  }
+  private void fillNative(ChronoOperationResult result) {
+    switch on valueType {
+      when 'Instant' {
+        result.instantValue = ChronoInstantService.toDatetime(
+          ((ChronoInstant) value)
+        );
       }
       when 'ZonedDateTime' {
         ChronoZonedDateTime zoned = (ChronoZonedDateTime) value;
-        result.instantValue = zoned.toDatetime();
-        result.dateValue = zoned.toDate();
-        result.timeValue = ChronoIso.timeText(zoned.toTime());
-        result.timeZoneId = zoned.getTimeZoneId();
+        result.instantValue = ChronoZonedDateTimeService.toDatetime(zoned);
+        result.dateValue = ChronoZonedDateTimeService.toDate(zoned);
+        result.timeValue = ChronoIso.timeText(
+          ChronoZonedDateTimeService.toTime(zoned)
+        );
+        result.timeZoneId = ChronoZonedDateTimeService.getTimeZoneId(zoned);
       }
       when 'PlainDateTime' {
         ChronoPlainDateTime local = (ChronoPlainDateTime) value;
-        result.dateValue = local.toDate();
-        result.timeValue = ChronoIso.timeText(local.toTime());
+        result.dateValue = ChronoPlainDateTimeService.toDate(local);
+        result.timeValue = ChronoIso.timeText(
+          ChronoPlainDateTimeService.toTime(local)
+        );
       }
       when 'PlainDate' {
-        result.dateValue = ((ChronoPlainDate) value).toDate();
+        result.dateValue = ChronoPlainDateService.toDate(
+          ((ChronoPlainDate) value)
+        );
       }
       when 'PlainTime' {
         result.timeValue = ChronoIso.timeText(
-          ((ChronoPlainTime) value).toTime()
+          ChronoPlainTimeService.toTime(((ChronoPlainTime) value))
         );
       }
       when 'Duration' {
         ChronoDuration duration = (ChronoDuration) value;
-        result.months = duration.getMonths();
-        result.days = duration.getDays();
-        result.milliseconds = duration.getMilliseconds();
+        result.months = ChronoDurationService.getMonths(duration);
+        result.days = ChronoDurationService.getDays(duration);
+        result.milliseconds = ChronoDurationService.getMilliseconds(duration);
       }
     }
   }
   public static Datetime exact(Datetime nativeValue, String text) {
-    if (nativeValue != null) {
-      if (!String.isBlank(text)) {
-        throw new ChronoException(
-          'Provide a native instant or an ISO instant, not both.'
-        );
-      }
-      return nativeValue;
-    }
-    ChronoSupport.requireValue(text, 'ISO instant');
-    return text.contains('[')
-      ? ChronoZonedDateTime.parse(text).toDatetime()
-      : ChronoInstant.parse(text).toDatetime();
+    return ChronoExactInput.resolve(nativeValue, text);
   }
 }

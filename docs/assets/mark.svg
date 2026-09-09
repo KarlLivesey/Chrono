@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect
+    width="40"
+    height="40"
+    rx="20"
+    fill="#203a40"
+  /><path
+    d="M29 10a14 14 0 1 0 4 19"
+    fill="none"
+    stroke="#f6f4ee"
+    stroke-width="2.5"
+  /><path
+    d="M20 10v10l8 4"
+    fill="none"
+    stroke="#e9ac79"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  /><circle cx="20" cy="20" r="2.5" fill="#e9ac79" /></svg>

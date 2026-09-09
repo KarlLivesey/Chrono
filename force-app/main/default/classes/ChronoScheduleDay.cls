@@ -36,7 +36,20 @@ public with sharing class ChronoScheduleDay {
         );
       }
     }
-    result.sort();
+    result.sort(new SpanComparator());
+    List<Span> merged = new List<Span>();
+    for (Span opening : result) {
+      if (
+        !merged.isEmpty() &&
+        opening.startTime <= merged[merged.size() - 1].endTime
+      ) {
+        Span previous = merged[merged.size() - 1];
+        previous.endTime = Math.max(previous.endTime, opening.endTime);
+      } else {
+        merged.add(opening);
+      }
+    }
+    result = merged;
     for (Holiday holiday : holidays) {
       if (ChronoHolidays.occurs(holiday, day)) {
         for (Span closed : holidaySpans(holiday, day, intervals)) {
@@ -81,25 +94,30 @@ public with sharing class ChronoScheduleDay {
         result.add(opening);
       } else {
         if (closed.startTime > opening.startTime) {
-          result.add(new Span(opening.startTime, closed.startTime));
+          result.add(span(opening.startTime, closed.startTime));
         }
         if (closed.endTime < opening.endTime) {
-          result.add(new Span(closed.endTime, opening.endTime));
+          result.add(span(closed.endTime, opening.endTime));
         }
       }
     }
     return result;
   }
-  public class Span implements Comparable {
+  public class Span {
     public Long startTime;
     public Long endTime;
-    public Integer compareTo(Object other) {
-      Long otherStart = ((Span) other).startTime;
-      return startTime == otherStart ? 0 : (startTime < otherStart ? -1 : 1);
-    }
-    public Span(Long startTime, Long endTime) {
-      this.startTime = startTime;
-      this.endTime = endTime;
+  }
+  public static Span span(Long startTime, Long endTime) {
+    Span result = new Span();
+    result.startTime = startTime;
+    result.endTime = endTime;
+    return result;
+  }
+  private class SpanComparator implements Comparator<Span> {
+    public Integer compare(Span left, Span right) {
+      ChronoSupport.requireValue(left, 'Schedule interval');
+      ChronoSupport.requireValue(right, 'Schedule interval');
+      return ChronoFlowCompare.compareLong(left.startTime, right.startTime);
     }
   }
 }

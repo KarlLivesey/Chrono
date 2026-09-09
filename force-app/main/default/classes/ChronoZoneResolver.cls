@@ -8,16 +8,8 @@ public with sharing class ChronoZoneResolver {
   ) {
     ChronoSupport.requireValue(localDate, 'Date');
     ChronoSupport.requireValue(localTime, 'Time');
-    TimeZone zone = ChronoSupport.zone(zoneId);
     Datetime wallClock = Datetime.newInstanceGmt(localDate, localTime);
-    Set<Integer> offsets = new Set<Integer>{ zone.getOffset(wallClock) };
-    Datetime midnight = Datetime.newInstanceGmt(
-      localDate,
-      Time.newInstance(0, 0, 0, 0)
-    );
-    for (Integer day = -3; day <= 3; day++) {
-      offsets.add(zone.getOffset(midnight.addDays(day)));
-    }
+    Set<Integer> offsets = sampleOffsets(localDate, zoneId);
     List<Datetime> matches = new List<Datetime>();
     for (Integer offset : offsets) {
       Datetime candidate = Datetime.newInstance(wallClock.getTime() - offset);
@@ -27,6 +19,19 @@ public with sharing class ChronoZoneResolver {
     }
     matches.sort();
     return matches;
+  }
+  /** @description Samples nearby offsets for exact resolution and explicit picker gap corrections. */
+  public static Set<Integer> sampleOffsets(Date localDate, String zoneId) {
+    TimeZone zone = ChronoSupport.zone(zoneId);
+    Datetime midnight = Datetime.newInstanceGmt(
+      localDate,
+      Time.newInstance(0, 0, 0, 0)
+    );
+    Set<Integer> offsets = new Set<Integer>();
+    for (Integer hour = -72; hour <= 72; hour += 6) {
+      offsets.add(zone.getOffset(midnight.addHours(hour)));
+    }
+    return offsets;
   }
   public static Datetime choose(
     ChronoPlainDateTime local,
@@ -40,7 +45,11 @@ public with sharing class ChronoZoneResolver {
         'Disambiguation must be reject, earlier or later.'
       );
     }
-    List<Datetime> matches = resolve(local.toDate(), local.toTime(), zoneId);
+    List<Datetime> matches = resolve(
+      ChronoPlainDateTimeService.toDate(local),
+      ChronoPlainDateTimeService.toTime(local),
+      zoneId
+    );
     if (matches.isEmpty()) {
       throw new ChronoException(
         'Local datetime does not exist in ' + zoneId + '.'

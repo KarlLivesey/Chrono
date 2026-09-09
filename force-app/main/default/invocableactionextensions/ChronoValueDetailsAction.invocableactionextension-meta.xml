@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<InvocableActionExtension
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+><targets><targetType>ActionParameter</targetType><targetName
+    >ChronoValueDetailsAction.Request.valueType</targetName><attributes><key
+      >Order</key><dataType>Integer</dataType><value
+      >1</value></attributes><attributes><key>Group</key><dataType
+      >String</dataType><value>Source</value></attributes></targets><targets
+  ><targetType>ActionParameter</targetType><targetName
+    >ChronoValueDetailsAction.Request.value</targetName><attributes><key
+      >Order</key><dataType>Integer</dataType><value
+      >2</value></attributes><attributes><key>Group</key><dataType
+      >String</dataType><value>Source</value></attributes></targets><targets
+  ><targetType>ActionParameter</targetType><targetName
+    >ChronoValueDetailsAction.Request.dateValue</targetName><attributes><key
+      >Order</key><dataType>Integer</dataType><value
+      >3</value></attributes><attributes><key>Group</key><dataType
+      >String</dataType><value>Source</value></attributes></targets><targets
+  ><targetType>ActionParameter</targetType><targetName
+    >ChronoValueDetailsAction.Request.instantValue</targetName><attributes><key
+      >Order</key><dataType>Integer</dataType><value
+      >4</value></attributes><attributes><key>Group</key><dataType
+      >String</dataType><value>Source</value></attributes></targets><targets
+  ><targetType>ActionParameter</targetType><targetName
+    >ChronoValueDetailsAction.Request.timeValue</targetName><attributes><key
+      >Order</key><dataType>Integer</dataType><value
+      >5</value></attributes><attributes><key>Group</key><dataType
+      >String</dataType><value>Source</value></attributes></targets><targets
+  ><targetType>ActionParameter</targetType><targetName
+    >ChronoValueDetailsAction.Request.timeZoneId</targetName><attributes><key
+      >Order</key><dataType>Integer</dataType><value
+      >6</value></attributes><attributes><key>Group</key><dataType
+      >String</dataType><value>Context</value></attributes></targets><targets
+  ><targetType>ActionParameter</targetType><targetName
+    >ChronoValueDetailsAction.Request.disambiguation</targetName><attributes
+    ><key>Order</key><dataType>Integer</dataType><value
+      >7</value></attributes><attributes><key>Group</key><dataType
+      >String</dataType><value
+      >Context</value></attributes></targets></InvocableActionExtension>

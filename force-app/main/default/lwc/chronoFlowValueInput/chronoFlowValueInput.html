@@ -1,0 +1,35 @@
+<template
+  ><template lwc:if={duration}
+    ><c-chrono-duration-input
+      data-control
+      label={label}
+      value={value}
+      required={required}
+      disabled={disabled}
+      onvaluechange={change}
+    ></c-chrono-duration-input></template
+  ><template lwc:elseif={time}
+    ><c-chrono-time-input
+      data-control
+      label={label}
+      value={value}
+      required={required}
+      disabled={disabled}
+      onvaluechange={change}
+    ></c-chrono-time-input></template
+  ><template lwc:else
+    ><c-chrono-partial-date-input
+      data-control
+      kind={kind}
+      label={label}
+      value={value}
+      required={required}
+      disabled={disabled}
+      onvaluechange={change}
+    ></c-chrono-partial-date-input></template
+  ><template lwc:if={externalError}
+    ><lightning-formatted-rich-text
+      class="slds-text-color_error"
+      value={externalError}
+    ></lightning-formatted-rich-text></template
+></template>

@@ -1,0 +1,16 @@
+<template
+  ><section aria-label={label}>
+    <template for:each={rows} for:item="row"
+      ><div key={row.key} class="row">
+        <template lwc:if={row.error}
+          ><span class="slds-text-color_error" role="alert"
+            >{row.error}</span
+          ></template
+        ><template lwc:else
+          ><span class="zone">{row.zone}</span><span>{row.datetime}</span
+          ><span class="slds-text-color_weak">{row.offset}</span></template
+        >
+      </div></template
+    >
+  </section></template
+>

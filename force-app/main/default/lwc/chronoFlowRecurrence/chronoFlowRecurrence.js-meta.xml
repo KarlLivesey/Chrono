@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningComponentBundle
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+><apiVersion>67.0</apiVersion><isExposed>true</isExposed><masterLabel
+  >Chrono: Recurrence builder</masterLabel><targets><target
+    >lightning__FlowScreen</target></targets><targetConfigs><targetConfig
+      targets="lightning__FlowScreen"
+    ><property
+        name="label"
+        type="String"
+        label="Label"
+        role="inputOnly"
+      /><property
+        name="timeZoneId"
+        type="String"
+        label="Timezone"
+        role="inputOnly"
+      /><property
+        name="allowTimeZoneSelection"
+        type="Boolean"
+        label="Allow timezone selection"
+        role="inputOnly"
+      /><property name="rule" type="String" label="Recurrence rule" /><property
+        name="untilDate"
+        type="Date"
+        label="Search through date"
+      /><property
+        name="maximumResults"
+        type="Integer"
+        label="Maximum preview results"
+        role="inputOnly"
+      /><property
+        name="operatingHoursId"
+        type="String"
+        label="OperatingHours ID"
+        role="inputOnly"
+      /><property
+        name="operatingHoursRecord"
+        type="@salesforce/schema/OperatingHours"
+        label="OperatingHours record"
+        role="inputOnly"
+      /><property
+        name="timeSlots"
+        type="@salesforce/schema/TimeSlot[]"
+        label="Time slots"
+        role="inputOnly"
+      /><property
+        name="holidays"
+        type="@salesforce/schema/Holiday[]"
+        label="Holidays"
+        role="inputOnly"
+      /><property
+        name="disabled"
+        type="Boolean"
+        label="Read only"
+        role="inputOnly"
+      /><property
+        name="values"
+        type="String[]"
+        label="Occurrence ISO values"
+        role="outputOnly"
+      /><property
+        name="startValue"
+        type="String"
+        label="Starting zoned ISO value"
+      /><property
+        name="closedPolicy"
+        type="String"
+        label="Selected closed-hours policy"
+      /></targetConfig></targetConfigs></LightningComponentBundle>

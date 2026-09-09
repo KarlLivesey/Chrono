@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<LightningComponentBundle
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+><apiVersion>67.0</apiVersion><isExposed>true</isExposed><masterLabel
+  >Chrono: Multi-timezone display</masterLabel><targets><target
+    >lightning__FlowScreen</target></targets><targetConfigs><targetConfig
+      targets="lightning__FlowScreen"
+    ><property
+        name="label"
+        type="String"
+        label="Accessible label"
+        default="Across timezones"
+        role="inputOnly"
+      /><property
+        name="value"
+        type="String"
+        label="ISO instant or zoned datetime"
+        role="inputOnly"
+      /><property
+        name="dateTimeValue"
+        type="DateTime"
+        label="Native datetime (alternative)"
+        role="inputOnly"
+      /><property
+        name="timeZoneIds"
+        type="String[]"
+        label="Timezone collection"
+        role="inputOnly"
+      /><property
+        name="timeZoneIdsText"
+        type="String"
+        label="Fixed timezone IDs (comma or newline separated)"
+        role="inputOnly"
+      /><property
+        name="dateStyle"
+        type="String"
+        label="Date length (user locale)"
+        default="short"
+        datasource="short,medium,long"
+        role="inputOnly"
+      /></targetConfig></targetConfigs></LightningComponentBundle>

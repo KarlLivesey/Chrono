@@ -1,0 +1,26 @@
+<template
+  ><fieldset>
+    <legend class="slds-form-element__label">{label}</legend>
+    <div class="range">
+      <c-chrono-date-time-control
+        data-side="start"
+        label="Start"
+        lwc:spread={config}
+        initial-chrono-value={startValue}
+        onvaluechange={changed}
+      ></c-chrono-date-time-control
+      ><c-chrono-date-time-control
+        data-side="end"
+        label="End (exclusive)"
+        lwc:spread={config}
+        initial-chrono-value={endValue}
+        onvaluechange={changed}
+      ></c-chrono-date-time-control>
+    </div>
+    <template lwc:if={pending}
+      ><span role="status">Checking range…</span></template
+    ><template lwc:if={error}
+      ><div class="slds-text-color_error" role="alert">{error}</div></template
+    >
+  </fieldset></template
+>

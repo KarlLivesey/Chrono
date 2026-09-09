@@ -1,0 +1,40 @@
+<template>
+  <skel-chrono-date-time-picker
+    mode="date"
+    label="Subscriber date"
+    date-value="2026-09-06"
+  ></skel-chrono-date-time-picker>
+  <skel-chrono-date-time-control
+    mode="date"
+    label="Subscriber resolved date"
+    date-value="2026-09-06"
+  ></skel-chrono-date-time-control>
+  <skel-chrono-duration-input
+    label="Duration"
+    value="PT30M"
+  ></skel-chrono-duration-input>
+  <skel-chrono-time-input
+    label="Time"
+    value="09:00:00.000"
+  ></skel-chrono-time-input>
+  <skel-chrono-partial-date-input
+    kind="monthday"
+    value="--02-29"
+  ></skel-chrono-partial-date-input>
+  <skel-chrono-range-picker
+    mode="date"
+    start-value="2026-09-07"
+    end-value="2026-09-09"
+  ></skel-chrono-range-picker>
+  <skel-chrono-recurrence-builder
+    label="Repeat"
+    time-zone-id="UTC"
+  ></skel-chrono-recurrence-builder>
+  <skel-chrono-zone-display
+    value="2026-09-08T09:00:00Z"
+    time-zone-ids-text="Europe/London,America/New_York"
+  ></skel-chrono-zone-display>
+  <skel-chrono-availability-picker
+    input={availabilityInput}
+  ></skel-chrono-availability-picker>
+</template>

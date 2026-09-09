@@ -1,0 +1,116 @@
+<template>
+  <div class="action-editor">
+    <h3 class="slds-text-title_bold slds-m-bottom_small">{title}</h3>
+    <template lwc:if={collection}>
+      <p class="slds-text-body_small slds-m-bottom_small">
+        Choose the request collection. Each item carries its own values; results
+        keep the same order.
+      </p>
+      <c-chrono-flow-resource-picker
+        label="Input collection"
+        value={collectionValue}
+        value-type="Apex[]"
+        object-type={collectionType}
+        builder-context={builderContext}
+        automatic-output-variables={automaticOutputVariables}
+        onchoose={chooseCollection}
+      ></c-chrono-flow-resource-picker>
+    </template>
+    <template lwc:else>
+      <template lwc:if={hasType}>
+        <c-chrono-flow-value-editor
+          name="valueType"
+          label="Value type"
+          value={typeField.value}
+          reference={typeField.reference}
+          options={typeOptions}
+          builder-context={builderContext}
+          automatic-output-variables={automaticOutputVariables}
+          onvaluechange={handleValue}
+        ></c-chrono-flow-value-editor>
+      </template>
+      <template for:each={sourceGroups} for:item="group">
+        <div key={group.key} class="source-group">
+          <lightning-combobox
+            label={group.label}
+            value={group.format}
+            options={group.options}
+            data-prefix={group.prefix}
+            onchange={changeFormat}
+          ></lightning-combobox>
+          <template for:each={group.fields} for:item="field">
+            <c-chrono-flow-value-editor
+              key={field.name}
+              name={field.name}
+              label={field.label}
+              value={field.value}
+              value-type={field.dataType}
+              literal-type={field.literalType}
+              reference={field.reference}
+              options={field.options}
+              help-text={field.helpText}
+              builder-context={builderContext}
+              automatic-output-variables={automaticOutputVariables}
+              onvaluechange={handleValue}
+            ></c-chrono-flow-value-editor>
+          </template>
+        </div>
+      </template>
+      <template lwc:if={isAdjust}
+        ><lightning-combobox
+          label="Add or subtract using"
+          value={amountMode}
+          options={amountOptions}
+          onchange={changeAmount}
+        ></lightning-combobox
+      ></template>
+      <template for:each={fields} for:item="field">
+        <c-chrono-flow-value-editor
+          key={field.name}
+          name={field.name}
+          label={field.label}
+          value={field.value}
+          value-type={field.dataType}
+          literal-type={field.literalType}
+          reference={field.reference}
+          options={field.options}
+          searchable={field.searchable}
+          lookup-message={field.lookupMessage}
+          help-text={field.helpText}
+          builder-context={builderContext}
+          automatic-output-variables={automaticOutputVariables}
+          onvaluechange={handleValue}
+        ></c-chrono-flow-value-editor>
+      </template>
+      <template lwc:if={hasSchedule}>
+        <lightning-combobox
+          label="Working hours"
+          value={scheduleMode}
+          options={scheduleOptions}
+          onchange={changeSchedule}
+        ></lightning-combobox>
+        <template for:each={scheduleFields} for:item="field">
+          <c-chrono-flow-value-editor
+            key={field.name}
+            name={field.name}
+            label={field.label}
+            value={field.value}
+            value-type={field.dataType}
+            object-type={field.objectType}
+            reference-only={field.referenceOnly}
+            reference={field.reference}
+            help-text={field.helpText}
+            builder-context={builderContext}
+            automatic-output-variables={automaticOutputVariables}
+            onvaluechange={handleValue}
+          ></c-chrono-flow-value-editor>
+        </template>
+      </template>
+    </template>
+    <template for:each={errorList} for:item="error"
+      ><p key={error.id} class="slds-text-color_error" role="alert">
+        {error.errorString}
+      </p></template
+    >
+  </div>
+</template>

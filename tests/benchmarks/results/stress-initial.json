@@ -1,0 +1,82 @@
+{
+  "createdAt": "2026-09-08T09:16:01.500126+00:00",
+  "targetOrg": "chrono-subscriber",
+  "label": "Chrono-0.1.0.11-stress",
+  "operationsPerSample": 200,
+  "measuredSamples": 1,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "stress-availability-distinct",
+      "description": "200 distinct two-day windows across four schedule zones, ten weekly slots and 64 holidays.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 4472,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 101548,
+          "heapAfterBytes": 153920,
+          "cpuMs": 3793,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 3934,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 101548,
+          "heapAfterBytes": 153920,
+          "cpuMs": 3304,
+          "sample": 0
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 3304,
+        "median": 3304,
+        "max": 3304
+      },
+      "medianCpuMsPerOperation": 16.52
+    },
+    {
+      "name": "stress-recurrence-distinct",
+      "description": "200 distinct ten-day daily rules across four schedule zones, ten weekly slots and 64 holidays; exact expected dates.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 5897,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37009,
+          "heapAfterBytes": 76452,
+          "cpuMs": 5842,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 5278,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 37009,
+          "heapAfterBytes": 76452,
+          "cpuMs": 5210,
+          "sample": 0
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 5210,
+        "median": 5210,
+        "max": 5210
+      },
+      "medianCpuMsPerOperation": 26.05
+    }
+  ]
+}
