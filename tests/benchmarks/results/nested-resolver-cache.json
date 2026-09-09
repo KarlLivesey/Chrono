@@ -1,0 +1,1395 @@
+{
+  "createdAt": "2026-09-09T13:45:44.076341+00:00",
+  "targetOrg": "chrono-dev",
+  "sourceCommit": "f036e662d1735407cbc891329a8045ee5a86401a",
+  "operationsPerArm": 200,
+  "measuredPairs": 6,
+  "warmupPairs": 1,
+  "method": "Paired current resolver versus native-key wrapper; alternating order; fresh cache per arm.",
+  "cases": [
+    {
+      "name": "repeat-unique",
+      "samples": [
+        {
+          "heapDeltaBytes": 2995,
+          "heapAfterBytes": 22407,
+          "cpuMs": 5,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": -1,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": -8804,
+          "heapAfterBytes": 42783,
+          "cpuMs": 37,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": -1,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33498,
+          "cpuMs": 38,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 0,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": -19891,
+          "heapAfterBytes": 31479,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 0,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": 2995,
+          "heapAfterBytes": 22407,
+          "cpuMs": 6,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 1,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": -8804,
+          "heapAfterBytes": 42783,
+          "cpuMs": 42,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 1,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33498,
+          "cpuMs": 42,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 2,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": -19891,
+          "heapAfterBytes": 31479,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 2,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": 2995,
+          "heapAfterBytes": 22407,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 3,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": -8804,
+          "heapAfterBytes": 42783,
+          "cpuMs": 42,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 3,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33498,
+          "cpuMs": 53,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 4,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": -19891,
+          "heapAfterBytes": 31479,
+          "cpuMs": 6,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 4,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": 2995,
+          "heapAfterBytes": 22407,
+          "cpuMs": 5,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 5,
+          "scenario": "repeat-unique"
+        },
+        {
+          "heapDeltaBytes": -8804,
+          "heapAfterBytes": 42783,
+          "cpuMs": 37,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 5,
+          "scenario": "repeat-unique"
+        }
+      ],
+      "uncached": {
+        "minCpuMs": 37,
+        "medianCpuMs": 42.0,
+        "maxCpuMs": 53
+      },
+      "cached": {
+        "minCpuMs": 4,
+        "medianCpuMs": 4.5,
+        "maxCpuMs": 6
+      },
+      "pairedCpuDeltaMs": {
+        "values": [-34, -36, -38, -38, -47, -32],
+        "median": -37.0
+      }
+    },
+    {
+      "name": "repeat-overlap",
+      "samples": [
+        {
+          "heapDeltaBytes": 3859,
+          "heapAfterBytes": 35268,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": -1,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": -17560,
+          "heapAfterBytes": 75688,
+          "cpuMs": 54,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": -1,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": 26090,
+          "heapAfterBytes": 57499,
+          "cpuMs": 59,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 0,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": -39831,
+          "heapAfterBytes": 53140,
+          "cpuMs": 3,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 0,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": 3859,
+          "heapAfterBytes": 35268,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 1,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": -17560,
+          "heapAfterBytes": 75688,
+          "cpuMs": 46,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 1,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": 26090,
+          "heapAfterBytes": 57499,
+          "cpuMs": 69,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 2,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": -39831,
+          "heapAfterBytes": 53140,
+          "cpuMs": 3,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 2,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": 3859,
+          "heapAfterBytes": 35268,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 3,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": -17560,
+          "heapAfterBytes": 75688,
+          "cpuMs": 53,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 3,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": 26090,
+          "heapAfterBytes": 57499,
+          "cpuMs": 48,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 4,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": -39831,
+          "heapAfterBytes": 53140,
+          "cpuMs": 3,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 4,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": 3859,
+          "heapAfterBytes": 35268,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 5,
+          "scenario": "repeat-overlap"
+        },
+        {
+          "heapDeltaBytes": -17560,
+          "heapAfterBytes": 75688,
+          "cpuMs": 51,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 5,
+          "scenario": "repeat-overlap"
+        }
+      ],
+      "uncached": {
+        "minCpuMs": 46,
+        "medianCpuMs": 52.0,
+        "maxCpuMs": 69
+      },
+      "cached": {
+        "minCpuMs": 3,
+        "medianCpuMs": 3.5,
+        "maxCpuMs": 4
+      },
+      "pairedCpuDeltaMs": {
+        "values": [-56, -42, -66, -49, -45, -47],
+        "median": -48.0
+      }
+    },
+    {
+      "name": "repeat-gap",
+      "samples": [
+        {
+          "heapDeltaBytes": 2139,
+          "heapAfterBytes": 9544,
+          "cpuMs": 6,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": -1,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": -48,
+          "heapAfterBytes": 9876,
+          "cpuMs": 81,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": -1,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 2090,
+          "heapAfterBytes": 9495,
+          "cpuMs": 87,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 0,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 49,
+          "heapAfterBytes": 9816,
+          "cpuMs": 6,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 0,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 2139,
+          "heapAfterBytes": 9544,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 1,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": -48,
+          "heapAfterBytes": 9876,
+          "cpuMs": 47,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 1,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 2090,
+          "heapAfterBytes": 9495,
+          "cpuMs": 47,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 2,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 49,
+          "heapAfterBytes": 9816,
+          "cpuMs": 3,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 2,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 2139,
+          "heapAfterBytes": 9544,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 3,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": -48,
+          "heapAfterBytes": 9876,
+          "cpuMs": 48,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 3,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 2090,
+          "heapAfterBytes": 9495,
+          "cpuMs": 48,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 4,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 49,
+          "heapAfterBytes": 9816,
+          "cpuMs": 3,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 4,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": 2139,
+          "heapAfterBytes": 9544,
+          "cpuMs": 4,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 5,
+          "scenario": "repeat-gap"
+        },
+        {
+          "heapDeltaBytes": -48,
+          "heapAfterBytes": 9876,
+          "cpuMs": 48,
+          "uniqueKeys": 1,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 5,
+          "scenario": "repeat-gap"
+        }
+      ],
+      "uncached": {
+        "minCpuMs": 47,
+        "medianCpuMs": 48.0,
+        "maxCpuMs": 87
+      },
+      "cached": {
+        "minCpuMs": 3,
+        "medianCpuMs": 4.0,
+        "maxCpuMs": 6
+      },
+      "pairedCpuDeltaMs": {
+        "values": [-81, -43, -44, -44, -45, -44],
+        "median": -44.0
+      }
+    },
+    {
+      "name": "reuse-90",
+      "samples": [
+        {
+          "heapDeltaBytes": 4435,
+          "heapAfterBytes": 23842,
+          "cpuMs": 6,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": -1,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": -10244,
+          "heapAfterBytes": 42778,
+          "cpuMs": 31,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": -1,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 34,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 0,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": -18451,
+          "heapAfterBytes": 32914,
+          "cpuMs": 7,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 0,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": 4435,
+          "heapAfterBytes": 23842,
+          "cpuMs": 8,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 1,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": -10244,
+          "heapAfterBytes": 42778,
+          "cpuMs": 32,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 1,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 34,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 2,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": -18451,
+          "heapAfterBytes": 32914,
+          "cpuMs": 6,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 2,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": 4435,
+          "heapAfterBytes": 23842,
+          "cpuMs": 7,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 3,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": -10244,
+          "heapAfterBytes": 42778,
+          "cpuMs": 31,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 3,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 38,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 4,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": -18451,
+          "heapAfterBytes": 32914,
+          "cpuMs": 6,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 4,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": 4435,
+          "heapAfterBytes": 23842,
+          "cpuMs": 6,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 5,
+          "scenario": "reuse-90"
+        },
+        {
+          "heapDeltaBytes": -10244,
+          "heapAfterBytes": 42778,
+          "cpuMs": 33,
+          "uniqueKeys": 20,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 5,
+          "scenario": "reuse-90"
+        }
+      ],
+      "uncached": {
+        "minCpuMs": 31,
+        "medianCpuMs": 33.5,
+        "maxCpuMs": 38
+      },
+      "cached": {
+        "minCpuMs": 6,
+        "medianCpuMs": 6.5,
+        "maxCpuMs": 8
+      },
+      "pairedCpuDeltaMs": {
+        "values": [-27, -24, -28, -24, -32, -27],
+        "median": -27.0
+      }
+    },
+    {
+      "name": "reuse-50",
+      "samples": [
+        {
+          "heapDeltaBytes": 10195,
+          "heapAfterBytes": 29602,
+          "cpuMs": 41,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": -1,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": -16004,
+          "heapAfterBytes": 42778,
+          "cpuMs": 52,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": -1,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 44,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 0,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": -12691,
+          "heapAfterBytes": 38674,
+          "cpuMs": 21,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 0,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": 10195,
+          "heapAfterBytes": 29602,
+          "cpuMs": 23,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 1,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": -16004,
+          "heapAfterBytes": 42778,
+          "cpuMs": 37,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 1,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 33,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 2,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": -12691,
+          "heapAfterBytes": 38674,
+          "cpuMs": 20,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 2,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": 10195,
+          "heapAfterBytes": 29602,
+          "cpuMs": 22,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 3,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": -16004,
+          "heapAfterBytes": 42778,
+          "cpuMs": 38,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 3,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 36,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 4,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": -12691,
+          "heapAfterBytes": 38674,
+          "cpuMs": 21,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 4,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": 10195,
+          "heapAfterBytes": 29602,
+          "cpuMs": 27,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 5,
+          "scenario": "reuse-50"
+        },
+        {
+          "heapDeltaBytes": -16004,
+          "heapAfterBytes": 42778,
+          "cpuMs": 41,
+          "uniqueKeys": 100,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 5,
+          "scenario": "reuse-50"
+        }
+      ],
+      "uncached": {
+        "minCpuMs": 33,
+        "medianCpuMs": 37.5,
+        "maxCpuMs": 44
+      },
+      "cached": {
+        "minCpuMs": 20,
+        "medianCpuMs": 21.5,
+        "maxCpuMs": 27
+      },
+      "pairedCpuDeltaMs": {
+        "values": [-23, -14, -13, -16, -15, -14],
+        "median": -14.5
+      }
+    },
+    {
+      "name": "reuse-25",
+      "samples": [
+        {
+          "heapDeltaBytes": 13795,
+          "heapAfterBytes": 33202,
+          "cpuMs": 27,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": -1,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": -19604,
+          "heapAfterBytes": 42778,
+          "cpuMs": 30,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": -1,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 33,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 0,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": -9091,
+          "heapAfterBytes": 42274,
+          "cpuMs": 29,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 0,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": 13795,
+          "heapAfterBytes": 33202,
+          "cpuMs": 27,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 1,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": -19604,
+          "heapAfterBytes": 42778,
+          "cpuMs": 32,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 1,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 60,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 2,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": -9091,
+          "heapAfterBytes": 42274,
+          "cpuMs": 34,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 2,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": 13795,
+          "heapAfterBytes": 33202,
+          "cpuMs": 30,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 3,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": -19604,
+          "heapAfterBytes": 42778,
+          "cpuMs": 32,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 3,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33493,
+          "cpuMs": 36,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 4,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": -9091,
+          "heapAfterBytes": 42274,
+          "cpuMs": 27,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 4,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": 13795,
+          "heapAfterBytes": 33202,
+          "cpuMs": 28,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 5,
+          "scenario": "reuse-25"
+        },
+        {
+          "heapDeltaBytes": -19604,
+          "heapAfterBytes": 42778,
+          "cpuMs": 34,
+          "uniqueKeys": 150,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 5,
+          "scenario": "reuse-25"
+        }
+      ],
+      "uncached": {
+        "minCpuMs": 32,
+        "medianCpuMs": 33.5,
+        "maxCpuMs": 60
+      },
+      "cached": {
+        "minCpuMs": 27,
+        "medianCpuMs": 28.5,
+        "maxCpuMs": 34
+      },
+      "pairedCpuDeltaMs": {
+        "values": [-4, -5, -26, -2, -9, -6],
+        "median": -5.5
+      }
+    },
+    {
+      "name": "distinct-times",
+      "samples": [
+        {
+          "heapDeltaBytes": 17323,
+          "heapAfterBytes": 36728,
+          "cpuMs": 36,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": -1,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": -23132,
+          "heapAfterBytes": 42776,
+          "cpuMs": 36,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": -1,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33491,
+          "cpuMs": 36,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 0,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": -5563,
+          "heapAfterBytes": 45800,
+          "cpuMs": 38,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 0,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": 17323,
+          "heapAfterBytes": 36728,
+          "cpuMs": 36,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 1,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": -23132,
+          "heapAfterBytes": 42776,
+          "cpuMs": 32,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 1,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33491,
+          "cpuMs": 35,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 2,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": -5563,
+          "heapAfterBytes": 45800,
+          "cpuMs": 32,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 2,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": 17323,
+          "heapAfterBytes": 36728,
+          "cpuMs": 48,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 3,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": -23132,
+          "heapAfterBytes": 42776,
+          "cpuMs": 48,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 3,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": 14086,
+          "heapAfterBytes": 33491,
+          "cpuMs": 37,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 4,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": -5563,
+          "heapAfterBytes": 45800,
+          "cpuMs": 39,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 4,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": 17323,
+          "heapAfterBytes": 36728,
+          "cpuMs": 35,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 5,
+          "scenario": "distinct-times"
+        },
+        {
+          "heapDeltaBytes": -23132,
+          "heapAfterBytes": 42776,
+          "cpuMs": 33,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 5,
+          "scenario": "distinct-times"
+        }
+      ],
+      "uncached": {
+        "minCpuMs": 32,
+        "medianCpuMs": 35.5,
+        "maxCpuMs": 48
+      },
+      "cached": {
+        "minCpuMs": 32,
+        "medianCpuMs": 37.0,
+        "maxCpuMs": 48
+      },
+      "pairedCpuDeltaMs": {
+        "values": [2, 4, -3, 0, 2, 2],
+        "median": 2.0
+      }
+    },
+    {
+      "name": "distinct-dates",
+      "samples": [
+        {
+          "heapDeltaBytes": 19715,
+          "heapAfterBytes": 39116,
+          "cpuMs": 36,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": -1,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": -25520,
+          "heapAfterBytes": 42776,
+          "cpuMs": 35,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": -1,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": 14090,
+          "heapAfterBytes": 33491,
+          "cpuMs": 54,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 0,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": -3175,
+          "heapAfterBytes": 48188,
+          "cpuMs": 58,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 0,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": 19715,
+          "heapAfterBytes": 39116,
+          "cpuMs": 49,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 1,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": -25520,
+          "heapAfterBytes": 42776,
+          "cpuMs": 34,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 1,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": 14090,
+          "heapAfterBytes": 33491,
+          "cpuMs": 32,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 2,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": -3175,
+          "heapAfterBytes": 48188,
+          "cpuMs": 36,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 2,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": 19715,
+          "heapAfterBytes": 39116,
+          "cpuMs": 46,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 3,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": -25520,
+          "heapAfterBytes": 42776,
+          "cpuMs": 53,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 3,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": 14090,
+          "heapAfterBytes": 33491,
+          "cpuMs": 41,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": false,
+          "pair": 4,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": -3175,
+          "heapAfterBytes": 48188,
+          "cpuMs": 47,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": false,
+          "cached": true,
+          "pair": 4,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": 19715,
+          "heapAfterBytes": 39116,
+          "cpuMs": 36,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": true,
+          "pair": 5,
+          "scenario": "distinct-dates"
+        },
+        {
+          "heapDeltaBytes": -25520,
+          "heapAfterBytes": 42776,
+          "cpuMs": 32,
+          "uniqueKeys": 200,
+          "operations": 200,
+          "cachedFirst": true,
+          "cached": false,
+          "pair": 5,
+          "scenario": "distinct-dates"
+        }
+      ],
+      "uncached": {
+        "minCpuMs": 32,
+        "medianCpuMs": 37.5,
+        "maxCpuMs": 54
+      },
+      "cached": {
+        "minCpuMs": 36,
+        "medianCpuMs": 46.5,
+        "maxCpuMs": 58
+      },
+      "pairedCpuDeltaMs": {
+        "values": [4, 15, 4, -7, 6, 4],
+        "median": 4.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "createdAt": "2026-09-09T13:48:59.206726+00:00",
+  "targetOrg": "chrono-dev",
+  "sourceCommit": "f036e662d1735407cbc891329a8045ee5a86401a",
+  "fixtureSha256": "da9db09fdcdd953889eb68a19e03a81da8d62ccbbdf6065cf8240398e1391504",
+  "operationsPerArm": 200,
+  "measuredPairs": 6,
+  "warmupPairs": 1,
+  "method": "Paired current resolver versus native-key wrapper; alternating order; fresh cache per arm.",
+  "cases": [],
+  "checksSha256": "8e74b9724b1b9ce2d4d19622f224cd39e091dd019c1a8ffba9cef2aa5f086a5d",
+  "checksPassed": true
+}

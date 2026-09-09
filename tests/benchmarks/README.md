@@ -89,3 +89,6 @@ before/after comparisons, rejected experiments and retained changes.
 The `optimise-picker-*` cases call internal picker endpoints directly in
 `chrono-dev`. They require explicit `--case` selection and are excluded from the
 default subscriber suite; they are server CPU measurements, not browser timings.
+
+The [native-key resolver cache experiment](NESTED-RESOLVER-CACHE.md) uses paired,
+alternating-order runs to compare repeated, mixed and distinct native inputs.
