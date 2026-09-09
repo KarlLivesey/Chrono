@@ -62,6 +62,8 @@ def main():
         if unknown:
             parser.error('Unknown cases: ' + ', '.join(sorted(unknown)))
         cases = [case for case in cases if case['name'] in args.selected]
+    else:
+        cases = [case for case in cases if not case.get('explicitSelectionOnly', False)]
     report = {'createdAt': datetime.now(timezone.utc).isoformat(),
               'targetOrg': args.target_org, 'label': args.label, 'operationsPerSample': args.count,
               'measuredSamples': args.samples, 'warmupSamples': 1, 'cases': []}

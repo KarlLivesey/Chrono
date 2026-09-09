@@ -85,3 +85,7 @@ ordering. See [the September audit](../../docs/service-audit-2026-09.md) and
 
 See [individually measured optimisation candidates](OPTIMISATIONS.md) for
 before/after comparisons, rejected experiments and retained changes.
+
+The `optimise-picker-*` cases call internal picker endpoints directly in
+`chrono-dev`. They require explicit `--case` selection and are excluded from the
+default subscriber suite; they are server CPU measurements, not browser timings.

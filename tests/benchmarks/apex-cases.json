@@ -231,5 +231,22 @@
     "body": "List<skel.ChronoLocalResolutionResult> results=new List<skel.ChronoLocalResolutionResult>();for(Integer i=0;i<$COUNT;i++)results.add(skel.ChronoTimeZoneService.resolveLocal(requests)[0]);",
     "assert": "Assert.areEqual($COUNT,results.size());for(skel.ChronoLocalResolutionResult r:results){Assert.isTrue(r.success,r.errorMessage==null?'Successful resolution':r.errorMessage);Assert.areEqual('nonexistent',r.resolutionStatus);Assert.areEqual('2026-03-29T00:59:59.999+00:00[Europe/London]',skel.ChronoZonedDateTimeService.toIsoString(r.previousValue));Assert.areEqual('2026-03-29T02:00:00.000+01:00[Europe/London]',skel.ChronoZonedDateTimeService.toIsoString(r.nextValue));}",
     "freshTransactionPerSample": true
+  },
+  {
+    "name": "optimise-picker-projection",
+    "description": "Development-org invocation of the actual picker Apex endpoint, projecting a fractional timezone offset. Requires explicit selection and chrono-dev.",
+    "setup": "Datetime instant=Datetime.newInstance(Datetime.newInstanceGmt(2026,9,8,8,30,12).getTime()+123);",
+    "body": "List<skel.ChronoPickerOption> results=new List<skel.ChronoPickerOption>();for(Integer i=0;i<$COUNT;i++)results.add(skel.ChronoPickerController.projectInstant(instant,'Asia/Kathmandu'));",
+    "assert": "Assert.areEqual($COUNT,results.size());for(skel.ChronoPickerOption r:results){Assert.areEqual(instant,r.instantValue);Assert.areEqual('2026-09-08T14:15:12.123',r.localValue);Assert.areEqual(20700,r.offsetSeconds);}",
+    "freshTransactionPerSample": true,
+    "explicitSelectionOnly": true
+  },
+  {
+    "name": "optimise-picker-overlap",
+    "description": "Development-org invocation of the actual picker Apex endpoint, retaining both repeated-hour choices. Requires explicit selection and chrono-dev.",
+    "body": "List<List<skel.ChronoPickerOption>> results=new List<List<skel.ChronoPickerOption>>();for(Integer i=0;i<$COUNT;i++)results.add(skel.ChronoPickerController.resolveLocal('2026-10-25','01:30','Europe/London'));",
+    "assert": "Assert.areEqual($COUNT,results.size());for(List<skel.ChronoPickerOption> r:results){Assert.areEqual(2,r.size());Assert.areEqual('2026-10-25T01:30:00.000',r[0].localValue);Assert.areEqual(r[0].localValue,r[1].localValue);Assert.areEqual(3600,r[0].offsetSeconds);Assert.areEqual(0,r[1].offsetSeconds);Assert.areEqual('earlier',r[0].choice);Assert.areEqual('later',r[1].choice);Assert.areEqual(3600000L,r[1].instantValue.getTime()-r[0].instantValue.getTime());}",
+    "freshTransactionPerSample": true,
+    "explicitSelectionOnly": true
   }
 ]

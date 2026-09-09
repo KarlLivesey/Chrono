@@ -68,3 +68,33 @@ candidate and on restoration. The 20 contract tests and focused Apex lint passed
 The cases are `optimise-resolution-unique`, `optimise-resolution-overlap` and
 `optimise-resolution-gap`. Each calls the public service independently for every
 item so batch deduplication cannot disguise the cost of resolution.
+
+## 3. Reuse picker projection offset — rejected
+
+The candidate preserved instant validation and computed the local clock and
+reported offset from a single offset lookup. Its direct projection endpoint did
+not improve; a repeat confirmed that result. The original implementation was
+restored rather than retaining an optimisation that only helped one workload.
+
+| Workload, 200 calls                  | Before median | Candidate median | Candidate repeat |
+| ------------------------------------ | ------------: | ---------------: | ---------------: |
+| Picker instant projection, Kathmandu |         47 ms |            49 ms |            51 ms |
+| Picker repeated-time choices, London |        172 ms |           166 ms |           160 ms |
+| Full missing-time resolution service |        898 ms |           955 ms |                — |
+
+The endpoint cases invoke the actual Apex picker controller in the development
+org and assert fractional offsets, wall fields and both overlap occurrences.
+They do not measure browser rendering or network latency. Those public internal
+controllers are not a subscriber Apex contract: the cases require explicit
+selection and `chrono-dev`, and are excluded from the default benchmark suite.
+
+All 33 targeted Apex tests passed with the candidate and after restoration;
+20 contract tests and focused Apex lint passed. No global signatures changed.
+
+- [Candidate diff](experiments/reuse-picker-offset.patch)
+- [Before](results/optimise-picker-before.json)
+- [Candidate](results/optimise-picker-after.json)
+- [Candidate confirmation](results/optimise-picker-confirmation.json)
+
+Select `optimise-picker-projection`, `optimise-picker-overlap` and
+`optimise-resolution-gap` for the same comparison.

@@ -1,0 +1,23 @@
+diff --git a/force-app/main/default/classes/ChronoPickerOptions.cls b/force-app/main/default/classes/ChronoPickerOptions.cls
+index a3d3431..0ed65b8 100644
+--- a/force-app/main/default/classes/ChronoPickerOptions.cls
++++ b/force-app/main/default/classes/ChronoPickerOptions.cls
+@@ -6,14 +6,16 @@ public with sharing class ChronoPickerOptions {
+     String zoneId,
+     String direction
+   ) {
+-    Datetime local = ChronoSupport.localValue(instant, zoneId);
++    ChronoDates.validateInstant(instant);
++    Integer offset = ChronoSupport.zone(zoneId).getOffset(instant);
++    Datetime local = ChronoSupport.shift(instant, (Long) offset);
+     ChronoPickerOption result = new ChronoPickerOption();
+     result.instantValue = instant;
+     result.localValue =
+       ChronoIso.dateText(local.dateGmt()) +
+       'T' +
+       ChronoIso.timeText(local.timeGmt());
+-    result.offsetSeconds = ChronoSupport.zone(zoneId).getOffset(instant) / 1000;
++    result.offsetSeconds = offset / 1000;
+     result.choice = direction;
+     return result;
+   }

@@ -1,0 +1,170 @@
+{
+  "createdAt": "2026-09-09T11:31:57.008124+00:00",
+  "targetOrg": "chrono-dev",
+  "label": "Confirmation: reused picker projection offset",
+  "operationsPerSample": 200,
+  "measuredSamples": 5,
+  "warmupSamples": 1,
+  "cases": [
+    {
+      "name": "optimise-picker-projection",
+      "description": "Development-org invocation of the actual picker Apex endpoint, projecting a fractional timezone offset. Requires explicit selection and chrono-dev.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 67,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 11687,
+          "heapAfterBytes": 12804,
+          "cpuMs": 56,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 57,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 11679,
+          "heapAfterBytes": 12796,
+          "cpuMs": 51,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 70,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 11636,
+          "heapAfterBytes": 12753,
+          "cpuMs": 63,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 59,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 11687,
+          "heapAfterBytes": 12804,
+          "cpuMs": 51,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 44,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 11679,
+          "heapAfterBytes": 12796,
+          "cpuMs": 38,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 48,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 11636,
+          "heapAfterBytes": 12753,
+          "cpuMs": 41,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 38,
+        "median": 51,
+        "max": 63
+      },
+      "medianCpuMsPerOperation": 0.255
+    },
+    {
+      "name": "optimise-picker-overlap",
+      "description": "Development-org invocation of the actual picker Apex endpoint, retaining both repeated-hour choices. Requires explicit selection and chrono-dev.",
+      "operationsPerSample": 200,
+      "samples": [
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 178,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 46831,
+          "heapAfterBytes": 47886,
+          "cpuMs": 162,
+          "sample": -1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 171,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 46831,
+          "heapAfterBytes": 47886,
+          "cpuMs": 153,
+          "sample": 0
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 172,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 46831,
+          "heapAfterBytes": 47886,
+          "cpuMs": 156,
+          "sample": 1
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 190,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 46831,
+          "heapAfterBytes": 47886,
+          "cpuMs": 174,
+          "sample": 2
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 196,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 46831,
+          "heapAfterBytes": 47886,
+          "cpuMs": 178,
+          "sample": 3
+        },
+        {
+          "heapLimitBytes": 6000000,
+          "cpuUsedMs": 180,
+          "cpuLimitMs": 10000,
+          "callerNamespaceDml": 0,
+          "callerNamespaceQueries": 0,
+          "heapDeltaBytes": 46831,
+          "heapAfterBytes": 47886,
+          "cpuMs": 160,
+          "sample": 4
+        }
+      ],
+      "transactionMode": "perSample",
+      "cpuMs": {
+        "min": 153,
+        "median": 160,
+        "max": 178
+      },
+      "medianCpuMsPerOperation": 0.8
+    }
+  ]
+}
