@@ -32,9 +32,9 @@ with HTTPS enforced.
   installed released 0.2.0.4, including unsaved hours and allocation assertions.
 - Documentation formatting and `git diff --check` passed.
 
-The current publication commit and Pages build are recorded here after the
-`gh-pages` update. Package source and the main workspace are kept separate from
-the generated Pages branch.
+The current publication commit is `de52f20c8a19e8196f825e0323b9c81c134f912e`;
+the corresponding GitHub Pages build/deployment is `34499619306`. Package source
+and the main workspace are kept separate from the generated Pages branch.
 
 Visual rendering was not inspected in a browser, in accordance with the project's
 no-screen-capture/Computer Use requirement. No Salesforce package build or new
