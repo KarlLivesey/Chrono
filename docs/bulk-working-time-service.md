@@ -1,7 +1,7 @@
 # Bulk working-time service
 
-The next Chrono package version adds `ChronoWorkingTimeService.add(requests)`.
-It is not present in released version 0.1.0.19. Existing working-time Flow actions
+Chrono package version 0.2.0.4 adds `ChronoWorkingTimeService.add(requests)`.
+It was not present in released version 0.1.0.19. Existing working-time Flow actions
 retain their method signatures and now adapt this service's typed results. Optional date/clock and supplied-record inputs extend the existing request contracts.
 
 ```apex
@@ -41,9 +41,9 @@ Working differences retain the same shared schedule context. Native and ISO endp
 
 Existing methods, field types and constructors are retained. The schedule ID becomes optional when supplying native records; the request gains optional date, clock, policy and native schedule fields. The additive global service and typed
 result follow [managed 2GP namespace visibility](https://developer.salesforce.com/docs/platform/pkg2-dev/guide/sfdx-dev-dev2gp-namespace-visibility.html).
-A new minor package version is needed; this addition is not a patch to 0.1.0.19.
+A minor package version was required; this addition was released in 0.2.0.4 rather than being a patch to 0.1.0.19.
 
-The wider [bulk Apex service catalogue](bulk-apex-services.md) covers the other calculation families in the upcoming 0.2 version.
+The wider [bulk Apex service catalogue](bulk-apex-services.md) covers the other calculation families included in released 0.2.0.4.
 
 ## Subscriber check
 
@@ -80,7 +80,6 @@ these managed input objects from the subscriber raised `System.JSONException`.
 This service supports typed Apex calls; it does not promise subscriber-side JSON
 serialisation of its input/result objects. Flow retains native/ISO transport.
 
-This is an unreleased test build. Validation was skipped, no package coverage was
-calculated, and no standard build or promotion was performed for this extraction.
-The public documentation for released 0.1.0.19 continues to describe the action
-entry point that is actually available in that version.
+This section records the earlier unreleased test build. The current public
+installation and service documentation target released 0.2.0.4; 0.1.0.19 remains
+the historical ancestor for the upgrade evidence above.

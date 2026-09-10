@@ -15,6 +15,8 @@ DOCS = ROOT / 'docs'
 CLASSES = ROOT / 'force-app/main/default/classes'
 NS = {'m': 'http://soap.sforce.com/2006/04/metadata'}
 VERSION = json.loads((ROOT / 'sfdx-project.json').read_text())['packageDirectories'][0]['versionNumber']
+SITE_CONFIG = json.loads((DOCS / 'site.json').read_text())
+RELEASE_VERSION = SITE_CONFIG['version']
 REFERENCE_STATUS = 'Development source; not the released installation package'
 spec = importlib.util.spec_from_file_location('chrono_api', ROOT / 'scripts/check-global-api.py')
 api = importlib.util.module_from_spec(spec)
@@ -188,7 +190,7 @@ def action_pages(inventory):
                 '## Configuration registration', f'Scalar editor: `{meta["configurationEditor"]}`. '
                 f'Collection editor: `{coll_meta["configurationEditor"]}`. '
                 'Both are namespaced package components with a calendar icon. '
-                'The installed 0.1.0.19 action metadata was checked against these registrations.',
+                f'The installed {RELEASE_VERSION} action metadata was checked against these registrations.',
                 'Generated from invocable source declarations and the editor catalogue. '
                 '[All action families](index.md) · [Examples](../../handbook/examples.md).']
         write(f'reference/actions/{family}.md', '\n\n'.join(out))

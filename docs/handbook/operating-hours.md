@@ -30,7 +30,7 @@ are not interpreted as an empty schedule; they are reported as errors.
 
 ## Bulk-safe Apex and Flow
 
-For the **0.2 development API**, call `skel.ChronoWorkingTimeService.add(requests)`
+For the released **0.2.0.4 API**, call `skel.ChronoWorkingTimeService.add(requests)`
 once with a `List<skel.ChronoWorkingTimeInput>`. It returns ordered,
 independent `ChronoWorkingTimeResult` records; check `success` before reading
 `value.instant` and `value.timeZoneId`. Saved schedules share three user-mode
@@ -38,11 +38,11 @@ queries per call; supplied native schedules use none. BusinessHours adds one
 configuration query. The [bulk Apex guide](../bulk-apex-services.md) lists all
 27 service operations, complete examples, input choices and query costs.
 
-The public install link currently installs **released 0.1.0.19**, which does
-not contain those new services. On that release the existing batch entry point
-is `skel.ChronoWorkingTimeAction.run(List<skel.ChronoWorkingTimeAction.Request>)`,
+The public install link installs released **0.2.0.4**, which contains these
+services. The older 0.1.0.19 release had only the action entry point
+`skel.ChronoWorkingTimeAction.run(List<skel.ChronoWorkingTimeAction.Request>)`,
 returning `List<skel.ChronoFlowResult>`. The direct services are the intended
-Apex API for 0.2; they do not invoke Flow. See [release status](releases.md).
+Apex API for 0.2 and do not invoke Flow. See [release status](releases.md).
 
 In Flow, **Chrono: Add or subtract working time** batches separate interviews;
 its [collection action](../reference/actions/WorkingTime.md) also accepts explicit

@@ -52,7 +52,7 @@ Record navigation browses readable fields and parent relationships. Search cover
 the loaded fields; navigate a parent to load deeper relationships. Schema requests
 are deduplicated within an open lookup. `ChronoFlowEditorController` reads schema only, enforces object/field
 read access, and is called by an LWC in the same package. It adds no global Apex
-API; installed editor registrations and subscriber tests passed on released 0.1.0.19; browser rendering remains unverified.
+API; installed editor registrations and subscriber tests passed on released 0.2.0.4; browser rendering remains unverified.
 
 The approved compact layout uses adjacent base date/time inputs, one label row
 with independent timezone and Hours controls, and a small persistent offset

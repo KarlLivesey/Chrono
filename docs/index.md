@@ -5,12 +5,12 @@ Use it in Flow, Apex and Lightning components: convert a customer's local time,
 calculate a deadline inside operating hours, find an appointment, or divide work
 into named billing blocks.
 
-**Released version 0.1.0.19 · Namespace `skel` · BSD-3-Clause**
+**Released version 0.2.0.4 · Namespace `skel` · BSD-3-Clause**
 
 ## Install into your org
 
-**[Install in production / Developer Edition](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KFNtQAO)**
-· **[Install in a sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KFNtQAO)**
+**[Install in production / Developer Edition](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KOZFQA4)**
+· **[Install in a sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KOZFQA4)**
 
 Sign in to your target org, select **Install for Admins Only**, then assign
 **Chrono Flow User** in Setup → Permission Sets. Follow the
@@ -60,9 +60,9 @@ all **27 Flow families / 54 actions**, and the
 [exposed components](reference/components/index.md). Core values are data-only;
 their services own construction, validation and calculations.
 
-The released candidate passed **210 Apex tests**, **30 shared conformance cases**
-and the installed configuration checks for all **54 actions**, with **91% package
-coverage**. See [release notes](handbook/releases.md) for the evidence and its limits.
+The released package passed Salesforce's **90% package-coverage requirement**,
+promotion and the installed configuration checks for all **54 actions**. See
+[release notes](handbook/releases.md) for the release evidence and its limits.
 
 Chrono uses Salesforce timezone rules and millisecond arithmetic. It does not
 bundle another timezone database, implement alternative calendars, or claim

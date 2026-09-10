@@ -1,8 +1,11 @@
 # Bulk Apex services
 
-These additions are under development for 0.2. They are not in the released 0.1.0.19 package or its public installation link.
+These bulk Apex services are included in released package 0.2.0.4. Pass the
+complete request list to a service; Apex callers do not construct an invocable
+action or call Flow.
 
-Pass the complete request list to a service. Apex callers do not construct an invocable action or call Flow. Scalar and collection Flow actions adapt their inputs to these same services, then convert the results back to the existing Flow outputs.
+Scalar and collection Flow actions adapt their inputs to these same services,
+then convert the results back to the existing Flow outputs.
 
 ```apex
 List<skel.ChronoCheckWorkingTimeInput> requests = new List<skel.ChronoCheckWorkingTimeInput>();
@@ -147,13 +150,13 @@ beta 0.2.0.3.
 
 ## Validation
 
-Current date/native-schedule candidate, verified on 8 September 2026:
+Current date/native-schedule release, verified on 9 September 2026:
 
-- **0.2.0.3** (`04tgK000000KIYfQAO`), one skip-validation build (`08cgK000000H4ATQA0`). Salesforce reports `ValidationSkipped=true`, `IsReleased=false`, ancestor `04tgK000000KFNtQAO` (released 0.1.0.19).
+- **0.2.0.4** (`04tgK000000KOZFQA4`), standard validated build and promoted release. Its ancestor is `04tgK000000KFNtQAO` (0.1.0.19).
 - Full development deployment `0AfG100000LNgaLKAT`: **240 Apex tests passed**. The final test-helper cleanup was redeployed and its **11 focused tests passed** (`0AfG100000LNaYFKA1`).
 - **145 LWC tests, 43 Temporal tests and 19 contract tests passed**. Formatting passed. PMD has no severity 1–3 findings; low-severity findings remain.
 - The reviewed inventory contains **1,604 global declarations**, with all 121 core API method signatures preserved. There are 46 optional input fields added across the four input classes and their scalar wrappers. Existing field types/method signatures remain; the working-time schedule ID annotation changes from required to optional, and ISO labels/descriptions describe the expanded inputs.
-- The released ancestor was installed with the original fixtures; **47 subscriber tests passed** (`0AfAs00000X84oEKAR`). Upgrade **0.1.0.19 → 0.2.0.3 succeeded** (`0HfAs000002bZvJKAU`) with those consumers installed.
+- The released ancestor was installed with the original fixtures; **47 subscriber tests passed** (`0AfAs00000X84oEKAR`). Upgrade **0.1.0.19 → 0.2.0.3 succeeded** (`0HfAs000002bZvJKAU`) before the final 0.2.0.4 promotion.
 - Post-upgrade fixture deployment `0AfAs00000X89XmKAJ`: **83 subscriber tests passed**. This includes the previous 69 and 14 additional tests in `ChronoDatedConsumerTest` and `ChronoNativeFlowConsumerTest`.
 - Actual Flow interviews verified add/difference/check/find with unsaved OperatingHours, TimeSlot and Holiday records, native dates/clocks, and collection inputs. The difference fixture also verified distinct endpoint timezones and separate repeated-time policies. Scalar Flow fixtures omit the saved schedule ID entirely.
 - Installed REST action descriptions confirm the optional schedule ID, native `SOBJECT` inputs for OperatingHours/TimeSlot/Holiday, and all four custom configuration-editor registrations.

@@ -8,6 +8,8 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 SITE = ROOT / '.docs-site'
+SITE_CONFIG = json.loads((ROOT / 'docs/site.json').read_text())
+RELEASE_VERSION = SITE_CONFIG['version']
 
 
 class Page(HTMLParser):
@@ -56,7 +58,7 @@ assert len(list((SITE / 'reference/components').glob('*.html'))) == 19
 search = json.loads((SITE / 'search-index.json').read_text())
 assert len(search) == len(pages) - 2
 assert all((SITE / p['url']).is_file() for p in search)
-with zipfile.ZipFile(SITE / 'downloads/chrono-examples-0.1.0.19.zip') as archive:
+with zipfile.ZipFile(SITE / f'downloads/chrono-examples-{RELEASE_VERSION}.zip') as archive:
     assert archive.testzip() is None
     assert len([n for n in archive.namelist() if n.endswith('.flow')]) == 13
     assert all('..' not in Path(n).parts for n in archive.namelist())

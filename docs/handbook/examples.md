@@ -6,8 +6,8 @@ Use them to learn the configuration editor or as a starting point in a test org.
 
 ## Get the examples
 
-Download [the example bundle](../downloads/chrono-examples-0.1.0.19.zip), unzip it,
-and deploy its Metadata API directory into an org with Chrono 0.1.0.19 installed:
+Download [the example bundle](../downloads/chrono-examples-0.2.0.4.zip), unzip it,
+and deploy its Metadata API directory into an org with Chrono 0.2.0.4 installed:
 
 ```sh
 sf project deploy start --metadata-dir chrono-examples/metadata --target-org your-org --wait 20

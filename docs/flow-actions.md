@@ -1,6 +1,9 @@
 # Chrono in Flow
 
-The unreleased 0.2 update also supports dates/local date-times in elapsed and working-time arithmetic, and supplied native schedules for add, difference, check and find. See [dates and supplied schedules](bulk-apex-services.md#dates-and-supplied-schedules) for the new inputs and editor choices. The released 0.1 installation link does not include those additions.
+Released 0.2.0.4 supports dates/local date-times in elapsed and working-time
+arithmetic, and supplied native schedules for add, difference, check and find.
+See [dates and supplied schedules](bulk-apex-services.md#dates-and-supplied-schedules)
+for the inputs and editor choices.
 
 See the [complete action catalogue](action-catalogue.md) for all 54 actions and their categories. The sections below retain the original API examples.
 
@@ -42,7 +45,7 @@ See [thirteen complete examples and a portable download](handbook/examples.md).
 
 The registration follows Salesforce's [namespaced action-editor contract](https://developer.salesforce.com/docs/platform/lwc/guide/use-flow-custom-property-editor-action-example.html).
 Configuration events use the [required bubbling/composed Flow interface](https://developer.salesforce.com/docs/platform/lwc/guide/use-flow-custom-property-editor-interface.html).
-All 54 installed editor registrations were verified on released 0.1.0.19, and the
+All 54 installed editor registrations were verified on released 0.2.0.4, and the
 subscriber Apex/Flow suite passed. Browser rendering remains unverified.
 
 ## Single-value inputs

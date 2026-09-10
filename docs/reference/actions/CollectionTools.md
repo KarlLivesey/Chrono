@@ -64,6 +64,6 @@ Use an Apex-defined collection of [ChronoCollectionToolsInput](../apex/ChronoCol
 
 ## Configuration registration
 
-Scalar editor: `skel-chrono-collection-tools-editor`. Collection editor: `skel-chrono-collection-tools-collection-editor`. Both are namespaced package components with a calendar icon. The installed 0.1.0.19 action metadata was checked against these registrations.
+Scalar editor: `skel-chrono-collection-tools-editor`. Collection editor: `skel-chrono-collection-tools-collection-editor`. Both are namespaced package components with a calendar icon. The installed 0.2.0.4 action metadata was checked against these registrations.
 
 Generated from invocable source declarations and the editor catalogue. [All action families](index.md) · [Examples](../../handbook/examples.md).

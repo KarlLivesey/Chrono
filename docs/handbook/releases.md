@@ -8,7 +8,7 @@ package passing its 90% Apex coverage requirement.
 
 This release adds direct bulk Apex service entry points for the action families,
 including working-time calculations with supplied native schedules and local
-date/time inputs. The released package is based on `0.1.0.19`.
+date/time inputs. It supersedes the initial `0.1.0.19` release.
 
 ## 0.2 — development notes
 
