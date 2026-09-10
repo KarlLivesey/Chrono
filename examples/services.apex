@@ -1,4 +1,4 @@
-// Chrono 0.1.0.19 subscriber examples. No queries or DML.
+// Chrono 0.2.0.4 subscriber examples. No queries or DML.
 // Run: sf apex run --target-org your-org --file services.apex
 skel.ChronoPlainDate january = skel.ChronoPlainDateService.parseIso(
   '2026-01-31'

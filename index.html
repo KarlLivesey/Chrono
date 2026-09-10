@@ -15,9 +15,9 @@
 Use it in Flow, Apex and Lightning components: convert a customer&#39;s local time,
 calculate a deadline inside operating hours, find an appointment, or divide work
 into named billing blocks.</p>
-<p><strong>Released version 0.1.0.19 · Namespace <code>skel</code> · BSD-3-Clause</strong></p>
-<h2 id="install-into-your-org">Install into your org<a class="heading-anchor" href="#install-into-your-org" aria-label="Link to Install into your org">#</a></h2><p><strong><a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KFNtQAO">Install in production / Developer Edition</a></strong>
-· <strong><a href="https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KFNtQAO">Install in a sandbox</a></strong></p>
+<p><strong>Released version 0.2.0.4 · Namespace <code>skel</code> · BSD-3-Clause</strong></p>
+<h2 id="install-into-your-org">Install into your org<a class="heading-anchor" href="#install-into-your-org" aria-label="Link to Install into your org">#</a></h2><p><strong><a href="https://login.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KOZFQA4">Install in production / Developer Edition</a></strong>
+· <strong><a href="https://test.salesforce.com/packaging/installPackage.apexp?p0=04tgK000000KOZFQA4">Install in a sandbox</a></strong></p>
 <p>Sign in to your target org, select <strong>Install for Admins Only</strong>, then assign
 <strong>Chrono Flow User</strong> in Setup → Permission Sets. Follow the
 <a href="handbook/installation.html">installation quick start</a> for CLI commands, schedule
@@ -46,9 +46,9 @@ resource types and unresolved local times.</li>
 all <strong>27 Flow families / 54 actions</strong>, and the
 <a href="reference/components/index.html">exposed components</a>. Core values are data-only;
 their services own construction, validation and calculations.</p>
-<p>The released candidate passed <strong>210 Apex tests</strong>, <strong>30 shared conformance cases</strong>
-and the installed configuration checks for all <strong>54 actions</strong>, with <strong>91% package
-coverage</strong>. See <a href="handbook/releases.html">release notes</a> for the evidence and its limits.</p>
+<p>The released package passed Salesforce&#39;s <strong>90% package-coverage requirement</strong>,
+promotion and the installed configuration checks for all <strong>54 actions</strong>. See
+<a href="handbook/releases.html">release notes</a> for the release evidence and its limits.</p>
 <p>Chrono uses Salesforce timezone rules and millisecond arithmetic. It does not
 bundle another timezone database, implement alternative calendars, or claim
 complete JavaScript Temporal compatibility. See <a href="handbook/limits.html">supported behaviour and limits</a>.</p>

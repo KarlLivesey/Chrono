@@ -31,18 +31,18 @@ country or timezone. Provide the records representing your organisation&#39;s ru
 <p>Single query-backed Apex working-time overloads perform three user-mode queries
 per schedule load. Flow batches common schedules across requests. Access failures
 are not interpreted as an empty schedule; they are reported as errors.</p>
-<h2 id="bulk-safe-apex-and-flow">Bulk-safe Apex and Flow<a class="heading-anchor" href="#bulk-safe-apex-and-flow" aria-label="Link to Bulk-safe Apex and Flow">#</a></h2><p>For the <strong>0.2 development API</strong>, call <code>skel.ChronoWorkingTimeService.add(requests)</code>
+<h2 id="bulk-safe-apex-and-flow">Bulk-safe Apex and Flow<a class="heading-anchor" href="#bulk-safe-apex-and-flow" aria-label="Link to Bulk-safe Apex and Flow">#</a></h2><p>For the released <strong>0.2.0.4 API</strong>, call <code>skel.ChronoWorkingTimeService.add(requests)</code>
 once with a <code>List&lt;skel.ChronoWorkingTimeInput&gt;</code>. It returns ordered,
 independent <code>ChronoWorkingTimeResult</code> records; check <code>success</code> before reading
 <code>value.instant</code> and <code>value.timeZoneId</code>. Saved schedules share three user-mode
 queries per call; supplied native schedules use none. BusinessHours adds one
 configuration query. The <a href="../bulk-apex-services.html">bulk Apex guide</a> lists all
 27 service operations, complete examples, input choices and query costs.</p>
-<p>The public install link currently installs <strong>released 0.1.0.19</strong>, which does
-not contain those new services. On that release the existing batch entry point
-is <code>skel.ChronoWorkingTimeAction.run(List&lt;skel.ChronoWorkingTimeAction.Request&gt;)</code>,
+<p>The public install link installs released <strong>0.2.0.4</strong>, which contains these
+services. The older 0.1.0.19 release had only the action entry point
+<code>skel.ChronoWorkingTimeAction.run(List&lt;skel.ChronoWorkingTimeAction.Request&gt;)</code>,
 returning <code>List&lt;skel.ChronoFlowResult&gt;</code>. The direct services are the intended
-Apex API for 0.2; they do not invoke Flow. See <a href="releases.html">release status</a>.</p>
+Apex API for 0.2 and do not invoke Flow. See <a href="releases.html">release status</a>.</p>
 <p>In Flow, <strong>Chrono: Add or subtract working time</strong> batches separate interviews;
 its <a href="../reference/actions/WorkingTime.html">collection action</a> also accepts explicit
 collections. Working elapsed differences similarly batch saved schedules through
